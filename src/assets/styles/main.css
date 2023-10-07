@@ -1,0 +1,497 @@
+@import './animations.css';
+@import './fonts.css';
+
+* {
+  box-sizing: border-box;
+  user-select: none;
+  overflow-wrap: break-word;
+  margin: 0px;
+  padding: 0px;
+}
+html {
+  font-size: 10px;
+}
+:root {
+  --playlist-height: 200px;
+}
+ul {
+  list-style: none;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: Lato, sans-serif;
+  background: rgb(83 83 83);
+  background-size: 400% 400%;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  color: #585858;
+}
+
+button {
+  appearance: none;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button:hover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
+#app {
+  width: 1000px;
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  column-gap: 10px;
+  height: 100vh;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.pc-only {
+  display: block;
+}
+
+.sp-only {
+  display: none;
+}
+
+.scrolled {
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  transition: all 0.3s;
+}
+
+/* Customize website's scrollbar like Mac OS
+Not supports in Firefox and IE */
+/* total width */
+.scrollbar::-webkit-scrollbar {
+  background-color: #fff;
+  width: 16px;
+}
+
+/* background of the scrollbar except button or resizer */
+.scrollbar::-webkit-scrollbar-track {
+  background-color: #fff;
+}
+
+/* scrollbar itself */
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #d7d5d5;
+  border-radius: 16px;
+  border: 5px solid #fff;
+}
+
+/* set button(top and bottom of the scrollbar) */
+.scrollbar::-webkit-scrollbar-button {
+  display: none;
+}
+
+/**** Start playlist ****/
+.playlist {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #fff;
+  overflow: auto;
+  position: relative;
+  height: var(--playlist-height);
+}
+
+.playlist h3 {
+  color: #212121;
+  font-size: 1.8rem;
+  font-weight: 400;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.playlist .song-playlist {
+  overflow: auto;
+  height: 100%;
+}
+
+.playlist .song {
+  display: flex;
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: #ececec solid 1px;
+}
+
+.playlist .song.active {
+  background-color: #e9f3f7;
+  border-bottom: #dcecf2 solid 1px;
+}
+
+.actions > .close {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 20px;
+  color: #ba83ca;
+}
+
+.playlist .song:hover {
+  background-color: #e9f3f7;
+  border-bottom: #dcecf2 solid 1px;
+  transition: background-color 0.3s;
+}
+
+/**** End playlist ****/
+
+/**** Start Player ****/
+.player {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  padding: 25px;
+  background-color: #fff;
+  font-size: 1.6rem;
+}
+
+.cover-wrapper {
+  width: 100%;
+  display: flex;
+  margin-bottom: 25px;
+}
+
+.cover-wrapper img {
+  height: 60px;
+}
+
+.animated {
+  animation: appear-smoothly 1s normal both;
+  transition: all 0.3s;
+}
+
+.cover {
+  height: 100%;
+  box-shadow: 0 24px 35px -16px rgba(107, 179, 237, 0.5);
+  border-radius: 5px;
+}
+
+.player .song-title {
+  width: 100%;
+  color: #53565a;
+  font-size: 1.3em;
+  text-align: left;
+  padding: 0 10px;
+}
+
+.artist {
+  width: 100%;
+  font-weight: 400;
+  text-align: center;
+}
+
+.details {
+  margin-left: 10px;
+  width: 100%;
+}
+
+.details > .song-title {
+  font-size: 1.6rem;
+}
+
+.details > .artist {
+  color: #5d5555;
+  text-align: left;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 15px;
+}
+
+.play,
+.pause {
+  background-image: linear-gradient(
+    to right top,
+    #d16ba5,
+    #c777b9,
+    #ba83ca,
+    #aa8fd8,
+    #9a9ae1,
+    #8aa7ec,
+    #79b3f4,
+    #69bff8,
+    #52cffe,
+    #41dfff,
+    #46eefa,
+    #5ffbf1
+  );
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  justify-content: center;
+  box-shadow: -1px 17px 24px -6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  font-size: 25px;
+  color: #fff;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.next,
+.prev {
+  border: 0;
+  border-radius: 50%;
+  font-size: 20px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.09);
+  color: #fff;
+  transition: background-color 0.2s;
+  position: relative;
+}
+
+.volume_container {
+  width: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.volume_container .volume-down {
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.volume_container .volume-up {
+  margin-left: 15px;
+  display: inline-block;
+}
+
+.timer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.k-progress-outer {
+  margin-top: 15px !important;
+  padding-right: 0 !important;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.footer .loops p {
+  color: #5d5555;
+  font-size: 1.6rem;
+}
+
+.footer .loops p:not(:last-child) {
+  margin-bottom: 5px;
+}
+
+.footer .btn-reset {
+  width: 80px;
+  height: 40px;
+  border: solid 1px #d4d4d4;
+  border-radius: 5px;
+}
+
+.footer .btn-reset:hover {
+  background-color: #f3f3f3;
+}
+
+.play-form-to {
+  display: flex;
+  align-items: center;
+  font-size: 1.6rem;
+}
+.play-form-to > .select {
+  width: 80px;
+  margin: 0 7px;
+}
+
+.loops-input {
+  padding: 2px;
+  margin: 0 2px;
+  width: 30px;
+  text-align: center;
+  border: none;
+  font-size: 1.6rem;
+  border-bottom: 1px #d4d4d4 solid;
+}
+
+.text-primary {
+  color: #dc3545;
+}
+
+/**** End Player ****/
+
+/**** Start Lyrics ****/
+.lyrics {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #fff;
+  overflow: auto;
+  position: relative;
+  height: calc(100vh - var(--playlist-height) - 10px);
+}
+
+.lyrics .text {
+  padding: 20px 30px;
+  text-align: center;
+  overflow: auto;
+}
+
+.lyrics .text:hover {
+  overflow: auto;
+}
+
+.lyrics h3 {
+  color: #212121;
+  font-size: 1.8rem;
+  font-weight: 400;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.lyrics p {
+  color: #696969;
+  transition: all 0.5s;
+  cursor: pointer;
+  font-size: 1.8rem;
+}
+
+.lyrics p.lyric2 {
+  text-align: left;
+}
+
+.lyrics p.over {
+  color: #c0c0c0;
+}
+
+.lyrics p:hover {
+  color: #5991e5;
+}
+
+.lyrics p.active {
+  color: #355fe5;
+  font-weight: bold;
+}
+
+.lyrics p:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.lyrics p:first-letter {
+  text-transform: capitalize;
+}
+
+.select-lyric-type {
+  width: 110px !important;
+  position: absolute !important;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+}
+
+/**** End Lyrics ****/
+
+/**** Start Mobile ****/
+@media (max-width: 768px) {
+  #app {
+    grid-template-columns: 1fr;
+  }
+
+  body {
+    height: 100%;
+  }
+
+  .pc-only {
+    display: none;
+  }
+
+  .sp-only {
+    display: block;
+  }
+
+  .playlist,
+  .lyrics {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 0;
+    z-index: 10;
+    border-radius: 10px 10px 0 0;
+    transition: height 0.3s;
+    max-width: 100%;
+  }
+
+  .playlist.active,
+  .lyrics.active {
+    box-shadow: rgb(44, 62, 80) 0px -15px 15px -15px;
+    height: 80vh;
+  }
+
+  .actions > .close {
+    display: block;
+    position: absolute;
+    top: 13px;
+    right: 10px;
+    z-index: 12;
+  }
+
+  /**** Start navigation mobile ****/
+  .nav-mobile {
+    position: sticky;
+    top: 20px;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 5px;
+    font-size: 2.5rem;
+    color: white;
+  }
+
+  /**** End navigation mobile ****/
+}
+
+/**** End Mobile ****/
