@@ -2,10 +2,8 @@ const songs = [
   {
     id: 1,
     title: 'Unit 1 A Picnic by the River',
-    artist: 'LPTD',
     seconds: 66,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 1 A Picnic by the River.mp3',
+    src: './assets/audios/LPTD1.1/Unit 1 A Picnic by the River.mp3',
     lyric1: `1
 00:00:02,066 --> 00:00:03,799
 nature and the environment
@@ -124,10 +122,8 @@ W:   Good idea!`
   {
     id: 2,
     title: 'Unit 2 Let’s Recycle',
-    artist: 'LPTD',
     seconds: 60,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 2 Let’s Recycle.mp3',
+    src: './assets/audios/LPTD1.1/Unit 2 Let’s Recycle.mp3',
     lyric1: `1
 00:00:00,300 --> 00:00:02,666
 unit 2 let's recycle
@@ -222,10 +218,8 @@ M:   Good! We all need to recycle. It helps to keep the environment clean.`
   {
     id: 3,
     title: 'Unit 3 Growing Roses',
-    artist: 'LPTD',
     seconds: 64,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 3 Growing Roses.mp3',
+    src: './assets/audios/LPTD1.1/Unit 3 Growing Roses.mp3',
     lyric1: `1
 00:00:00,200 --> 00:00:02,733
 unit 3 growing roses
@@ -322,10 +316,8 @@ W:   You’re welcome!`
   {
     id: 4,
     title: 'Unit 4 Bird Watching',
-    artist: 'LPTD',
     seconds: 70,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 4 Bird Watching.mp3',
+    src: './assets/audios/LPTD1.1/Unit 4 Bird Watching.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:02,466
 unit 4 bird watching
@@ -425,10 +417,8 @@ G :   Really? Maybe I will go bird watching one day after all!`
   {
     id: 5,
     title: 'Unit 5 Trees in the Forest',
-    artist: 'LPTD',
     seconds: 74,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 5 Trees in the Forest.mp3',
+    src: './assets/audios/LPTD1.1/Unit 5 Trees in the Forest.mp3',
     lyric1: `1
 00:00:00,133 --> 00:00:02,899
 unit 5 trees in the forest
@@ -531,10 +521,8 @@ We should all take care of forests.`
   {
     id: 6,
     title: 'Unit 6 An Easy Way to Shop',
-    artist: 'LPTD',
     seconds: 69,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 6 An Easy Way to Shop.mp3',
+    src: './assets/audios/LPTD1.1/Unit 6 An Easy Way to Shop.mp3',
     lyric1: `1
 00:00:01,666 --> 00:00:03,733
 science and technology
@@ -633,10 +621,8 @@ G :   No, you have to pay for it online with a credit card.`
   {
     id: 7,
     title: 'Unit 7 Cell Phone Messages',
-    artist: 'LPTD',
     seconds: 62,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 7 Cell Phone Messages.mp3',
+    src: './assets/audios/LPTD1.1/Unit 7 Cell Phone Messages.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:02,999
 unit 7 cell phone messages
@@ -741,10 +727,8 @@ W:   You’re welcome. I think you’ll find it useful.`
   {
     id: 8,
     title: 'Unit 8 Bubbles in Boiling Water',
-    artist: 'LPTD',
     seconds: 69,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 8 Bubbles in Boiling Water.mp3',
+    src: './assets/audios/LPTD1.1/Unit 8 Bubbles in Boiling Water.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:03,533
 unit 8 bubbles in boiling water
@@ -847,10 +831,8 @@ Try it and see!`
   {
     id: 9,
     title: 'Unit 9 The Blue Sky',
-    artist: 'LPTD',
     seconds: 70,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 9 The Blue Sky.mp3',
+    src: './assets/audios/LPTD1.1/Unit 9 The Blue Sky.mp3',
     lyric1: `1
 00:00:00,266 --> 00:00:02,799
 unit 9 the blue sky
@@ -947,10 +929,8 @@ B :   Now I understand why the sky is blue!`
   {
     id: 10,
     title: 'Unit 10 A New Camera',
-    artist: 'LPTD',
     seconds: 64,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 10 A New Camera.mp3',
+    src: './assets/audios/LPTD1.1/Unit 10 A New Camera.mp3',
     lyric1: `1
 00:00:00,200 --> 00:00:02,666
 unit 10 a new camera
@@ -1048,10 +1028,8 @@ W:   Great! Maybe I should get a digital camera, too.`
   {
     id: 11,
     title: 'Unit 11 Gold',
-    artist: 'LPTD',
     seconds: 69,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 11 Gold.mp3',
+    src: './assets/audios/LPTD1.1/Unit 11 Gold.mp3',
     lyric1: `1
 00:00:01,533 --> 00:00:05,933
 art and culture unit 11 gold
@@ -1146,10 +1124,8 @@ Today, banks store gold in the form of bars. Its value is more than $600 per oun
   {
     id: 12,
     title: 'Unit 12 The Summer Music Festival',
-    artist: 'LPTD',
     seconds: 64,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 12 The Summer Music Festival.mp3',
+    src: './assets/audios/LPTD1.1/Unit 12 The Summer Music Festival.mp3',
     lyric1: `1
 00:00:00,200 --> 00:00:03,333
 unit 12 the summer music festival
@@ -1243,10 +1219,8 @@ M:   That’s a lot of money! I don’t think I want to spend that much on a tic
   {
     id: 13,
     title: 'Unit 13 The School Play',
-    artist: 'LPTD',
     seconds: 68,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 13 The School Play.mp3',
+    src: './assets/audios/LPTD1.1/Unit 13 The School Play.mp3',
     lyric1: `1
 00:00:00,300 --> 00:00:03,066
 unit 13 the school play
@@ -1356,10 +1330,8 @@ G :   That would be great! Let’s go early so we get good seats!`
   {
     id: 14,
     title: 'Unit 14 Ballet Class',
-    artist: 'LPTD',
     seconds: 65,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 14 Ballet Class.mp3',
+    src: './assets/audios/LPTD1.1/Unit 14 Ballet Class.mp3',
     lyric1: `1
 00:00:00,133 --> 00:00:02,866
 unit 14 ballet class
@@ -1450,10 +1422,8 @@ W:   Well, go and have some fun dancing!`
   {
     id: 15,
     title: 'Unit 15 Monet’s Garden',
-    artist: 'LPTD',
     seconds: 71,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 15 Monet’s Garden.mp3',
+    src: './assets/audios/LPTD1.1/Unit 15 Monet’s Garden.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:03,399
 unit 15 monet's garden
@@ -1544,10 +1514,8 @@ Most of them are art lovers or artists. They come to see the place that Monet lo
   {
     id: 16,
     title: 'Unit 16 A Haunted House',
-    artist: 'LPTD',
     seconds: 76,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 16 A Haunted House.mp3',
+    src: './assets/audios/LPTD1.1/Unit 16 A Haunted House.mp3',
     lyric1: `1
 00:00:01,733 --> 00:00:03,599
 leisure and entertainment
@@ -1660,10 +1628,8 @@ G :   Whew, I’m glad to hear that! Sure, I’ll come with you!`
   {
     id: 17,
     title: 'Unit 17 A Big Screen TV',
-    artist: 'LPTD',
     seconds: 63,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 17 A Big Screen TV.mp3',
+    src: './assets/audios/LPTD1.1/Unit 17 A Big Screen TV.mp3',
     lyric1: `1
 00:00:00,200 --> 00:00:03,333
 unit 17 a big screen TV
@@ -1748,10 +1714,8 @@ M:   I have to save some money to buy the TV first. It will be a few months befo
   {
     id: 18,
     title: 'Unit 18 He’s Famous',
-    artist: 'LPTD',
     seconds: 66,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 18 He’s Famous.mp3',
+    src: './assets/audios/LPTD1.1/Unit 18 He’s Famous.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:02,866
 unit 18 he's famous
@@ -1843,10 +1807,8 @@ G :   Well, that explains why I don’t like your new haircut!`
   {
     id: 19,
     title: 'Unit 19 A Housewarming Party',
-    artist: 'LPTD',
     seconds: 65,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 19 A Housewarming Party.mp3',
+    src: './assets/audios/LPTD1.1/Unit 19 A Housewarming Party.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:03,133
 unit 19 a housewarming party
@@ -1940,10 +1902,8 @@ M:   Thanks. The food looks delicious!`
   {
     id: 20,
     title: 'Unit 20 Making Music',
-    artist: 'LPTD',
     seconds: 70,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 20 Making Music.mp3',
+    src: './assets/audios/LPTD1.1/Unit 20 Making Music.mp3',
     lyric1: `1
 00:00:00,266 --> 00:00:03,066
 unit 20 making music
@@ -2037,10 +1997,8 @@ People can make music as a group. A choir is a group of people who sing. An orch
   {
     id: 21,
     title: 'Unit 21 Where Is Your Homework',
-    artist: 'LPTD',
     seconds: 70,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 21 Where Is Your Homework.mp3',
+    src: './assets/audios/LPTD1.1/Unit 21 Where Is Your Homework.mp3',
     lyric1: `1
 00:00:01,700 --> 00:00:03,366
 school and family
@@ -2141,10 +2099,8 @@ G :   I am your friend. That’s why I’m not letting you copy work!`
   {
     id: 22,
     title: 'Unit 22 After School Activities',
-    artist: 'LPTD',
     seconds: 61,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 22 After School Activities.mp3',
+    src: './assets/audios/LPTD1.1/Unit 22 After School Activities.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:01,366
 unit 22
@@ -2244,10 +2200,8 @@ G :   Well, I hope you find enough time for both schoolwork and sports. Good luc
   {
     id: 23,
     title: 'Unit 23 Arts and Crafts Class',
-    artist: 'LPTD',
     seconds: 75,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 23 Arts and Crafts Class.mp3',
+    src: './assets/audios/LPTD1.1/Unit 23 Arts and Crafts Class.mp3',
     lyric1: `1
 00:00:08,900 --> 00:00:12,633
 unit 23 arts and crafts class
@@ -2350,10 +2304,8 @@ G :   Next week, I’m going to make a necklace.`
   {
     id: 24,
     title: 'Unit 24 Grandfather’s Birthday',
-    artist: 'LPTD',
     seconds: 67,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 24 Grandfather’s Birthday.mp3',
+    src: './assets/audios/LPTD1.1/Unit 24 Grandfather’s Birthday.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:03,599
 unit 24 grandfather's birthday
@@ -2461,10 +2413,8 @@ W:   When your father gets home from work.`
   {
     id: 25,
     title: 'Unit 25 The Lesson',
-    artist: 'LPTD',
     seconds: 71,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 25 The Lesson.mp3',
+    src: './assets/audios/LPTD1.1/Unit 25 The Lesson.mp3',
     lyric1: `1
 00:00:00,200 --> 00:00:02,933
 unit 25 the lesson
@@ -2511,7 +2461,7 @@ he said break them
 
 12
 00:00:43,000 --> 00:00:45,733
-each sun broke his stick easily
+each son broke his stick easily
 
 13
 00:00:46,600 --> 00:00:50,000
@@ -2557,10 +2507,8 @@ They started to work together.`
   {
     id: 26,
     title: 'Unit 26 A Problem at the Office',
-    artist: 'LPTD',
     seconds: 73,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 26 A Problem at the Office.mp3',
+    src: './assets/audios/LPTD1.1/Unit 26 A Problem at the Office.mp3',
     lyric1: `1
 00:00:01,933 --> 00:00:03,299
 people and work
@@ -2667,10 +2615,8 @@ W:   Don’t worry. Your work is probably still on your computer. I can help you
   {
     id: 27,
     title: 'Unit 27 My Future Job',
-    artist: 'LPTD',
     seconds: 69,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 27 My Future Job.mp3',
+    src: './assets/audios/LPTD1.1/Unit 27 My Future Job.mp3',
     lyric1: `1
 00:00:00,200 --> 00:00:03,300
 unit 27 my future job
@@ -2773,10 +2719,8 @@ G :   I want to be a teacher, too. But I want to teach English, not math!`
   {
     id: 28,
     title: 'Unit 28 Shopping',
-    artist: 'LPTD',
     seconds: 70,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 28 Shopping.mp3',
+    src: './assets/audios/LPTD1.1/Unit 28 Shopping.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:02,766
 unit 28 shopping
@@ -2880,10 +2824,8 @@ M:   No, thanks. I think I’ll just go to Super Glasses!`
   {
     id: 29,
     title: 'Unit 29 A Part-time Job',
-    artist: 'LPTD',
     seconds: 67,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 29 A Part-time Job.mp3',
+    src: './assets/audios/LPTD1.1/Unit 29 A Part-time Job.mp3',
     lyric1: `1
 00:00:00,200 --> 00:00:03,400
 unit 29 a part time job
@@ -2982,10 +2924,8 @@ B :   That would be very useful. Thanks!`
   {
     id: 30,
     title: 'Unit 30 Teamwork',
-    artist: 'LPTD',
     seconds: 69,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 30 Teamwork.mp3',
+    src: './assets/audios/LPTD1.1/Unit 30 Teamwork.mp3',
     lyric1: `1
 00:00:00,200 --> 00:00:02,700
 unit 30 teamwork
@@ -3108,10 +3048,8 @@ Teamwork works!`
   {
     id: 31,
     title: 'Unit 31 The Marathon',
-    artist: 'LPTD',
     seconds: 67,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 31 The Marathon.mp3',
+    src: './assets/audios/LPTD1.1/Unit 31 The Marathon.mp3',
     lyric1: `1
 00:00:01,700 --> 00:00:03,200
 sports and health
@@ -3215,10 +3153,8 @@ M:   She did quite well! She was not the fastest runner, but she was in the top 
   {
     id: 32,
     title: 'Unit 32 Racquetball',
-    artist: 'LPTD',
     seconds: 73,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 32 Racquetball.mp3',
+    src: './assets/audios/LPTD1.1/Unit 32 Racquetball.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:02,699
 unit 32 racketball
@@ -3320,10 +3256,8 @@ It is played all over the world.`
   {
     id: 33,
     title: 'Unit 33 Summer Sports',
-    artist: 'LPTD',
     seconds: 66,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 33 Summer Sports.mp3',
+    src: './assets/audios/LPTD1.1/Unit 33 Summer Sports.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:02,966
 unit 33 summer sports
@@ -3425,10 +3359,8 @@ B :   Bye!`
   {
     id: 34,
     title: 'Unit 34 Inline Skating',
-    artist: 'LPTD',
     seconds: 73,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 34 Inline Skating.mp3',
+    src: './assets/audios/LPTD1.1/Unit 34 Inline Skating.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:03,066
 unit 34 inline skating
@@ -3537,10 +3469,8 @@ B :   OK!`
   {
     id: 35,
     title: 'Unit 35 The Olympics',
-    artist: 'LPTD',
     seconds: 74,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 35 The Olympics.mp3',
+    src: './assets/audios/LPTD1.1/Unit 35 The Olympics.mp3',
     lyric1: `1
 00:00:00,200 --> 00:00:03,066
 unit 35 the Olympics
@@ -3646,10 +3576,8 @@ They must be the best to win medals in these games.`
   {
     id: 36,
     title: 'Unit 36 A Bicycle Trip',
-    artist: 'LPTD',
     seconds: 68,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 36 A Bicycle Trip.mp3',
+    src: './assets/audios/LPTD1.1/Unit 36 A Bicycle Trip.mp3',
     lyric1: `1
 00:00:01,666 --> 00:00:03,599
 travel and transport
@@ -3737,10 +3665,8 @@ W:   I wish I could go on a bicycle trip, too! Well, don’t get too many flat t
   {
     id: 37,
     title: 'Unit 37 Driving Down South',
-    artist: 'LPTD',
     seconds: 69,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 37 Driving Down South.mp3',
+    src: './assets/audios/LPTD1.1/Unit 37 Driving Down South.mp3',
     lyric1: `1
 00:00:00,200 --> 00:00:03,533
 unit 37 driving down south
@@ -3854,10 +3780,8 @@ G :   Have a nice time! Bring me some pecans!`
   {
     id: 38,
     title: 'Unit 38 The Travel Agent',
-    artist: 'LPTD',
     seconds: 61,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 38 The Travel Agent.mp3',
+    src: './assets/audios/LPTD1.1/Unit 38 The Travel Agent.mp3',
     lyric1: `1
 00:00:00,266 --> 00:00:03,199
 unit 38 the travel agent
@@ -3957,10 +3881,8 @@ M:   Sure!`
   {
     id: 39,
     title: 'Unit 39 Taking the Train',
-    artist: 'LPTD',
     seconds: 67,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 39 Taking the Train.mp3',
+    src: './assets/audios/LPTD1.1/Unit 39 Taking the Train.mp3',
     lyric1: `1
 00:00:00,200 --> 00:00:03,200
 unit 39 taking the train
@@ -4059,10 +3981,8 @@ M:   Thanks! I’ll call him right now. Where’s the phone?`
   {
     id: 40,
     title: 'Unit 40 Go on a Cruise',
-    artist: 'LPTD',
     seconds: 58,
-    cover: '/assets/images/cover.jpg',
-    src: '/assets/audios/LPTD1.1/Unit 40 Go on a Cruise.mp3',
+    src: './assets/audios/LPTD1.1/Unit 40 Go on a Cruise.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:02,866
 unit 40 go on a cruise

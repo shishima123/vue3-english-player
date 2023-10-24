@@ -1,112 +1,104 @@
 <script setup>
-import {formatTimer, timeStringToSecond} from './helpers/timer'
-import {threatSongs} from './helpers/utils'
+import { formatTimer, timeStringToSecond } from './helpers/timer'
+import { threatSongs } from './helpers/utils'
 import songMocks from './mocks/songs'
-import {computed, onMounted, reactive, ref, watch} from "vue";
+import { computed, onMounted, ref, watch } from 'vue'
+import { TransitionFade } from '@morev/vue-transitions'
 
-let loops = ref(10)
-let countLoops = ref(0)
-let playFrom = ref(1)
-let playTo = ref(10)
-let current = ref({seconds: 0, src: null})
-let coverObject = ref({cover: true, animated: false})
-let index = ref(0)
-let isPlaying = ref(false)
-let currentlyTimer = ref('00:00')
-let songs = ref(songMocks)
-let player = ref(new Audio())
-let seekSlider = ref(0)
-let seekSliderFormat = ref((v) => `${formatTimer(current.value.seconds * (v / 100))}`)
-let volumeSlider = ref(100)
-let activePlaylist = ref(false)
-let activeLyrics = ref(false)
-let currentLyric = ref({})
-let lyricTypesOptions = ref([
-  {id: 'lyric1', name: 'Lyric 1'},
-  {id: 'lyric2', name: 'Lyric 2'}
+let loopsState = ref(10)
+let countLoopsState = ref(0)
+let playFromState = ref(1)
+let playToState = ref(10)
+let currentState = ref({})
+let indexState = ref(0)
+let isPlayingState = ref(false)
+let currentlyTimerState = ref('00:00')
+let songsState = ref(songMocks)
+let playerState = ref(new Audio())
+let seekSliderState = ref(0)
+let seekSliderFormatState = ref((v) => `${formatTimer(currentState.value.seconds * (v / 100))}`)
+let volumeSliderState = ref(100)
+let activePlaylistState = ref(false)
+let activeLyricsState = ref(false)
+let currentLyricState = ref({})
+let lyricTypesOptionsState = ref([
+  { id: 'lyric1', name: 'Lyric 1' },
+  { id: 'lyric2', name: 'Lyric 2' }
 ])
-let selectedLyricType = ref({id: 'lyric1', name: 'Lyric 1'})
-let setPlayFromToFlg = ref(false)
 
-let songPlaylist = ref(null)
-let lyricRef = ref(null)
+let selectedLyricTypeState = ref({ id: 'lyric1', name: 'Lyric 1' })
+let playFromToFlagState = ref(false)
+let playFromToCustomFlagState = ref(true)
+let playFromToPickedState = ref(1)
 
-function setCover() {
-  coverObject.value.animated = true
-
-  setTimeout(() => {
-    coverObject.value.animated = false
-  }, 1000)
-}
+let songPlaylistState = ref(null)
+let lyricRefState = ref(null)
 
 function setCurrentSong() {
-  current.value = songs.value[index.value]
-  player.value.src = current.value.src
-  setCover()
+  currentState.value = songsState.value[indexState.value]
+  playerState.value.src = currentState.value.src
 }
 
 function setCurrentlyTimer(time) {
   if (!time) {
     return false
   }
-  player.value.currentTime = time + 0.1
+  playerState.value.currentTime = time + 0.1
 }
 
 function play(indexInput, isClickFromList = false) {
-  if (isClickFromList && indexInput === index.value && isPlaying.value) {
+  if (isClickFromList && indexInput === indexState.value && isPlayingState.value) {
     return true
   }
 
-  if (index.value !== indexInput) {
+  if (indexState.value !== indexInput) {
     setLoopsCount(0)
-    index.value = calcCurrentIndex(indexInput)
+    indexState.value = calcCurrentIndex(indexInput)
     setCurrentSong()
     scrollToActiveInPlaylist()
   }
-  player.value.play()
-  isPlaying.value = true
+  playerState.value.play()
+  isPlayingState.value = true
 }
 
 function pause() {
-  player.value.pause()
-  isPlaying.value = false
+  playerState.value.pause()
+  isPlayingState.value = false
 }
 
 function next() {
-  let newIndex = (index.value + 1) % songs.value.length
+  let newIndex = (indexState.value + 1) % songsState.value.length
   play(newIndex)
 }
 
 function prev() {
-  let newIndex = (index.value - 1 + songs.value.length) % songs.value.length
+  let newIndex = (indexState.value - 1 + songsState.value.length) % songsState.value.length
   play(newIndex)
 }
 
 function setLoopsCount($count) {
-  countLoops.value = $count
+  countLoopsState.value = $count
 }
 
 function registerListener() {
-  player.value.addEventListener('timeupdate', () => {
-    let playerTimer = player.value.currentTime
-    currentLyric.value = convertLyric.value.find(
-        (el) => playerTimer >= el.start - 0.4 && playerTimer <= el.end
+  playerState.value.addEventListener('timeupdate', () => {
+    let playerTimer = playerState.value.currentTime
+    currentLyricState.value = convertLyric.value.find(
+      (el) => playerTimer >= el.start - 0.4 && playerTimer <= el.end
     )
-    currentlyTimer.value = formatTimer(playerTimer)
-    let percent = Math.round((playerTimer * 100) / current.value.seconds)
-    seekSlider.value = Math.min(percent, 100)
+    currentlyTimerState.value = formatTimer(playerTimer)
   })
-  player.value.addEventListener('ended', () => {
-    setLoopsCount(++countLoops.value)
-    if (countLoops.value >= loops.value) {
+  playerState.value.addEventListener('ended', () => {
+    setLoopsCount(++countLoopsState.value)
+    if (countLoopsState.value >= loopsState.value) {
       next()
     }
-    isPlaying.value = false
+    isPlayingState.value = false
     convertLyric.value.map((el) => {
       el.over = false
     })
-    if (setPlayFromToFlg.value) {
-      play(index.value)
+    if (playFromToFlagState.value) {
+      play(indexState.value)
     } else {
       next()
     }
@@ -114,114 +106,118 @@ function registerListener() {
 }
 
 function seekTo() {
-  console.log(current.value.seconds, seekSlider);
-  console.log(current.value.seconds * (seekSlider.value / 100));
-  player.value.currentTime = current.value.seconds * (seekSlider.value / 100)
+  playerState.value.currentTime = currentState.value.seconds * (seekSliderState.value / 100)
 }
 
 function setVolume() {
-  player.value.volume = volumeSlider.value / 100
+  playerState.value.volume = volumeSliderState.value / 100
 }
 
 function activeNavMobile(type = null) {
   switch (type) {
     case 'playlist':
-      activeLyrics.value = false
-      activePlaylist.value = !activePlaylist.value
+      activeLyricsState.value = false
+      activePlaylistState.value = !activePlaylistState.value
       break
     case 'lyrics':
-      activeLyrics.value = !activeLyrics.value
-      activePlaylist.value = false
+      activeLyricsState.value = !activeLyricsState.value
+      activePlaylistState.value = false
       break
     default:
-      activeLyrics.value = false
-      activePlaylist.value = false
+      activeLyricsState.value = false
+      activePlaylistState.value = false
   }
 }
 
 function scrollToActiveInPlaylist(behavior = 'smooth') {
   setTimeout(() => {
-    let list = songPlaylist.value
+    let list = songPlaylistState.value
     let active = list.querySelector('.active')
     if (!active) {
       return
     }
-    active.scrollIntoView({behavior: behavior, block: 'center'})
+    active.scrollIntoView({ behavior: behavior, block: 'center' })
   })
 }
 
 function scrollToActiveInLyrics() {
   setTimeout(() => {
-    let list = lyricRef.value
+    let list = lyricRefState.value
     let active = list.querySelector('.active')
     if (!active) {
       return
     }
-    let listRect = list.getBoundingClientRect()
-    let activeRect = active.getBoundingClientRect()
-    if (activeRect.top < listRect.top || activeRect.bottom > listRect.bottom - 200) {
-      active.scrollIntoView({behavior: 'smooth', block: 'center'})
-    }
+    active.scrollIntoView({ behavior: 'smooth', block: 'center' })
   })
 }
 
 function setDefaultSettingFromLocalStorage() {
-  let attributes = ['volumeSlider', 'loops', 'countLoops', 'playFrom', 'playTo']
+  let attributes = [
+    'volumeSliderState',
+    'loopsState',
+    'countLoopsState',
+    'playFromState',
+    'playToState',
+    'playFromToPickedState'
+  ]
   attributes.forEach((el) => {
     if (localStorage[el]) {
-      [el].value = Number(localStorage[el])
+      eval(el).value = Number(localStorage[el])
     }
   })
-
-  if (localStorage.index) {
-    index.value =
-        Number(localStorage.index) > songs.value.length - 1 ? 0 : Number(localStorage.index)
+  if (localStorage.indexState) {
+    indexState.value =
+      Number(localStorage.indexState) > songsState.value.length - 1
+        ? 0
+        : Number(localStorage.indexState)
   }
 
-  if (localStorage.playFrom) {
-    playFrom.value = localStorage.playFrom === 'null' ? null : Number(localStorage.playFrom)
+  if (localStorage.playFromState) {
+    playFromState.value =
+      localStorage.playFromState === 'null' ? null : Number(localStorage.playFromState)
   }
 
-  if (localStorage.playTo) {
-    playTo.value = localStorage.playTo === 'null' ? null : Number(localStorage.playTo)
+  if (localStorage.playToState) {
+    playToState.value =
+      localStorage.playToState === 'null' ? null : Number(localStorage.playToState)
   }
 }
 
-function handleScrollPlaylistLyric(evt, el) {
+function handleScrollLyric(evt, el) {
   if (el.scrollTop > 0) {
-    el.previousSibling.classList.add("scrolled");
+    el.previousSibling.classList.add('scrolled')
   } else {
-    el.previousSibling.classList.remove("scrolled");
+    el.previousSibling.classList.remove('scrolled')
   }
 }
 
 function calcCurrentIndex(newIndex) {
-  if (!setPlayFromToFlg.value || (!playFrom.value && !playTo.value)) {
+  if (!playFromToFlagState.value || (!playFromState.value && !playToState.value)) {
     return newIndex
   }
 
-  if (newIndex === songs.value.length - 1) {
-    return playTo.value - 1
+  if (newIndex === songsState.value.length - 1) {
+    return playToState.value - 1
   }
 
   if (newIndex === 0) {
-    return playFrom.value - 1
+    return playFromState.value - 1
   }
 
-  let from = Number(playFrom.value ? playFrom : 0)
-  let to = Number(playTo.value ? playTo : songs.value.length - 1)
+  let from = Number(playFromState.value ? playFromState.value : 0)
+  let to = Number(playToState.value ? playToState.value : songsState.value.length - 1)
   let range = to - from + 1
   let normalizedIndex = (newIndex - from + 1) % range
   newIndex = from + normalizedIndex - 1
 
-  if (playFrom.value <= newIndex && newIndex <= playTo.value) {
+  if (playFromState.value <= newIndex && newIndex <= playToState.value) {
     return newIndex
   }
-  return playFrom.value - 1
+  return playFromState.value - 1
 }
 
 onMounted(() => {
-  songs.value = threatSongs(songMocks)
+  songsState.value = threatSongs(songMocks)
   setDefaultSettingFromLocalStorage()
   setCurrentSong()
   scrollToActiveInPlaylist('auto')
@@ -229,12 +225,12 @@ onMounted(() => {
 })
 
 let convertLyric = computed(() => {
-  if (typeof current.value[selectedLyricType.value.id] === 'undefined') {
+  if (typeof currentState.value[selectedLyricTypeState.value.id] === 'undefined') {
     return []
   }
 
   let lyricConverted = []
-  let split = current.value[selectedLyricType.value.id].split(/\n\s*\n/)
+  let split = currentState.value[selectedLyricTypeState.value.id].split(/\n\s*\n/)
   for (let i = 0; i < split.length; i++) {
     let subtitle = split[i]
 
@@ -252,36 +248,36 @@ let convertLyric = computed(() => {
     let timeString = timeLine.trim()
     let text = textLines.join('\n').trim()
     let [start, end] = timeLine.trim().split('-->').map(timeStringToSecond)
-    lyricConverted.push({id, timeString, text, start, end, over: false})
+    lyricConverted.push({ id, timeString, text, start, end, over: false })
   }
   return lyricConverted
 })
 
 let songIndexOptions = computed(() => {
-  return [...Array(songs.value.length).keys()].map((el) => el + 1)
+  return [...Array(songsState.value.length).keys()].map((el) => el + 1)
 })
 
-watch(volumeSlider, async (value) => {
-  localStorage.volumeSlider = value
+watch(volumeSliderState, async (value) => {
+  localStorage.volumeSliderState = value
 })
-watch(loops, async (value, old) => {
+watch(loopsState, async (value, old) => {
   value = isNaN(value) ? old : value
-  loops.value = value
-  localStorage.loops = value
+  loopsState.value = value
+  localStorage.loopsState = value
 })
-watch(countLoops, async (value) => {
-  localStorage.countLoops = value
+watch(countLoopsState, async (value) => {
+  localStorage.countLoopsState = value
 })
-watch(index, async (value) => {
-  localStorage.index = value
+watch(indexState, async (value) => {
+  localStorage.indexState = value
 })
-watch(playFrom, async (value) => {
-  localStorage.playFrom = value
+watch(playFromState, async (value) => {
+  localStorage.playFromState = value
 })
-watch(playTo, async (value) => {
-  localStorage.playTo = value
+watch(playToState, async (value) => {
+  localStorage.playToState = value
 })
-watch(currentLyric, async (value) => {
+watch(currentLyricState, async (value) => {
   if (value) {
     convertLyric.value.map((el) => {
       if (el.id <= value.id) {
@@ -292,174 +288,278 @@ watch(currentLyric, async (value) => {
   }
   scrollToActiveInLyrics()
 })
+watch(currentlyTimerState, async (value) => {
+  if (value) {
+    let percent = Math.round((playerState.value.currentTime * 100) / currentState.value.seconds)
+    seekSliderState.value = Math.min(percent, 100)
+  }
+  scrollToActiveInLyrics()
+})
+watch(playFromToPickedState, async (value) => {
+  let mapping = {
+    1: {
+      from: 1,
+      to: 10
+    },
+    2: {
+      from: 11,
+      to: 20
+    },
+    3: {
+      from: 21,
+      to: 30
+    },
+    4: {
+      from: 31,
+      to: 40
+    }
+  }
+
+  localStorage.playFromToPickedState = value
+
+  if (value in mapping) {
+    playFromState.value = mapping[value].from
+    playToState.value = mapping[value].to
+    playFromToCustomFlagState.value = true
+  } else {
+    playFromToCustomFlagState.value = false
+  }
+})
 </script>
 
 <template>
-  <!--    <div class="nav-mobile sp-only">-->
-  <!--      <div @click="activeNavMobile('playlist')">-->
-  <!--        <font-awesome-icon :icon="['fas', 'list']"/>-->
-  <!--      </div>-->
-  <!--      <div @click="activeNavMobile('lyrics')">-->
-  <!--        <font-awesome-icon :icon="['fas', 'music']"/>-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <section class="player">
-    <div class="cover-wrapper">
-      <img v-bind:class="coverObject" :src="current.cover"/>
-      <h2 class="song-title">
-        {{ current.title }}
-      </h2>
-    </div>
+  <section
+    class="player-section"
+    :class="{ 'hide-setting-block': activeLyricsState || activePlaylistState }"
+  >
+    <h2 class="song-title">
+      {{ currentState.title }}
+    </h2>
     <div class="time-slider">
-      <vue-slider
-          v-model="seekSlider"
-          :tooltip="'active'"
-          @change="seekTo"
-          :tooltip-formatter="seekSliderFormat"
-      ></vue-slider>
-
       <div class="timer">
-        <p class="start">{{ currentlyTimer }}</p>
+        <p class="start">{{ currentlyTimerState }}</p>
         <p class="end">
-          {{ current.totalTimer }}
+          {{ currentState.totalTimer }}
         </p>
       </div>
+      <vue-slider
+        v-model="seekSliderState"
+        :tooltip="'active'"
+        :tooltip-formatter="seekSliderFormatState"
+        @drag-end="seekTo"
+      ></vue-slider>
     </div>
 
     <div class="volume_container">
-        <span class="volume-down">
-          <font-awesome-icon icon="volume-down"/>
-        </span>
+      <span class="volume-down">
+        <font-awesome-icon icon="volume-down" />
+      </span>
 
       <vue-slider
-          v-model="volumeSlider"
-          :tooltip="'active'"
-          @change="setVolume"
-          :style="{ width: '100%' }"
+        v-model="volumeSliderState"
+        :tooltip="'active'"
+        @change="setVolume"
+        :style="{ width: '100%' }"
       ></vue-slider>
       <span class="volume-up">
-          <font-awesome-icon icon="volume-up"/>
-        </span>
+        <font-awesome-icon icon="volume-up" />
+      </span>
     </div>
     <div class="controls">
-      <button class="prev" @click="prev" v-if="songs.length > 1">
-        <font-awesome-icon icon="step-backward"/>
-      </button>
-      <button class="play" v-if="!isPlaying" @click="play(index)">
-        <font-awesome-icon icon="play"/>
-      </button>
-      <button class="pause" v-else @click="pause">
-        <font-awesome-icon icon="pause"/>
-      </button>
-      <button class="next" @click="next" v-if="songs.length > 1">
-        <font-awesome-icon icon="step-forward"/>
-      </button>
+      <div class="controls-action">
+        <button class="prev" @click="prev" v-if="songsState.length > 1">
+          <font-awesome-icon icon="step-backward" />
+        </button>
+        <button class="next" @click="next" v-if="songsState.length > 1">
+          <font-awesome-icon icon="step-forward" />
+        </button>
+      </div>
+
+      <div class="action-play-pause">
+        <button class="play" v-if="!isPlayingState" @click="play(indexState)">
+          <font-awesome-icon icon="play" />
+        </button>
+        <button class="pause" v-else @click="pause">
+          <font-awesome-icon icon="pause" />
+        </button>
+      </div>
     </div>
-    <div class="footer">
+    <fieldset class="setting-block">
+      <legend class="play-form-to-label">Loops</legend>
       <div class="loops">
         <p>
           Played
-          <span class="text-primary">{{ countLoops }}</span>
+          <span class="text-primary">{{ countLoopsState }}</span>
           times
         </p>
         <p>
           <label for="loops_input">Loop for</label>
-          <input id="loops_input" class="loops-input" v-model="loops" type="text" name="loops-input"/>
+          <input
+            id="loops_input"
+            class="loops-input"
+            v-model="loopsState"
+            type="text"
+            name="loops-input"
+          />
           <span>times</span>
         </p>
       </div>
       <div>
-        <button class="btn-reset" @click="setLoopsCount(0)">Reset</button>
+        <button class="btn btn-reset" @click="setLoopsCount(0)">Reset</button>
       </div>
-    </div>
-    <div class="footer">
-      <div class="play-form-to">
-        <label>Play from </label>
-        <multi-select
-            class="select"
-            v-model="playFrom"
-            :options="songIndexOptions"
-            :searchable="false"
-            :show-labels="false"
-            :disabled="setPlayFromToFlg"
-            placeholder=""
-        ></multi-select>
-        <label>to </label>
-        <multi-select
-            class="select"
-            v-model="playTo"
-            :options="songIndexOptions"
-            :searchable="false"
-            :show-labels="false"
-            :disabled="setPlayFromToFlg"
-            placeholder=""
-        ></multi-select>
+    </fieldset>
+    <transition-fade>
+      <div class="setting-section" v-show="!activeLyricsState && !activePlaylistState">
+        <fieldset class="setting-block">
+          <legend class="play-form-to-label">Play from to</legend>
+          <div class="play-form-to">
+            <div class="play-form-to-radio">
+              <label class="radio-container"
+                >1-10
+                <input
+                  type="radio"
+                  name="playFromTo"
+                  value="1"
+                  :disabled="playFromToFlagState"
+                  v-model="playFromToPickedState"
+                />
+                <span class="checkmark"></span>
+              </label>
+              <label class="radio-container"
+                >11-20
+                <input
+                  type="radio"
+                  name="playFromTo"
+                  value="2"
+                  :disabled="playFromToFlagState"
+                  v-model="playFromToPickedState"
+                />
+                <span class="checkmark"></span>
+              </label>
+              <label class="radio-container"
+                >21-30
+                <input
+                  type="radio"
+                  name="playFromTo"
+                  value="3"
+                  :disabled="playFromToFlagState"
+                  v-model="playFromToPickedState"
+                />
+                <span class="checkmark"></span>
+              </label>
+              <label class="radio-container"
+                >31-40
+                <input
+                  type="radio"
+                  name="playFromTo"
+                  value="4"
+                  :disabled="playFromToFlagState"
+                  v-model="playFromToPickedState"
+                />
+                <span class="checkmark"></span>
+              </label>
+              <label class="radio-container"
+                >Custom
+                <input
+                  type="radio"
+                  name="playFromTo"
+                  value="5"
+                  :disabled="playFromToFlagState"
+                  v-model="playFromToPickedState"
+                />
+                <span class="checkmark"></span>
+              </label>
+            </div>
+            <div class="play-form-to-custom">
+              <div class="play-form-to-custom-select">
+                <multi-select
+                  class="select"
+                  v-model="playFromState"
+                  :options="songIndexOptions"
+                  :searchable="false"
+                  :show-labels="false"
+                  :disabled="playFromToFlagState || playFromToCustomFlagState"
+                  placeholder=""
+                ></multi-select>
+                <label class="select-label">to </label>
+                <multi-select
+                  class="select"
+                  v-model="playToState"
+                  :options="songIndexOptions"
+                  :searchable="false"
+                  :show-labels="false"
+                  :disabled="playFromToFlagState || playFromToCustomFlagState"
+                  placeholder=""
+                ></multi-select>
+              </div>
+              <button
+                class="btn btn-set-from-to"
+                @click="playFromToFlagState = !playFromToFlagState"
+              >
+                {{ playFromToFlagState ? 'Cancel' : 'Set' }}
+              </button>
+            </div>
+          </div>
+        </fieldset>
       </div>
-      <div>
-        <button class="btn-reset" @click="setPlayFromToFlg = !setPlayFromToFlg">
-          {{ setPlayFromToFlg ? 'Cancel' : 'Set' }}
-        </button>
-      </div>
+    </transition-fade>
+  </section>
+
+  <section class="lyrics-section" :class="{ active: activeLyricsState }">
+    <multi-select
+      class="select-lyric-type"
+      v-model="selectedLyricTypeState"
+      :options="lyricTypesOptionsState"
+      :allow-empty="false"
+      :searchable="false"
+      label="name"
+      track-by="id"
+      :show-labels="false"
+    ></multi-select>
+    <h3>Lyrics</h3>
+    <div class="text scrollbar" ref="lyricRefState" v-scroll-element="handleScrollLyric">
+      <p
+        v-html="lyric.text"
+        v-for="(lyric, index) in convertLyric"
+        :key="index"
+        :class="{
+          active: lyric.id === currentLyricState?.id,
+          lyric2: selectedLyricTypeState.id === 'lyric2',
+          over: lyric.over
+        }"
+        @click="setCurrentlyTimer(lyric.start || 0)"
+      ></p>
     </div>
   </section>
-  <div style="display: grid; gap: 10px">
-    <section class="lyrics" :class="{ active: activeLyrics }">
-      <div class="actions sp-only">
-        <button class="close" @click="activeNavMobile()">
-          <font-awesome-icon icon="times"/>
-        </button>
-      </div>
-      <multi-select
-          class="select-lyric-type"
-          v-model="selectedLyricType"
-          :options="lyricTypesOptions"
-          :allow-empty="false"
-          :searchable="false"
-          label="name"
-          track-by="id"
-          :show-labels="false"
-      ></multi-select>
-      <h3>Lyrics</h3>
-      <div class="text scrollbar" ref="lyricRef" v-scroll-element="handleScrollPlaylistLyric">
-        <p
-            v-html="lyric.text"
-            v-for="(lyric, index) in convertLyric"
-            :key="index"
-            :class="{
-              active: lyric.id === currentLyric?.id,
-              lyric2: selectedLyricType.id === 'lyric2',
-              over: lyric.over
-            }"
-            @click="setCurrentlyTimer(lyric.start || 0)"
-        ></p>
-      </div>
-    </section>
-    <section class="playlist" :class="{ active: activePlaylist }" style="">
-      <div class="actions sp-only">
-        <button class="close" @click="activeNavMobile('playlist')">
-          <font-awesome-icon icon="times"/>
-        </button>
-      </div>
-      <ul
-          class="song-playlist scrollbar"
-          ref="songPlaylist"
-          v-scroll-element="handleScrollPlaylistLyric"
+
+  <section class="playlist-section" :class="{ active: activePlaylistState }">
+    <ul class="song-playlist scrollbar" ref="songPlaylistState">
+      <li
+        v-for="(song, key) in songsState"
+        :key="song.id"
+        class="song"
+        @click="play(key, true)"
+        :class="{ active: song.id === currentState.id }"
       >
-        <li
-            v-for="(song, key) in songs"
-            :key="song.id"
-            class="song"
-            @click="play(key, true)"
-            :class="{ active: song.id === current.id }"
-        >
-          <div class="details">
-            <p class="song-title">
-              {{ song.title }}
-            </p>
-          </div>
-        </li>
-      </ul>
-    </section>
+        <div class="details">
+          <p class="song-title">
+            {{ song.title }}
+          </p>
+        </div>
+      </li>
+    </ul>
+  </section>
+  <div class="nav-mobile sp-only">
+    <div
+      class="playlist"
+      :class="{ active: activePlaylistState }"
+      @click="activeNavMobile('playlist')"
+    >
+      <font-awesome-icon :icon="['fas', 'list']" />
+    </div>
+    <div class="lyrics" :class="{ active: activeLyricsState }" @click="activeNavMobile('lyrics')">
+      <font-awesome-icon :icon="['fas', 'music']" />
+    </div>
   </div>
 </template>
 
