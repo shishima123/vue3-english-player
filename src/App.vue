@@ -494,7 +494,7 @@ watch(playFromToPickedState, async (value) => {
     :class="{ 'playlist-lyrics-section-active': activeLyricsState }"
     v-scroll-element="handleScrollLyric"
   >
-    <div class="sticky top-0 bg-white">
+    <div class="sticky top-0 bg-white z-10">
       <multi-select
         class="!w-[110px] !absolute top-[5px] left-[10px]"
         v-model="selectedLyricTypeState"
@@ -551,14 +551,14 @@ watch(playFromToPickedState, async (value) => {
   >
     <div
       class="px-5 py-2 w-1/2 text-center border-b-4 border-b-white border-solid transition-all duration-300"
-      :class="{ 'text-blue-500 border-b-blue-500': activePlaylistState }"
+      :class="{ 'text-blue-500 !border-b-blue-500': activePlaylistState }"
       @click="activeNavMobile('playlist')"
     >
       <font-awesome-icon :icon="['fas', 'list']" />
     </div>
     <div
       class="px-5 py-2 w-1/2 text-center border-b-4 border-b-white border-solid transition-all duration-300"
-      :class="{ 'text-blue-500 border-b-blue-500': activeLyricsState }"
+      :class="{ 'text-blue-500 !border-b-blue-500': activeLyricsState }"
       @click="activeNavMobile('lyrics')"
     >
       <font-awesome-icon :icon="['fas', 'music']" />

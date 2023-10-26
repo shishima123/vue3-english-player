@@ -13,8 +13,11 @@
 @layer base {
     html {
         font-weight: 500;
+        /*fix pull to refresh*/
         overflow: hidden;
         overscroll-behavior: contain;
+        /*fix blue color when touched*/
+        -webkit-tap-highlight-color: transparent;
     }
     body {
         background: #f4f6fa;
