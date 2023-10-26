@@ -124,17 +124,10 @@
     .scrolled {
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
         rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-        position: sticky;
-        top: 0;
-        left: 0;
-        right: 0;
-        background-color: white;
-        transition: all 0.3s;
     }
 
     .playlist-lyrics-section-active {
-        display: block!important;
-        height: calc(100vh - 350px)!important;
+        height: calc(100vh - 385px)!important;
         box-shadow: 0px -22px 9px -27px rgba(0, 0, 0, 0.45) inset;
     }
 }

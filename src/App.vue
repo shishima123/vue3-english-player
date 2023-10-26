@@ -3,7 +3,6 @@ import { formatTimer, timeStringToSecond } from './helpers/timer'
 import { threatSongs } from './helpers/utils'
 import songMocks from './mocks/songs'
 import { computed, onMounted, ref, watch } from 'vue'
-import { TransitionFade } from '@morev/vue-transitions'
 
 let loopsState = ref(10)
 let countLoopsState = ref(0)
@@ -211,9 +210,9 @@ function setDefaultSettingFromLocalStorage() {
 
 function handleScrollLyric(evt, el) {
   if (el.scrollTop > 0) {
-    el.previousSibling.classList.add('scrolled')
+    el.firstChild.classList.add('scrolled')
   } else {
-    el.previousSibling.classList.remove('scrolled')
+    el.firstChild.classList.remove('scrolled')
   }
 }
 
@@ -337,8 +336,9 @@ watch(playFromToPickedState, async (value) => {
 </script>
 
 <template>
+  <!-- begin:: Player Section -->
   <section
-    class="flex flex-col flex-nowrap order-3 w-full h-full mx-auto px-[15px] md:p-[10px] bg-white text-base rounded-none md:rounded shadow-none md:shadow-md row-start-1 row-end-3 col-start-1 col-end-2 md:order-1"
+    class="flex flex-col flex-nowrap order-3 w-full h-full mx-auto px-[15px] md:p-[10px] bg-white text-base rounded-none md:rounded shadow-none md:shadow-md row-start-1 row-end-3 col-start-1 col-end-2 md:order-1 transition-all"
     :class="{ '!h-[420px]': activeLyricsState || activePlaylistState }"
   >
     <h2 class="w-full text-xl font-bold text-center py-4 px-1">
@@ -431,87 +431,86 @@ watch(playFromToPickedState, async (value) => {
         <button class="btn" @click="setLoopsCount(0)">Reset</button>
       </div>
     </fieldset>
-    <transition-fade>
-      <div
-        :class="{ '!hidden': activeLyricsState || activePlaylistState }"
-        v-show="!activeLyricsState && !activePlaylistState"
-      >
-        <fieldset class="flex justify-between items-center my-1 fieldset-border">
-          <legend>Play from to</legend>
-          <div class="w-full">
-            <div class="grid grid-cols-3">
-              <label
-                v-for="(radio, index) in playToMappingState"
-                :key="index"
-                class="radio-container"
-              >
-                {{ radio.text }}
-                <input
-                  type="radio"
-                  name="playFromTo"
-                  :value="index"
-                  :disabled="playFromToFlagState"
-                  v-model="playFromToPickedState"
-                />
-                <span class="checkmark"></span>
-              </label>
-            </div>
-            <div class="flex justify-between">
-              <div class="flex items-center">
-                <multi-select
-                  class="!w-[80px]"
-                  v-model="playFromState"
-                  :options="songIndexOptions"
-                  :searchable="false"
-                  :show-labels="false"
-                  :disabled="playFromToFlagState || playFromToCustomFlagState"
-                  placeholder=""
-                ></multi-select>
-                <label class="mx-3">to</label>
-                <multi-select
-                  class="!w-[80px]"
-                  v-model="playToState"
-                  :options="songIndexOptions"
-                  :searchable="false"
-                  :show-labels="false"
-                  :disabled="playFromToFlagState || playFromToCustomFlagState"
-                  placeholder=""
-                ></multi-select>
-              </div>
-              <button
-                class="btn"
-                :class="{ 'bg-zinc-100': playFromToFlagState }"
-                @click="playFromToFlagState = !playFromToFlagState"
-              >
-                {{ playFromToFlagState ? 'Cancel' : 'Set' }}
-              </button>
-            </div>
-          </div>
-        </fieldset>
-      </div>
-    </transition-fade>
-  </section>
-
-  <section
-    class="lyrics-section1 flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative md:rounded md:shadow-md row-start-1 row-end-2 col-start-2 col-end-3 h-0 md:h-[calc(100vh-var(--playlist-height)-var(--gap-app)-var(--padding-app)*2)] transition-all duration-300 ease-in"
-    :class="{ 'playlist-lyrics-section-active': activeLyricsState }"
-  >
-    <multi-select
-      class="!w-[110px] !absolute top-[10px] left-[10px] z-10"
-      v-model="selectedLyricTypeState"
-      :options="lyricTypesOptionsState"
-      :allow-empty="false"
-      :searchable="false"
-      label="name"
-      track-by="id"
-      :show-labels="false"
-    ></multi-select>
-    <h3 class="text-lg text-center py-5 font-bold">Lyrics</h3>
     <div
-      class="py-5 px-7 text-center overflow-auto hover:overflow-auto scrollbar"
-      ref="lyricRefState"
-      v-scroll-element="handleScrollLyric"
+      :class="{ '!hidden': activeLyricsState || activePlaylistState }"
+      v-show="!activeLyricsState && !activePlaylistState"
     >
+      <fieldset class="flex justify-between items-center my-1 fieldset-border">
+        <legend>Play from to</legend>
+        <div class="w-full">
+          <div class="grid grid-cols-3">
+            <label
+              v-for="(radio, index) in playToMappingState"
+              :key="index"
+              class="radio-container"
+            >
+              {{ radio.text }}
+              <input
+                type="radio"
+                name="playFromTo"
+                :value="index"
+                :disabled="playFromToFlagState"
+                v-model="playFromToPickedState"
+              />
+              <span class="checkmark"></span>
+            </label>
+          </div>
+          <div class="flex justify-between">
+            <div class="flex items-center">
+              <multi-select
+                class="!w-[80px]"
+                v-model="playFromState"
+                :options="songIndexOptions"
+                :searchable="false"
+                :show-labels="false"
+                :disabled="playFromToFlagState || playFromToCustomFlagState"
+                placeholder=""
+              ></multi-select>
+              <label class="mx-3">to</label>
+              <multi-select
+                class="!w-[80px]"
+                v-model="playToState"
+                :options="songIndexOptions"
+                :searchable="false"
+                :show-labels="false"
+                :disabled="playFromToFlagState || playFromToCustomFlagState"
+                placeholder=""
+              ></multi-select>
+            </div>
+            <button
+              class="btn"
+              :class="{ 'bg-zinc-100': playFromToFlagState }"
+              @click="playFromToFlagState = !playFromToFlagState"
+            >
+              {{ playFromToFlagState ? 'Cancel' : 'Set' }}
+            </button>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </section>
+  <!-- end:: Player Section -->
+
+  <!-- begin:: Lyric Section -->
+  <section
+    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative md:rounded md:shadow-md row-start-1 row-end-2 col-start-2 col-end-3 h-0 md:h-[calc(100vh-var(--playlist-height)-var(--gap-app)-var(--padding-app)*2)] scrollbar"
+    :class="{ 'playlist-lyrics-section-active': activeLyricsState }"
+    v-scroll-element="handleScrollLyric"
+  >
+    <div class="sticky top-0 bg-white">
+      <multi-select
+        class="!w-[110px] !absolute top-[5px] left-[10px]"
+        v-model="selectedLyricTypeState"
+        :options="lyricTypesOptionsState"
+        :allow-empty="false"
+        :searchable="false"
+        label="name"
+        track-by="id"
+        :show-labels="false"
+      ></multi-select>
+      <h3 class="text-lg text-center py-3 font-bold">Lyrics</h3>
+    </div>
+    <div class="py-5 px-7 text-center" ref="lyricRefState">
       <p
         v-html="lyric.text"
         v-for="(lyric, index) in convertLyric"
@@ -526,9 +525,11 @@ watch(playFromToPickedState, async (value) => {
       ></p>
     </div>
   </section>
+  <!-- end:: Lyric Section -->
 
+  <!-- begin:: Playlist Section -->
   <section
-    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative h-0 md:h-[var(--playlist-height)] md:rounded md:shadow-md row-start-2 row-end-3 col-start-2 col-end-3 transition-all duration-300 ease-in"
+    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative h-0 md:h-[var(--playlist-height)] md:rounded md:shadow-md row-start-2 row-end-3 col-start-2 col-end-3"
     :class="{ 'playlist-lyrics-section-active': activePlaylistState }"
   >
     <ul class="overflow-auto hover:overflow-auto scrollbar h-full" ref="songPlaylistState">
@@ -545,7 +546,10 @@ watch(playFromToPickedState, async (value) => {
       </li>
     </ul>
   </section>
-  <div
+  <!-- end:: Playlist Section -->
+
+  <!-- begin:: Nav mobile -->
+  <section
     class="flex items-center fixed bottom-0 left-0 text-2xl text-gray-600 w-full shadow-[0px_3px_8px_rgba(0,0,0,0.24)] bg-white md:hidden"
   >
     <div
@@ -562,7 +566,8 @@ watch(playFromToPickedState, async (value) => {
     >
       <font-awesome-icon :icon="['fas', 'music']" />
     </div>
-  </div>
+  </section>
+  <!-- end:: Nav mobile -->
 </template>
 
 <style scoped></style>

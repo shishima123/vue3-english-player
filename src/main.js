@@ -3,7 +3,6 @@ import 'vue-slider-component/theme/antd.css'
 import 'vue-multiselect/dist/vue-multiselect.css'
 import Multiselect from 'vue-multiselect'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import '@morev/vue-transitions/styles'
 
 import { createApp } from 'vue'
 import App from './App.vue'
