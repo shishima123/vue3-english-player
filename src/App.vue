@@ -34,6 +34,32 @@ let playFromToPickedState = ref(1)
 let songPlaylistState = ref(null)
 let lyricRefState = ref(null)
 
+let playToMappingState = ref({
+  1: {
+    text: '1-10',
+    from: 1,
+    to: 10
+  },
+  2: {
+    text: '11-20',
+    from: 11,
+    to: 20
+  },
+  3: {
+    text: '21-30',
+    from: 21,
+    to: 30
+  },
+  4: {
+    text: '31-40',
+    from: 31,
+    to: 40
+  },
+  other: {
+    text: 'Other'
+  }
+})
+
 function setCurrentSong() {
   currentState.value = songsState.value[indexState.value]
   playerState.value.src = currentState.value.src
@@ -296,51 +322,32 @@ watch(currentlyTimerState, async (value) => {
   scrollToActiveInLyrics()
 })
 watch(playFromToPickedState, async (value) => {
-  let mapping = {
-    1: {
-      from: 1,
-      to: 10
-    },
-    2: {
-      from: 11,
-      to: 20
-    },
-    3: {
-      from: 21,
-      to: 30
-    },
-    4: {
-      from: 31,
-      to: 40
-    }
+  localStorage.playFromToPickedState = value
+  if (value === 'other') {
+    playFromToCustomFlagState.value = false
+    return true
   }
 
-  localStorage.playFromToPickedState = value
-
-  if (value in mapping) {
-    playFromState.value = mapping[value].from
-    playToState.value = mapping[value].to
+  if (value in playToMappingState.value) {
+    playFromState.value = playToMappingState.value[value].from
+    playToState.value = playToMappingState.value[value].to
     playFromToCustomFlagState.value = true
-  } else {
-    playFromToCustomFlagState.value = false
   }
 })
 </script>
 
 <template>
   <section
-    class="player-section"
-    :class="{ 'hide-setting-block': activeLyricsState || activePlaylistState }"
+    class="flex flex-col flex-nowrap order-3 w-full h-full mx-auto px-[15px] md:p-[10px] bg-white text-base rounded-none md:rounded shadow-none md:shadow-md row-start-1 row-end-3 col-start-1 col-end-2 md:order-1"
+    :class="{ '!h-[420px]': activeLyricsState || activePlaylistState }"
   >
-    <h2 class="song-title">
+    <h2 class="w-full text-xl font-bold text-center py-4 px-1">
       {{ currentState.title }}
     </h2>
-    <div class="time-slider">
-      <div class="timer">
-        <p class="start">{{ currentlyTimerState }}</p>
-        <p class="end">
-          {{ currentState.totalTimer }}
-        </p>
+    <div class="mb-5">
+      <div class="flex justify-between px-1 w-full text-xs">
+        <p>{{ currentlyTimerState }}</p>
+        <p>{{ currentState.totalTimer }}</p>
       </div>
       <vue-slider
         v-model="seekSliderState"
@@ -350,8 +357,8 @@ watch(playFromToPickedState, async (value) => {
       ></vue-slider>
     </div>
 
-    <div class="volume_container">
-      <span class="volume-down">
+    <div class="flex items-center justify-center w-3/5 mx-auto">
+      <span class="mr-2 inline-block">
         <font-awesome-icon icon="volume-down" />
       </span>
 
@@ -361,42 +368,58 @@ watch(playFromToPickedState, async (value) => {
         @change="setVolume"
         :style="{ width: '100%' }"
       ></vue-slider>
-      <span class="volume-up">
+      <span class="ml-4 inline-block">
         <font-awesome-icon icon="volume-up" />
       </span>
     </div>
-    <div class="controls">
-      <div class="controls-action">
-        <button class="prev" @click="prev" v-if="songsState.length > 1">
+    <div class="flex justify-center items-center py-5 px-4">
+      <div class="flex justify-between border border-solid border-gray-200 w-3/5 rounded-[30px]">
+        <button
+          class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-300 relative py-5 px-7 hover:scale-125"
+          @click="prev"
+          v-if="songsState.length > 1"
+        >
           <font-awesome-icon icon="step-backward" />
         </button>
-        <button class="next" @click="next" v-if="songsState.length > 1">
+        <button
+          class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-300 relative py-5 px-7 hover:scale-125"
+          @click="next"
+          v-if="songsState.length > 1"
+        >
           <font-awesome-icon icon="step-forward" />
         </button>
       </div>
 
-      <div class="action-play-pause">
-        <button class="play" v-if="!isPlayingState" @click="play(indexState)">
+      <div class="absolute">
+        <button
+          class="bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110"
+          v-if="!isPlayingState"
+          @click="play(indexState)"
+        >
           <font-awesome-icon icon="play" />
         </button>
-        <button class="pause" v-else @click="pause">
+        <button
+          class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110"
+          v-else
+          @click="pause"
+        >
           <font-awesome-icon icon="pause" />
         </button>
       </div>
     </div>
-    <fieldset class="setting-block">
-      <legend class="play-form-to-label">Loops</legend>
-      <div class="loops">
-        <p>
+    <fieldset class="flex justify-between items-center my-1 fieldset-border">
+      <legend>Loops</legend>
+      <div>
+        <p class="text-base">
           Played
-          <span class="text-primary">{{ countLoopsState }}</span>
+          <span class="text-red-600">{{ countLoopsState }}</span>
           times
         </p>
-        <p>
+        <p class="text-base">
           <label for="loops_input">Loop for</label>
           <input
             id="loops_input"
-            class="loops-input"
+            class="p-0.5 mx-0.5 w-[30px] text-center text-base border-b border-solid border-gray-600 outline-0"
             v-model="loopsState"
             type="text"
             name="loops-input"
@@ -405,75 +428,38 @@ watch(playFromToPickedState, async (value) => {
         </p>
       </div>
       <div>
-        <button class="btn btn-reset" @click="setLoopsCount(0)">Reset</button>
+        <button class="btn" @click="setLoopsCount(0)">Reset</button>
       </div>
     </fieldset>
     <transition-fade>
-      <div class="setting-section" v-show="!activeLyricsState && !activePlaylistState">
-        <fieldset class="setting-block">
-          <legend class="play-form-to-label">Play from to</legend>
-          <div class="play-form-to">
-            <div class="play-form-to-radio">
-              <label class="radio-container"
-                >1-10
+      <div
+        :class="{ '!hidden': activeLyricsState || activePlaylistState }"
+        v-show="!activeLyricsState && !activePlaylistState"
+      >
+        <fieldset class="flex justify-between items-center my-1 fieldset-border">
+          <legend>Play from to</legend>
+          <div class="w-full">
+            <div class="grid grid-cols-3">
+              <label
+                v-for="(radio, index) in playToMappingState"
+                :key="index"
+                class="radio-container"
+              >
+                {{ radio.text }}
                 <input
                   type="radio"
                   name="playFromTo"
-                  value="1"
-                  :disabled="playFromToFlagState"
-                  v-model="playFromToPickedState"
-                />
-                <span class="checkmark"></span>
-              </label>
-              <label class="radio-container"
-                >11-20
-                <input
-                  type="radio"
-                  name="playFromTo"
-                  value="2"
-                  :disabled="playFromToFlagState"
-                  v-model="playFromToPickedState"
-                />
-                <span class="checkmark"></span>
-              </label>
-              <label class="radio-container"
-                >21-30
-                <input
-                  type="radio"
-                  name="playFromTo"
-                  value="3"
-                  :disabled="playFromToFlagState"
-                  v-model="playFromToPickedState"
-                />
-                <span class="checkmark"></span>
-              </label>
-              <label class="radio-container"
-                >31-40
-                <input
-                  type="radio"
-                  name="playFromTo"
-                  value="4"
-                  :disabled="playFromToFlagState"
-                  v-model="playFromToPickedState"
-                />
-                <span class="checkmark"></span>
-              </label>
-              <label class="radio-container"
-                >Custom
-                <input
-                  type="radio"
-                  name="playFromTo"
-                  value="5"
+                  :value="index"
                   :disabled="playFromToFlagState"
                   v-model="playFromToPickedState"
                 />
                 <span class="checkmark"></span>
               </label>
             </div>
-            <div class="play-form-to-custom">
-              <div class="play-form-to-custom-select">
+            <div class="flex justify-between">
+              <div class="flex items-center">
                 <multi-select
-                  class="select"
+                  class="!w-[80px]"
                   v-model="playFromState"
                   :options="songIndexOptions"
                   :searchable="false"
@@ -481,9 +467,9 @@ watch(playFromToPickedState, async (value) => {
                   :disabled="playFromToFlagState || playFromToCustomFlagState"
                   placeholder=""
                 ></multi-select>
-                <label class="select-label">to </label>
+                <label class="mx-3">to</label>
                 <multi-select
-                  class="select"
+                  class="!w-[80px]"
                   v-model="playToState"
                   :options="songIndexOptions"
                   :searchable="false"
@@ -493,7 +479,8 @@ watch(playFromToPickedState, async (value) => {
                 ></multi-select>
               </div>
               <button
-                class="btn btn-set-from-to"
+                class="btn"
+                :class="{ 'bg-zinc-100': playFromToFlagState }"
                 @click="playFromToFlagState = !playFromToFlagState"
               >
                 {{ playFromToFlagState ? 'Cancel' : 'Set' }}
@@ -505,9 +492,12 @@ watch(playFromToPickedState, async (value) => {
     </transition-fade>
   </section>
 
-  <section class="lyrics-section" :class="{ active: activeLyricsState }">
+  <section
+    class="lyrics-section1 flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative md:rounded md:shadow-md row-start-1 row-end-2 col-start-2 col-end-3 h-0 md:h-[calc(100vh-var(--playlist-height)-var(--gap-app)-var(--padding-app)*2)] transition-all duration-300 ease-in"
+    :class="{ 'playlist-lyrics-section-active': activeLyricsState }"
+  >
     <multi-select
-      class="select-lyric-type"
+      class="!w-[110px] !absolute top-[10px] left-[10px] z-10"
       v-model="selectedLyricTypeState"
       :options="lyricTypesOptionsState"
       :allow-empty="false"
@@ -516,48 +506,60 @@ watch(playFromToPickedState, async (value) => {
       track-by="id"
       :show-labels="false"
     ></multi-select>
-    <h3>Lyrics</h3>
-    <div class="text scrollbar" ref="lyricRefState" v-scroll-element="handleScrollLyric">
+    <h3 class="text-lg text-center py-5 font-bold">Lyrics</h3>
+    <div
+      class="py-5 px-7 text-center overflow-auto hover:overflow-auto scrollbar"
+      ref="lyricRefState"
+      v-scroll-element="handleScrollLyric"
+    >
       <p
         v-html="lyric.text"
         v-for="(lyric, index) in convertLyric"
         :key="index"
+        class="text-dimgray transition-all cursor-pointer text-lg hover:text-blue-400 first-letter:capitalize lyrics [&:not(:last-child)]:mb-3"
         :class="{
-          active: lyric.id === currentLyricState?.id,
-          lyric2: selectedLyricTypeState.id === 'lyric2',
-          over: lyric.over
+          '!text-blue-500 scale-110': lyric.id === currentLyricState?.id,
+          'text-left': selectedLyricTypeState.id === 'lyric2',
+          'text-slate-300': lyric.over
         }"
         @click="setCurrentlyTimer(lyric.start || 0)"
       ></p>
     </div>
   </section>
 
-  <section class="playlist-section" :class="{ active: activePlaylistState }">
-    <ul class="song-playlist scrollbar" ref="songPlaylistState">
+  <section
+    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative h-0 md:h-[var(--playlist-height)] md:rounded md:shadow-md row-start-2 row-end-3 col-start-2 col-end-3 transition-all duration-300 ease-in"
+    :class="{ 'playlist-lyrics-section-active': activePlaylistState }"
+  >
+    <ul class="overflow-auto hover:overflow-auto scrollbar h-full" ref="songPlaylistState">
       <li
         v-for="(song, key) in songsState"
         :key="song.id"
-        class="song"
+        class="grid grid-cols-1 py-[10px] px-4 cursor-pointer border-b border-solid border-slate-200 hover:bg-sky-100 transition"
         @click="play(key, true)"
-        :class="{ active: song.id === currentState.id }"
+        :class="{ 'bg-sky-200 !border-sky-200': song.id === currentState.id }"
       >
-        <div class="details">
-          <p class="song-title">
-            {{ song.title }}
-          </p>
-        </div>
+        <p class="ml-1 text-base">
+          {{ song.title }}
+        </p>
       </li>
     </ul>
   </section>
-  <div class="nav-mobile sp-only">
+  <div
+    class="flex items-center fixed bottom-0 left-0 text-2xl text-gray-600 w-full shadow-[0px_3px_8px_rgba(0,0,0,0.24)] bg-white md:hidden"
+  >
     <div
-      class="playlist"
-      :class="{ active: activePlaylistState }"
+      class="px-5 py-2 w-1/2 text-center border-b-4 border-b-white border-solid transition-all duration-300"
+      :class="{ 'text-blue-500 border-b-blue-500': activePlaylistState }"
       @click="activeNavMobile('playlist')"
     >
       <font-awesome-icon :icon="['fas', 'list']" />
     </div>
-    <div class="lyrics" :class="{ active: activeLyricsState }" @click="activeNavMobile('lyrics')">
+    <div
+      class="px-5 py-2 w-1/2 text-center border-b-4 border-b-white border-solid transition-all duration-300"
+      :class="{ 'text-blue-500 border-b-blue-500': activeLyricsState }"
+      @click="activeNavMobile('lyrics')"
+    >
       <font-awesome-icon :icon="['fas', 'music']" />
     </div>
   </div>

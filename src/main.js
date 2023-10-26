@@ -1,6 +1,4 @@
-import './assets/styles/main.css'
-import './assets/styles/fonts.css'
-import './assets/styles/animations.css'
+import './assets/styles/style.css'
 import 'vue-slider-component/theme/antd.css'
 import 'vue-multiselect/dist/vue-multiselect.css'
 import Multiselect from 'vue-multiselect'

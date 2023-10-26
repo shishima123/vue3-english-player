@@ -1,0 +1,141 @@
+/* ./src/assets/styles/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+    --playlist-height: 30vh;
+    --gap-app: 10px;
+    --padding-app: 10px;
+}
+
+@layer base {
+    html {
+        font-weight: 500;
+    }
+    body {
+        background: #f4f6fa;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        @apply font-default text-gray-800
+    }
+    @media (max-width: 768px) {
+        body {
+            background-color: #ffffff;
+        }
+    }
+
+    fieldset {
+        margin-inline-start: 2px;
+        margin-inline-end: 2px;
+        padding-block-start: 0.35em;
+        padding-inline-start: 0.75em;
+        padding-inline-end: 0.75em;
+        padding-block-end: 0.625em;
+    }
+
+    legend {
+        padding: 0 5px;
+        font-weight: 600;
+    }
+}
+
+@layer components {
+    .fieldset-border {
+        @apply border border-solid border-gray-200 rounded-md
+    }
+
+    .btn {
+        @apply w-[60px] h-[40px] border border-solid border-gray-400 shadow-md rounded-md hover:bg-gray-100 transition-all
+    }
+
+    /**** Start Radio custom ****/
+    .radio-container {
+        @apply block relative pl-[27px] mb-3 cursor-pointer select-none
+    }
+
+    /* Hide the browser's default checkbox */
+    .radio-container input {
+        @apply absolute opacity-0 cursor-pointer h-0 w-0
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        @apply absolute top-0 left-0 h-[20px] w-[20px] bg-gray-200 transition-all
+    }
+
+    /* On mouse-over, add a grey background color */
+    .radio-container:hover input ~ .checkmark {
+        @apply bg-gray-300
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .radio-container input:checked ~ .checkmark {
+        @apply bg-blue-500
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        @apply absolute hidden
+    }
+
+    /* Show the checkmark when checked */
+    .radio-container input:checked ~ .checkmark:after {
+        @apply block
+    }
+
+    /* Style the checkmark/indicator */
+    .radio-container .checkmark:after {
+        @apply left-[7px] top-[4px] w-[6px] h-[11px] border-solid border-white border-r-[3px] border-b-[3px] rotate-45
+    }
+
+    .radio-container input[disabled] ~ .checkmark {
+        @apply opacity-60
+    }
+    /**** End Radio custom ****/
+
+    /* Start Customize website's scrollbar like Mac OS */
+    /* total width */
+    .scrollbar::-webkit-scrollbar {
+        background-color: #fff;
+        width: 16px;
+    }
+
+    /* background of the scrollbar except button or resizer */
+    .scrollbar::-webkit-scrollbar-track {
+        background-color: #fff;
+    }
+
+    /* scrollbar itself */
+    .scrollbar::-webkit-scrollbar-thumb {
+        background-color: #d7d5d5;
+        border-radius: 16px;
+        border: 5px solid #fff;
+    }
+
+    /* set button(top and bottom of the scrollbar) */
+    .scrollbar::-webkit-scrollbar-button {
+        display: none;
+    }
+    /* End Customize website's scrollbar like Mac OS */
+
+    .scrolled {
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+        rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: white;
+        transition: all 0.3s;
+    }
+
+    .playlist-lyrics-section-active {
+        display: block!important;
+        height: calc(100vh - 350px)!important;
+        box-shadow: 0px -22px 9px -27px rgba(0, 0, 0, 0.45) inset;
+    }
+}
+
