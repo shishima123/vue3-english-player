@@ -13,6 +13,8 @@
 @layer base {
     html {
         font-weight: 500;
+        overflow: hidden;
+        overscroll-behavior: contain;
     }
     body {
         background: #f4f6fa;
