@@ -7,6 +7,7 @@
     --playlist-height: 30vh;
     --gap-app: 10px;
     --padding-app: 10px;
+    --player-mobile-height: 280px;
 }
 
 @layer base {
@@ -127,7 +128,7 @@
     }
 
     .playlist-lyrics-section-active {
-        height: calc(100vh - 385px)!important;
+        height: calc(100vh - var(--player-mobile-height))!important;
         box-shadow: 0px -22px 9px -27px rgba(0, 0, 0, 0.45) inset;
     }
 }

@@ -338,8 +338,8 @@ watch(playFromToPickedState, async (value) => {
 <template>
   <!-- begin:: Player Section -->
   <section
-    class="flex flex-col flex-nowrap order-3 w-full h-full mx-auto px-[15px] md:p-[10px] bg-white text-base rounded-none md:rounded shadow-none md:shadow-md row-start-1 row-end-3 col-start-1 col-end-2 md:order-1 transition-all"
-    :class="{ '!h-[420px]': activeLyricsState || activePlaylistState }"
+    class="flex flex-col flex-nowrap order-3 w-full h-full mx-auto px-[15px] md:p-[10px] bg-white text-base rounded-none md:rounded shadow-none md:shadow-md row-start-1 row-end-3 col-start-1 col-end-2 md:order-1 transition-[height] duration-[350ms] ease-linear"
+    :class="{ '!h-[var(--player-mobile-height)]': activeLyricsState || activePlaylistState }"
   >
     <h2 class="w-full text-xl font-bold text-center py-4 px-1">
       {{ currentState.title }}
@@ -431,10 +431,7 @@ watch(playFromToPickedState, async (value) => {
         <button class="btn" @click="setLoopsCount(0)">Reset</button>
       </div>
     </fieldset>
-    <div
-      :class="{ '!hidden': activeLyricsState || activePlaylistState }"
-      v-show="!activeLyricsState && !activePlaylistState"
-    >
+    <div>
       <fieldset class="flex justify-between items-center my-1 fieldset-border">
         <legend>Play from to</legend>
         <div class="w-full">
@@ -493,7 +490,7 @@ watch(playFromToPickedState, async (value) => {
 
   <!-- begin:: Lyric Section -->
   <section
-    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative md:rounded md:shadow-md row-start-1 row-end-2 col-start-2 col-end-3 h-0 md:h-[calc(100vh-var(--playlist-height)-var(--gap-app)-var(--padding-app)*2)] scrollbar"
+    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative row-start-1 row-end-2 col-start-2 col-end-3 h-0 scrollbar md:rounded md:shadow-md md:h-[calc(100vh-var(--playlist-height)-var(--gap-app)-var(--padding-app)*2)] transition-[height] duration-[350ms] ease-linear"
     :class="{ 'playlist-lyrics-section-active': activeLyricsState }"
     v-scroll-element="handleScrollLyric"
   >
@@ -517,7 +514,7 @@ watch(playFromToPickedState, async (value) => {
         :key="index"
         class="text-dimgray transition-all cursor-pointer text-lg hover:text-blue-400 first-letter:capitalize lyrics [&:not(:last-child)]:mb-3"
         :class="{
-          '!text-blue-500 scale-110': lyric.id === currentLyricState?.id,
+          '!text-blue-500 scale-110 active': lyric.id === currentLyricState?.id,
           'text-left': selectedLyricTypeState.id === 'lyric2',
           'text-slate-300': lyric.over
         }"
@@ -529,7 +526,7 @@ watch(playFromToPickedState, async (value) => {
 
   <!-- begin:: Playlist Section -->
   <section
-    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative h-0 md:h-[var(--playlist-height)] md:rounded md:shadow-md row-start-2 row-end-3 col-start-2 col-end-3"
+    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative h-0 row-start-2 row-end-3 col-start-2 col-end-3 md:h-[var(--playlist-height)] md:rounded md:shadow-md transition-[height] duration-[350ms] ease-linear"
     :class="{ 'playlist-lyrics-section-active': activePlaylistState }"
   >
     <ul class="overflow-auto hover:overflow-auto scrollbar h-full" ref="songPlaylistState">
@@ -538,7 +535,7 @@ watch(playFromToPickedState, async (value) => {
         :key="song.id"
         class="grid grid-cols-1 py-[10px] px-4 cursor-pointer border-b border-solid border-slate-200 hover:bg-sky-100 transition"
         @click="play(key, true)"
-        :class="{ 'bg-sky-200 !border-sky-200': song.id === currentState.id }"
+        :class="{ 'bg-sky-200 !border-sky-200 active': song.id === currentState.id }"
       >
         <p class="ml-1 text-base">
           {{ song.title }}
