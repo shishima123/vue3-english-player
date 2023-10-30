@@ -33,7 +33,7 @@ let playFromToPickedState = ref(1)
 let songPlaylistState = ref(null)
 let lyricRefState = ref(null)
 
-let playToMappingState = ref({
+let playFromToMappingState = ref({
   1: {
     text: '1-10',
     from: 1,
@@ -81,6 +81,7 @@ function play(indexInput, isClickFromList = false) {
     indexState.value = calcCurrentIndex(indexInput)
     setCurrentSong()
     scrollToActiveInPlaylist()
+    scrollToTopInLyrics()
   }
   playerState.value.play()
   isPlayingState.value = true
@@ -155,25 +156,25 @@ function activeNavMobile(type = null) {
 }
 
 function scrollToActiveInPlaylist(behavior = 'smooth') {
-  setTimeout(() => {
-    let list = songPlaylistState.value
-    let active = list.querySelector('.active')
-    if (!active) {
-      return
-    }
-    active.scrollIntoView({ behavior: behavior, block: 'center' })
-  })
+  scrollToActiveElement(songPlaylistState.value, '.active', behavior)
 }
 
 function scrollToActiveInLyrics() {
+  scrollToActiveElement(lyricRefState.value, '.active')
+}
+
+function scrollToActiveElement(element, activeClass, behavior = 'smooth', block = 'center') {
   setTimeout(() => {
-    let list = lyricRefState.value
-    let active = list.querySelector('.active')
+    let active = element.querySelector(activeClass)
     if (!active) {
       return
     }
-    active.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    active.scrollIntoView({ behavior, block })
   })
+}
+
+function scrollToTopInLyrics() {
+  lyricRefState.value.parentNode.scrollTo({ top: 0 })
 }
 
 function setDefaultSettingFromLocalStorage() {
@@ -327,9 +328,9 @@ watch(playFromToPickedState, async (value) => {
     return true
   }
 
-  if (value in playToMappingState.value) {
-    playFromState.value = playToMappingState.value[value].from
-    playToState.value = playToMappingState.value[value].to
+  if (value in playFromToMappingState.value) {
+    playFromState.value = playFromToMappingState.value[value].from
+    playToState.value = playFromToMappingState.value[value].to
     playFromToCustomFlagState.value = true
   }
 })
@@ -437,7 +438,7 @@ watch(playFromToPickedState, async (value) => {
         <div class="w-full">
           <div class="grid grid-cols-3">
             <label
-              v-for="(radio, index) in playToMappingState"
+              v-for="(radio, index) in playFromToMappingState"
               :key="index"
               class="radio-container"
             >
