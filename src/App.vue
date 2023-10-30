@@ -211,9 +211,9 @@ function setDefaultSettingFromLocalStorage() {
 
 function handleScrollLyric(evt, el) {
   if (el.scrollTop > 0) {
-    el.firstChild.classList.add('scrolled')
+    el.previousSibling.classList.add('scrolled')
   } else {
-    el.firstChild.classList.remove('scrolled')
+    el.previousSibling.classList.remove('scrolled')
   }
 }
 
@@ -491,11 +491,10 @@ watch(playFromToPickedState, async (value) => {
 
   <!-- begin:: Lyric Section -->
   <section
-    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative row-start-1 row-end-2 col-start-2 col-end-3 h-0 scrollbar md:rounded md:shadow-md md:h-[calc(100vh-var(--playlist-height)-var(--gap-app)-var(--padding-app)*2)] transition-[height] duration-[350ms] ease-linear"
+    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-hidden relative row-start-1 row-end-2 col-start-2 col-end-3 h-0 md:rounded md:shadow-md md:h-[calc(100vh-var(--playlist-height)-var(--gap-app)-var(--padding-app)*2)] transition-[height] duration-[350ms] ease-linear"
     :class="{ 'playlist-lyrics-section-active': activeLyricsState }"
-    v-scroll-element="handleScrollLyric"
   >
-    <div class="sticky top-0 bg-white z-10">
+    <div class="sticky top-0 bg-white z-10 transition">
       <multi-select
         class="!w-[110px] !absolute top-[5px] left-[10px]"
         v-model="selectedLyricTypeState"
@@ -508,7 +507,11 @@ watch(playFromToPickedState, async (value) => {
       ></multi-select>
       <h3 class="text-lg text-center py-3 font-bold">Lyrics</h3>
     </div>
-    <div class="py-5 px-7 text-center" ref="lyricRefState">
+    <div
+      class="py-5 px-7 text-center scrollbar overflow-auto"
+      ref="lyricRefState"
+      v-scroll-element="handleScrollLyric"
+    >
       <p
         v-html="lyric.text"
         v-for="(lyric, index) in convertLyric"
