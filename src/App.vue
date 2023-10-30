@@ -376,14 +376,14 @@ watch(playFromToPickedState, async (value) => {
     <div class="flex justify-center items-center py-5 px-4">
       <div class="flex justify-between border border-solid border-gray-200 w-3/5 rounded-[30px]">
         <button
-          class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-300 relative py-5 px-7 hover:scale-125"
+          class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-300 relative py-5 px-7 hover:scale-125 transition"
           @click="prev"
           v-if="songsState.length > 1"
         >
           <font-awesome-icon icon="step-backward" />
         </button>
         <button
-          class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-300 relative py-5 px-7 hover:scale-125"
+          class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-300 relative py-5 px-7 hover:scale-125 transition"
           @click="next"
           v-if="songsState.length > 1"
         >
@@ -393,14 +393,14 @@ watch(playFromToPickedState, async (value) => {
 
       <div class="absolute">
         <button
-          class="bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110"
+          class="bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
           v-if="!isPlayingState"
           @click="play(indexState)"
         >
           <font-awesome-icon icon="play" />
         </button>
         <button
-          class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110"
+          class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
           v-else
           @click="pause"
         >
