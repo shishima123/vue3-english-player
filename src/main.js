@@ -9,6 +9,9 @@ import App from './App.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VueSlider from 'vue-slider-component'
 
+import PerfectScrollbar from 'vue3-perfect-scrollbar'
+import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
+
 library.add(
   faPlay,
   faPause,
@@ -46,5 +49,7 @@ app.directive('scroll-element', {
     el.addEventListener('scroll', f)
   }
 })
+
+app.use(PerfectScrollbar)
 
 app.mount('#app')

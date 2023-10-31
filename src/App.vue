@@ -155,8 +155,8 @@ function activeNavMobile(type = null) {
   }
 }
 
-function scrollToActiveInPlaylist(behavior = 'smooth') {
-  scrollToActiveElement(songPlaylistState.value, '.active', behavior)
+function scrollToActiveInPlaylist(behavior = 'instant', block = 'start') {
+  scrollToActiveElement(songPlaylistState.value, '.active', behavior, block)
 }
 
 function scrollToActiveInLyrics() {
@@ -246,7 +246,7 @@ onMounted(() => {
   songsState.value = threatSongs(songMocks)
   setDefaultSettingFromLocalStorage()
   setCurrentSong()
-  scrollToActiveInPlaylist('auto')
+  scrollToActiveInPlaylist()
   registerListener()
 })
 
@@ -533,18 +533,20 @@ watch(playFromToPickedState, async (value) => {
     class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative h-0 row-start-2 row-end-3 col-start-2 col-end-3 md:h-[var(--playlist-height)] md:rounded md:shadow-md transition duration-[350ms] ease-linear"
     :class="{ 'playlist-lyrics-section-active': activePlaylistState }"
   >
-    <ul class="overflow-auto hover:overflow-auto scrollbar h-full" ref="songPlaylistState">
-      <li
-        v-for="(song, key) in songsState"
-        :key="song.id"
-        class="grid grid-cols-1 py-[10px] px-4 cursor-pointer border-b border-solid border-slate-200 hover:bg-sky-100 transition"
-        @click="play(key, true)"
-        :class="{ 'bg-sky-200 !border-sky-200 active': song.id === currentState.id }"
-      >
-        <p class="ml-1 text-base">
-          {{ song.title }}
-        </p>
-      </li>
+    <ul class="h-full" ref="songPlaylistState">
+      <perfect-scrollbar class="h-full">
+        <li
+          v-for="(song, key) in songsState"
+          :key="song.id"
+          class="grid grid-cols-1 py-[10px] px-4 cursor-pointer border-b border-solid border-slate-200 hover:bg-sky-100 transition"
+          @click="play(key, true)"
+          :class="{ 'bg-sky-200 !border-sky-200 active': song.id === currentState.id }"
+        >
+          <p class="ml-1 text-base">
+            {{ song.title }}
+          </p>
+        </li>
+      </perfect-scrollbar>
     </ul>
   </section>
   <!-- end:: Playlist Section -->
