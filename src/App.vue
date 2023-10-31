@@ -530,7 +530,7 @@ watch(playFromToPickedState, async (value) => {
 
   <!-- begin:: Playlist Section -->
   <section
-    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative h-0 row-start-2 row-end-3 col-start-2 col-end-3 md:h-[var(--playlist-height)] md:rounded md:shadow-md transition duration-[350ms] ease-linear"
+    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative h-0 row-start-2 row-end-3 col-start-2 col-end-3 md:h-[var(--playlist-height)] md:rounded md:shadow-md transition-[height] duration-[350ms] ease-linear"
     :class="{ 'playlist-lyrics-section-active': activePlaylistState }"
   >
     <ul class="h-full" ref="songPlaylistState">
