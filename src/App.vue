@@ -339,7 +339,7 @@ watch(playFromToPickedState, async (value) => {
 <template>
   <!-- begin:: Player Section -->
   <section
-    class="flex flex-col flex-nowrap order-3 w-full h-full mx-auto px-[15px] md:p-[10px] bg-white text-base rounded-none md:rounded shadow-none md:shadow-md row-start-1 row-end-3 col-start-1 col-end-2 md:order-1 transition-[height] duration-[350ms] ease-linear"
+    class="flex flex-col flex-nowrap order-3 w-full h-full mx-auto overflow-hidden px-[15px] md:p-[10px] bg-white text-base rounded-none md:rounded shadow-none md:shadow-md row-start-1 row-end-3 col-start-1 col-end-2 md:order-1 transition-[height] duration-[350ms] ease-linear"
     :class="{ '!h-[var(--player-mobile-height)]': activeLyricsState || activePlaylistState }"
   >
     <h2 class="w-full text-xl font-bold text-center py-4 px-1">
@@ -530,7 +530,7 @@ watch(playFromToPickedState, async (value) => {
 
   <!-- begin:: Playlist Section -->
   <section
-    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative h-0 row-start-2 row-end-3 col-start-2 col-end-3 md:h-[var(--playlist-height)] md:rounded md:shadow-md transition-[height] duration-[350ms] ease-linear"
+    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative h-0 row-start-2 row-end-3 col-start-2 col-end-3 md:h-[var(--playlist-height)] md:rounded md:shadow-md transition duration-[350ms] ease-linear"
     :class="{ 'playlist-lyrics-section-active': activePlaylistState }"
   >
     <ul class="overflow-auto hover:overflow-auto scrollbar h-full" ref="songPlaylistState">
