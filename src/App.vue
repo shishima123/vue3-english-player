@@ -1,38 +1,27 @@
 <script setup>
-import { formatTimer, timeStringToSecond } from './helpers/timer'
-import { threatSongs } from './helpers/utils'
-import songMocks from './mocks/songs'
+import { formatTimer } from './helpers/timer'
+import { threatSongs } from '@/helpers/utils'
+import songMocks from '@/mocks/songs'
 import { computed, onMounted, ref, watch } from 'vue'
+import NavMobile from '@/components/NavMobile.vue'
+import Playlist from '@/components/Playlist.vue'
+import Lyric from '@/components/Lyric.vue'
 
 let loopsState = ref(10)
-let countLoopsState = ref(0)
+let loopsCountState = ref(0)
 let playFromState = ref(1)
 let playToState = ref(10)
-let currentState = ref({})
-let indexState = ref(0)
+let currentSongState = ref({})
+let songIndexState = ref(0)
 let isPlayingState = ref(false)
 let currentlyTimerState = ref('00:00')
 let songsState = ref(songMocks)
 let playerState = ref(new Audio())
 let seekSliderState = ref(0)
-let seekSliderFormatState = ref((v) => `${formatTimer(currentState.value.seconds * (v / 100))}`)
+let seekSliderFormatState = ref((v) => `${formatTimer(currentSongState.value.seconds * (v / 100))}`)
 let volumeSliderState = ref(100)
-let activePlaylistState = ref(false)
-let activeLyricsState = ref(false)
-let currentLyricState = ref({})
-let lyricTypesOptionsState = ref([
-  { id: 'lyric1', name: 'Lyric 1' },
-  { id: 'lyric2', name: 'Lyric 2' }
-])
-
-let selectedLyricTypeState = ref({ id: 'lyric1', name: 'Lyric 1' })
 let playFromToFlagState = ref(false)
 let playFromToCustomFlagState = ref(true)
-let playFromToPickedState = ref(1)
-
-let songPlaylistState = ref(null)
-let lyricRefState = ref(null)
-
 let playFromToMappingState = ref({
   1: {
     text: '1-10',
@@ -59,9 +48,43 @@ let playFromToMappingState = ref({
   }
 })
 
+// refs
+let lyricRef = ref(null)
+let playlistRef = ref(null)
+
+// computed
+let songIndexOptionsComputed = computed(() => {
+  return [...Array(songsState.value.length).keys()].map((el) => el + 1)
+})
+
+function calcCurrentSongIndex(newSongIndex) {
+  if (!playFromToFlagState.value || (!playFromState.value && !playToState.value)) {
+    return newSongIndex
+  }
+
+  if (newSongIndex === songsState.value.length - 1) {
+    return playToState.value - 1
+  }
+
+  if (newSongIndex === 0) {
+    return playFromState.value - 1
+  }
+
+  let from = Number(playFromState.value ? playFromState.value : 0)
+  let to = Number(playToState.value ? playToState.value : songsState.value.length - 1)
+  let range = to - from + 1
+  let normalizedIndex = (newSongIndex - from + 1) % range
+  newSongIndex = from + normalizedIndex - 1
+
+  if (playFromState.value <= newSongIndex && newSongIndex <= playToState.value) {
+    return newSongIndex
+  }
+  return playFromState.value - 1
+}
+
 function setCurrentSong() {
-  currentState.value = songsState.value[indexState.value]
-  playerState.value.src = currentState.value.src
+  currentSongState.value = songsState.value[songIndexState.value]
+  playerState.value.src = currentSongState.value.src
 }
 
 function setCurrentlyTimer(time) {
@@ -71,17 +94,17 @@ function setCurrentlyTimer(time) {
   playerState.value.currentTime = time + 0.1
 }
 
-function play(indexInput, isClickFromList = false) {
-  if (isClickFromList && indexInput === indexState.value && isPlayingState.value) {
+function play(songIndexInput, isClickFromList = false) {
+  if (isClickFromList && songIndexInput === songIndexState.value && isPlayingState.value) {
     return true
   }
 
-  if (indexState.value !== indexInput) {
+  if (songIndexState.value !== songIndexInput) {
     setLoopsCount(0)
-    indexState.value = calcCurrentIndex(indexInput)
+    songIndexState.value = calcCurrentSongIndex(songIndexInput)
     setCurrentSong()
-    scrollToActiveInPlaylist()
-    scrollToTopInLyrics()
+    lyricRef.value.scrollToTopInLyrics()
+    playlistRef.value.scrollToActive()
   }
   playerState.value.play()
   isPlayingState.value = true
@@ -93,38 +116,34 @@ function pause() {
 }
 
 function next() {
-  let newIndex = (indexState.value + 1) % songsState.value.length
-  play(newIndex)
+  let newSongIndex = (songIndexState.value + 1) % songsState.value.length
+  play(newSongIndex)
 }
 
 function prev() {
-  let newIndex = (indexState.value - 1 + songsState.value.length) % songsState.value.length
-  play(newIndex)
+  let newSongIndex = (songIndexState.value - 1 + songsState.value.length) % songsState.value.length
+  play(newSongIndex)
 }
 
 function setLoopsCount($count) {
-  countLoopsState.value = $count
+  loopsCountState.value = $count
 }
 
 function registerListener() {
   playerState.value.addEventListener('timeupdate', () => {
     let playerTimer = playerState.value.currentTime
-    currentLyricState.value = convertLyric.value.find(
-      (el) => playerTimer >= el.start - 0.4 && playerTimer <= el.end
-    )
+    lyricRef.value.changeCurrentLyricState(playerTimer)
     currentlyTimerState.value = formatTimer(playerTimer)
   })
   playerState.value.addEventListener('ended', () => {
-    setLoopsCount(++countLoopsState.value)
-    if (countLoopsState.value >= loopsState.value) {
+    setLoopsCount(++loopsCountState.value)
+    if (loopsCountState.value >= loopsState.value) {
       next()
     }
     isPlayingState.value = false
-    convertLyric.value.map((el) => {
-      el.over = false
-    })
+    lyricRef.value.resetLyricOver()
     if (playFromToFlagState.value) {
-      play(indexState.value)
+      play(songIndexState.value)
     } else {
       next()
     }
@@ -132,56 +151,36 @@ function registerListener() {
 }
 
 function seekTo() {
-  playerState.value.currentTime = currentState.value.seconds * (seekSliderState.value / 100)
+  playerState.value.currentTime = currentSongState.value.seconds * (seekSliderState.value / 100)
 }
 
 function setVolume() {
   playerState.value.volume = volumeSliderState.value / 100
 }
 
+let showPlaylistState = ref(false)
+let showLyricsState = ref(false)
 function activeNavMobile(type = null) {
   switch (type) {
     case 'playlist':
-      activeLyricsState.value = false
-      activePlaylistState.value = !activePlaylistState.value
+      showLyricsState.value = false
+      showPlaylistState.value = !showPlaylistState.value
       break
     case 'lyrics':
-      activeLyricsState.value = !activeLyricsState.value
-      activePlaylistState.value = false
+      showLyricsState.value = !showLyricsState.value
+      showPlaylistState.value = false
       break
     default:
-      activeLyricsState.value = false
-      activePlaylistState.value = false
+      showLyricsState.value = false
+      showPlaylistState.value = false
   }
-}
-
-function scrollToActiveInPlaylist(behavior = 'instant', block = 'start') {
-  scrollToActiveElement(songPlaylistState.value, '.active', behavior, block)
-}
-
-function scrollToActiveInLyrics() {
-  scrollToActiveElement(lyricRefState.value, '.active')
-}
-
-function scrollToActiveElement(element, activeClass, behavior = 'smooth', block = 'center') {
-  setTimeout(() => {
-    let active = element.querySelector(activeClass)
-    if (!active) {
-      return
-    }
-    active.scrollIntoView({ behavior, block })
-  })
-}
-
-function scrollToTopInLyrics() {
-  lyricRefState.value.parentNode.scrollTo({ top: 0 })
 }
 
 function setDefaultSettingFromLocalStorage() {
   let attributes = [
     'volumeSliderState',
     'loopsState',
-    'countLoopsState',
+    'loopsCountState',
     'playFromState',
     'playToState',
     'playFromToPickedState'
@@ -191,11 +190,11 @@ function setDefaultSettingFromLocalStorage() {
       eval(el).value = Number(localStorage[el])
     }
   })
-  if (localStorage.indexState) {
-    indexState.value =
-      Number(localStorage.indexState) > songsState.value.length - 1
+  if (localStorage.songIndexState) {
+    songIndexState.value =
+      Number(localStorage.songIndexState) > songsState.value.length - 1
         ? 0
-        : Number(localStorage.indexState)
+        : Number(localStorage.songIndexState)
   }
 
   if (localStorage.playFromState) {
@@ -209,78 +208,11 @@ function setDefaultSettingFromLocalStorage() {
   }
 }
 
-function handleScrollLyric(evt, el) {
-  if (el.scrollTop > 0) {
-    el.previousSibling.classList.add('scrolled')
-  } else {
-    el.previousSibling.classList.remove('scrolled')
-  }
-}
-
-function calcCurrentIndex(newIndex) {
-  if (!playFromToFlagState.value || (!playFromState.value && !playToState.value)) {
-    return newIndex
-  }
-
-  if (newIndex === songsState.value.length - 1) {
-    return playToState.value - 1
-  }
-
-  if (newIndex === 0) {
-    return playFromState.value - 1
-  }
-
-  let from = Number(playFromState.value ? playFromState.value : 0)
-  let to = Number(playToState.value ? playToState.value : songsState.value.length - 1)
-  let range = to - from + 1
-  let normalizedIndex = (newIndex - from + 1) % range
-  newIndex = from + normalizedIndex - 1
-
-  if (playFromState.value <= newIndex && newIndex <= playToState.value) {
-    return newIndex
-  }
-  return playFromState.value - 1
-}
-
 onMounted(() => {
   songsState.value = threatSongs(songMocks)
   setDefaultSettingFromLocalStorage()
   setCurrentSong()
-  scrollToActiveInPlaylist()
   registerListener()
-})
-
-let convertLyric = computed(() => {
-  if (typeof currentState.value[selectedLyricTypeState.value.id] === 'undefined') {
-    return []
-  }
-
-  let lyricConverted = []
-  let split = currentState.value[selectedLyricTypeState.value.id].split(/\n\s*\n/)
-  for (let i = 0; i < split.length; i++) {
-    let subtitle = split[i]
-
-    let [idLine, timeLine, ...textLines] = subtitle.split('\n')
-    let id = parseInt(idLine.trim())
-    // type sub has no time
-    if (isNaN(id)) {
-      return [idLine, timeLine, ...textLines].map((subtitle, id) => ({
-        id,
-        text: subtitle
-      }))
-    }
-
-    // type sub has time
-    let timeString = timeLine.trim()
-    let text = textLines.join('\n').trim()
-    let [start, end] = timeLine.trim().split('-->').map(timeStringToSecond)
-    lyricConverted.push({ id, timeString, text, start, end, over: false })
-  }
-  return lyricConverted
-})
-
-let songIndexOptions = computed(() => {
-  return [...Array(songsState.value.length).keys()].map((el) => el + 1)
 })
 
 watch(volumeSliderState, async (value) => {
@@ -291,11 +223,11 @@ watch(loopsState, async (value, old) => {
   loopsState.value = value
   localStorage.loopsState = value
 })
-watch(countLoopsState, async (value) => {
-  localStorage.countLoopsState = value
+watch(loopsCountState, async (value) => {
+  localStorage.loopsCountState = value
 })
-watch(indexState, async (value) => {
-  localStorage.indexState = value
+watch(songIndexState, async (value) => {
+  localStorage.songIndexState = value
 })
 watch(playFromState, async (value) => {
   localStorage.playFromState = value
@@ -303,24 +235,15 @@ watch(playFromState, async (value) => {
 watch(playToState, async (value) => {
   localStorage.playToState = value
 })
-watch(currentLyricState, async (value) => {
-  if (value) {
-    convertLyric.value.map((el) => {
-      if (el.id <= value.id) {
-        return (el.over = true)
-      }
-      return (el.over = false)
-    })
-  }
-  scrollToActiveInLyrics()
-})
 watch(currentlyTimerState, async (value) => {
   if (value) {
-    let percent = Math.round((playerState.value.currentTime * 100) / currentState.value.seconds)
+    let percent = Math.round((playerState.value.currentTime * 100) / currentSongState.value.seconds)
     seekSliderState.value = Math.min(percent, 100)
   }
-  scrollToActiveInLyrics()
+  lyricRef.value.scrollToActiveInLyrics()
 })
+
+let playFromToPickedState = ref(1)
 watch(playFromToPickedState, async (value) => {
   localStorage.playFromToPickedState = value
   if (value === 'other') {
@@ -340,15 +263,15 @@ watch(playFromToPickedState, async (value) => {
   <!-- begin:: Player Section -->
   <section
     class="flex flex-col flex-nowrap order-3 w-full h-full mx-auto overflow-hidden px-[15px] md:p-[10px] bg-white text-base rounded-none md:rounded shadow-none md:shadow-md row-start-1 row-end-3 col-start-1 col-end-2 md:order-1 transition-[height] duration-[350ms] ease-linear"
-    :class="{ '!h-[var(--player-mobile-height)]': activeLyricsState || activePlaylistState }"
+    :class="{ '!h-[var(--player-mobile-height)]': showLyricsState || showPlaylistState }"
   >
     <h2 class="w-full text-xl font-bold text-center py-4 px-1 text-ellipsis whitespace-nowrap">
-      {{ currentState.title }}
+      {{ currentSongState.title }}
     </h2>
     <div class="mb-5">
       <div class="flex justify-between px-1 w-full text-xs">
         <p>{{ currentlyTimerState }}</p>
-        <p>{{ currentState.totalTimer }}</p>
+        <p>{{ currentSongState.totalTimer }}</p>
       </div>
       <vue-slider
         v-model="seekSliderState"
@@ -395,7 +318,7 @@ watch(playFromToPickedState, async (value) => {
         <button
           class="bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
           v-if="!isPlayingState"
-          @click="play(indexState)"
+          @click="play(songIndexState)"
         >
           <font-awesome-icon icon="play" />
         </button>
@@ -413,7 +336,7 @@ watch(playFromToPickedState, async (value) => {
       <div>
         <p class="text-base">
           Played
-          <span class="text-red-600">{{ countLoopsState }}</span>
+          <span class="text-red-600">{{ loopsCountState }}</span>
           times
         </p>
         <p class="text-base">
@@ -458,7 +381,7 @@ watch(playFromToPickedState, async (value) => {
               <multi-select
                 class="!w-[80px]"
                 v-model="playFromState"
-                :options="songIndexOptions"
+                :options="songIndexOptionsComputed"
                 :searchable="false"
                 :show-labels="false"
                 :disabled="playFromToFlagState || playFromToCustomFlagState"
@@ -468,7 +391,7 @@ watch(playFromToPickedState, async (value) => {
               <multi-select
                 class="!w-[80px]"
                 v-model="playToState"
-                :options="songIndexOptions"
+                :options="songIndexOptionsComputed"
                 :searchable="false"
                 :show-labels="false"
                 :disabled="playFromToFlagState || playFromToCustomFlagState"
@@ -488,88 +411,28 @@ watch(playFromToPickedState, async (value) => {
     </div>
   </section>
   <!-- end:: Player Section -->
-
-  <!-- begin:: Lyric Section -->
-  <section
-    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-hidden relative row-start-1 row-end-2 col-start-2 col-end-3 h-0 md:rounded md:shadow-md md:h-[calc(100vh-var(--playlist-height)-var(--gap-app)-var(--padding-app)*2)] transition-[height] duration-[350ms] ease-linear"
-    :class="{ 'playlist-lyrics-section-active': activeLyricsState }"
-  >
-    <div class="sticky top-0 bg-white z-10 transition">
-      <multi-select
-        class="!w-[110px] !absolute top-[5px] left-[10px]"
-        v-model="selectedLyricTypeState"
-        :options="lyricTypesOptionsState"
-        :allow-empty="false"
-        :searchable="false"
-        label="name"
-        track-by="id"
-        :show-labels="false"
-      ></multi-select>
-      <h3 class="text-lg text-center py-3 font-bold">Lyrics</h3>
-    </div>
-    <div
-      class="py-5 px-7 text-center scrollbar overflow-auto"
-      ref="lyricRefState"
-      v-scroll-element="handleScrollLyric"
-    >
-      <p
-        v-html="lyric.text"
-        v-for="(lyric, index) in convertLyric"
-        :key="index"
-        class="text-dimgray transition-all cursor-pointer text-lg hover:text-blue-400 first-letter:capitalize lyrics [&:not(:last-child)]:mb-3"
-        :class="{
-          '!text-blue-500 scale-110 active': lyric.id === currentLyricState?.id,
-          'text-left': selectedLyricTypeState.id === 'lyric2',
-          'text-slate-300': lyric.over
-        }"
-        @click="setCurrentlyTimer(lyric.start || 0)"
-      ></p>
-    </div>
-  </section>
-  <!-- end:: Lyric Section -->
-
+  <lyric
+    :current-song-state="currentSongState"
+    :show-lyrics-state="showLyricsState"
+    @set-currently-timer="setCurrentlyTimer"
+    ref="lyricRef"
+  />
   <!-- begin:: Playlist Section -->
-  <section
-    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative h-0 row-start-2 row-end-3 col-start-2 col-end-3 md:h-[var(--playlist-height)] md:rounded md:shadow-md transition-[height] duration-[350ms] ease-linear"
-    :class="{ 'playlist-lyrics-section-active': activePlaylistState }"
-  >
-    <ul class="h-full" ref="songPlaylistState">
-      <perfect-scrollbar class="h-full">
-        <li
-          v-for="(song, key) in songsState"
-          :key="song.id"
-          class="grid grid-cols-1 py-[10px] px-4 cursor-pointer border-b border-solid border-slate-200 hover:bg-sky-100 transition"
-          @click="play(key, true)"
-          :class="{ 'bg-sky-200 !border-sky-200 active': song.id === currentState.id }"
-        >
-          <p class="ml-1 text-base">
-            {{ song.title }}
-          </p>
-        </li>
-      </perfect-scrollbar>
-    </ul>
-  </section>
+  <playlist
+    :current-song-state="currentSongState"
+    :songs-state="songsState"
+    :show-playlist-state="showPlaylistState"
+    @play="play"
+    ref="playlistRef"
+  />
   <!-- end:: Playlist Section -->
 
   <!-- begin:: Nav mobile -->
-  <section
-    class="flex items-center fixed bottom-0 left-0 text-2xl text-gray-600 w-full shadow-[0px_3px_8px_rgba(0,0,0,0.24)] bg-white md:hidden"
-  >
-    <div
-      class="px-5 py-2 w-1/2 text-center border-b-4 border-b-white border-solid transition-all duration-300"
-      :class="{ 'text-blue-500 !border-b-blue-500': activePlaylistState }"
-      @click="activeNavMobile('playlist')"
-    >
-      <font-awesome-icon :icon="['fas', 'list']" />
-    </div>
-    <div
-      class="px-5 py-2 w-1/2 text-center border-b-4 border-b-white border-solid transition-all duration-300"
-      :class="{ 'text-blue-500 !border-b-blue-500': activeLyricsState }"
-      @click="activeNavMobile('lyrics')"
-    >
-      <font-awesome-icon :icon="['fas', 'music']" />
-    </div>
-  </section>
+  <nav-mobile
+    @activeNavMobile="activeNavMobile"
+    :show-lyrics-state="showLyricsState"
+    :show-playlist-state="showPlaylistState"
+  />
   <!-- end:: Nav mobile -->
 </template>
 
