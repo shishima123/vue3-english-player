@@ -4,8 +4,8 @@ import { computed, ref, watch } from 'vue'
 import { timeStringToSecond } from '@/helpers/timer'
 
 const props = defineProps({
-  activeLyricsState: Boolean,
-  currentState: Object
+  showLyricsState: Boolean,
+  currentSongState: Object
 })
 
 defineEmits(['handleScrollLyric', 'setCurrentlyTimer'])
@@ -26,12 +26,12 @@ let currentLyricState = ref({})
 let lyricRef = ref(null)
 
 let convertLyricComputed = computed(() => {
-  if (typeof props.currentState[selectedLyricTypeState.value.id] === 'undefined') {
+  if (typeof props.currentSongState[selectedLyricTypeState.value.id] === 'undefined') {
     return []
   }
 
   let lyricConverted = []
-  let split = props.currentState[selectedLyricTypeState.value.id].split(/\n\s*\n/)
+  let split = props.currentSongState[selectedLyricTypeState.value.id].split(/\n\s*\n/)
   for (let i = 0; i < split.length; i++) {
     let subtitle = split[i]
 
@@ -99,7 +99,7 @@ watch(currentLyricState, async (value) => {
   <!-- begin:: Lyric Section -->
   <section
     class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-hidden relative row-start-1 row-end-2 col-start-2 col-end-3 h-0 md:rounded md:shadow-md md:h-[calc(100vh-var(--playlist-height)-var(--gap-app)-var(--padding-app)*2)] transition-[height] duration-[350ms] ease-linear"
-    :class="{ 'playlist-lyrics-section-active': activeLyricsState }"
+    :class="{ 'playlist-lyrics-section-active': showLyricsState }"
   >
     <div class="sticky top-0 bg-white z-10 transition">
       <multi-select
@@ -115,7 +115,7 @@ watch(currentLyricState, async (value) => {
       <h3 class="text-lg text-center py-3 font-bold">Lyrics</h3>
     </div>
     <div
-      class="py-5 px-7 text-center scrollbar overflow-auto"
+      class="py-5 px-7 text-center scrollbar overflow-y-auto overflow-x-hidden"
       ref="lyricRef"
       v-scroll-element="handleScrollLyric"
     >

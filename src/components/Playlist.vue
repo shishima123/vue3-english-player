@@ -5,7 +5,7 @@ import { scrollToActiveElement } from '@/helpers/utils'
 const playlistRef = ref(null)
 
 defineProps({
-  activePlaylistState: {
+  showPlaylistState: {
     type: Boolean,
     required: true
   },
@@ -13,7 +13,7 @@ defineProps({
     type: Array,
     required: true
   },
-  currentState: {
+  currentSongState: {
     type: Object,
     required: true
   }
@@ -31,7 +31,7 @@ defineEmits(['play'])
 <template>
   <section
     class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative h-0 row-start-2 row-end-3 col-start-2 col-end-3 md:h-[var(--playlist-height)] md:rounded md:shadow-md transition-[height] duration-[350ms] ease-linear"
-    :class="{ 'playlist-lyrics-section-active': activePlaylistState }"
+    :class="{ 'playlist-lyrics-section-active': showPlaylistState }"
     ref="wrapper"
   >
     <ul class="h-full" ref="playlistRef">
@@ -41,7 +41,7 @@ defineEmits(['play'])
           :key="song.id"
           class="grid grid-cols-1 py-[10px] px-4 cursor-pointer border-b border-solid border-slate-200 hover:bg-sky-100 transition"
           @click="$emit('play', key, true)"
-          :class="{ 'bg-sky-200 !border-sky-200 active': song.id === currentState.id }"
+          :class="{ 'bg-sky-200 !border-sky-200 active': song.id === currentSongState.id }"
         >
           <p class="ml-1 text-base">
             {{ song.title }}
