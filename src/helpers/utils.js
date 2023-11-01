@@ -1,18 +1,6 @@
 import { formatTimer } from './timer'
 
 /**
- * Remove a target object from array
- * @param {array} array
- * @param {object} target
- */
-
-const deleteElement = (array, target) => {
-  return array.filter((item) => {
-    return item != target
-  })
-}
-
-/**
  * Insert initial songs params
  * @param {array} songs
  */
@@ -25,18 +13,14 @@ const threatSongs = (songs) => {
   })
 }
 
-/**
- * Shuffle songs.
- * @param {array} array
- */
-
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[array[i], array[j]] = [array[j], array[i]]
-  }
-
-  return array
+function scrollToActiveElement(element, activeClass, behavior = 'smooth', block = 'center') {
+  setTimeout(() => {
+    let scrollElement = element.querySelector(activeClass)
+    if (!scrollElement) {
+      return
+    }
+    scrollElement.scrollIntoView({ behavior, block })
+  })
 }
 
-export { deleteElement, threatSongs, shuffleArray }
+export { threatSongs, scrollToActiveElement }

@@ -1,8 +1,10 @@
 <script setup>
 import { formatTimer, timeStringToSecond } from './helpers/timer'
-import { threatSongs } from './helpers/utils'
-import songMocks from './mocks/songs'
+import { threatSongs } from '@/helpers/utils'
+import songMocks from '@/mocks/songs'
 import { computed, onMounted, ref, watch } from 'vue'
+import NavMobile from '@/components/NavMobile.vue'
+import Playlist from '@/components/Playlist.vue'
 
 let loopsState = ref(10)
 let countLoopsState = ref(0)
@@ -17,8 +19,6 @@ let playerState = ref(new Audio())
 let seekSliderState = ref(0)
 let seekSliderFormatState = ref((v) => `${formatTimer(currentState.value.seconds * (v / 100))}`)
 let volumeSliderState = ref(100)
-let activePlaylistState = ref(false)
-let activeLyricsState = ref(false)
 let currentLyricState = ref({})
 let lyricTypesOptionsState = ref([
   { id: 'lyric1', name: 'Lyric 1' },
@@ -30,8 +30,8 @@ let playFromToFlagState = ref(false)
 let playFromToCustomFlagState = ref(true)
 let playFromToPickedState = ref(1)
 
-let songPlaylistState = ref(null)
-let lyricRefState = ref(null)
+let lyricRef = ref(null)
+let playlistRef = ref(null)
 
 let playFromToMappingState = ref({
   1: {
@@ -71,17 +71,17 @@ function setCurrentlyTimer(time) {
   playerState.value.currentTime = time + 0.1
 }
 
-function play(indexInput, isClickFromList = false) {
-  if (isClickFromList && indexInput === indexState.value && isPlayingState.value) {
+function play(songIndexInput, isClickFromList = false) {
+  if (isClickFromList && songIndexInput === indexState.value && isPlayingState.value) {
     return true
   }
 
-  if (indexState.value !== indexInput) {
+  if (indexState.value !== songIndexInput) {
     setLoopsCount(0)
-    indexState.value = calcCurrentIndex(indexInput)
+    indexState.value = calcCurrentIndex(songIndexInput)
     setCurrentSong()
-    scrollToActiveInPlaylist()
     scrollToTopInLyrics()
+    playlistRef.value.scrollToActive()
   }
   playerState.value.play()
   isPlayingState.value = true
@@ -139,6 +139,8 @@ function setVolume() {
   playerState.value.volume = volumeSliderState.value / 100
 }
 
+let activePlaylistState = ref(false)
+let activeLyricsState = ref(false)
 function activeNavMobile(type = null) {
   switch (type) {
     case 'playlist':
@@ -155,26 +157,22 @@ function activeNavMobile(type = null) {
   }
 }
 
-function scrollToActiveInPlaylist(behavior = 'instant', block = 'start') {
-  scrollToActiveElement(songPlaylistState.value, '.active', behavior, block)
-}
-
 function scrollToActiveInLyrics() {
-  scrollToActiveElement(lyricRefState.value, '.active')
+  scrollToActiveElement(lyricRef.value, '.active')
 }
 
 function scrollToActiveElement(element, activeClass, behavior = 'smooth', block = 'center') {
   setTimeout(() => {
-    let active = element.querySelector(activeClass)
-    if (!active) {
+    let scrollElement = element.querySelector(activeClass)
+    if (!scrollElement) {
       return
     }
-    active.scrollIntoView({ behavior, block })
+    scrollElement.scrollIntoView({ behavior, block })
   })
 }
 
 function scrollToTopInLyrics() {
-  lyricRefState.value.parentNode.scrollTo({ top: 0 })
+  lyricRef.value.parentNode.scrollTo({ top: 0 })
 }
 
 function setDefaultSettingFromLocalStorage() {
@@ -246,7 +244,6 @@ onMounted(() => {
   songsState.value = threatSongs(songMocks)
   setDefaultSettingFromLocalStorage()
   setCurrentSong()
-  scrollToActiveInPlaylist()
   registerListener()
 })
 
@@ -509,7 +506,7 @@ watch(playFromToPickedState, async (value) => {
     </div>
     <div
       class="py-5 px-7 text-center scrollbar overflow-auto"
-      ref="lyricRefState"
+      ref="lyricRef"
       v-scroll-element="handleScrollLyric"
     >
       <p
@@ -529,47 +526,21 @@ watch(playFromToPickedState, async (value) => {
   <!-- end:: Lyric Section -->
 
   <!-- begin:: Playlist Section -->
-  <section
-    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-auto relative h-0 row-start-2 row-end-3 col-start-2 col-end-3 md:h-[var(--playlist-height)] md:rounded md:shadow-md transition-[height] duration-[350ms] ease-linear"
-    :class="{ 'playlist-lyrics-section-active': activePlaylistState }"
-  >
-    <ul class="h-full" ref="songPlaylistState">
-      <perfect-scrollbar class="h-full">
-        <li
-          v-for="(song, key) in songsState"
-          :key="song.id"
-          class="grid grid-cols-1 py-[10px] px-4 cursor-pointer border-b border-solid border-slate-200 hover:bg-sky-100 transition"
-          @click="play(key, true)"
-          :class="{ 'bg-sky-200 !border-sky-200 active': song.id === currentState.id }"
-        >
-          <p class="ml-1 text-base">
-            {{ song.title }}
-          </p>
-        </li>
-      </perfect-scrollbar>
-    </ul>
-  </section>
+  <playlist
+    :current-state="currentState"
+    :songs-state="songsState"
+    :active-playlist-state="activePlaylistState"
+    @play="play"
+    ref="playlistRef"
+  />
   <!-- end:: Playlist Section -->
 
   <!-- begin:: Nav mobile -->
-  <section
-    class="flex items-center fixed bottom-0 left-0 text-2xl text-gray-600 w-full shadow-[0px_3px_8px_rgba(0,0,0,0.24)] bg-white md:hidden"
-  >
-    <div
-      class="px-5 py-2 w-1/2 text-center border-b-4 border-b-white border-solid transition-all duration-300"
-      :class="{ 'text-blue-500 !border-b-blue-500': activePlaylistState }"
-      @click="activeNavMobile('playlist')"
-    >
-      <font-awesome-icon :icon="['fas', 'list']" />
-    </div>
-    <div
-      class="px-5 py-2 w-1/2 text-center border-b-4 border-b-white border-solid transition-all duration-300"
-      :class="{ 'text-blue-500 !border-b-blue-500': activeLyricsState }"
-      @click="activeNavMobile('lyrics')"
-    >
-      <font-awesome-icon :icon="['fas', 'music']" />
-    </div>
-  </section>
+  <nav-mobile
+    @activeNavMobile="activeNavMobile"
+    :active-lyrics-state="activeLyricsState"
+    :active-playlist-state="activePlaylistState"
+  />
   <!-- end:: Nav mobile -->
 </template>
 
