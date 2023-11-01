@@ -1,10 +1,11 @@
 <script setup>
-import { formatTimer, timeStringToSecond } from './helpers/timer'
+import { formatTimer } from './helpers/timer'
 import { threatSongs } from '@/helpers/utils'
 import songMocks from '@/mocks/songs'
 import { computed, onMounted, ref, watch } from 'vue'
 import NavMobile from '@/components/NavMobile.vue'
 import Playlist from '@/components/Playlist.vue'
+import Lyric from '@/components/Lyric.vue'
 
 let loopsState = ref(10)
 let countLoopsState = ref(0)
@@ -19,13 +20,6 @@ let playerState = ref(new Audio())
 let seekSliderState = ref(0)
 let seekSliderFormatState = ref((v) => `${formatTimer(currentState.value.seconds * (v / 100))}`)
 let volumeSliderState = ref(100)
-let currentLyricState = ref({})
-let lyricTypesOptionsState = ref([
-  { id: 'lyric1', name: 'Lyric 1' },
-  { id: 'lyric2', name: 'Lyric 2' }
-])
-
-let selectedLyricTypeState = ref({ id: 'lyric1', name: 'Lyric 1' })
 let playFromToFlagState = ref(false)
 let playFromToCustomFlagState = ref(true)
 let playFromToPickedState = ref(1)
@@ -80,7 +74,7 @@ function play(songIndexInput, isClickFromList = false) {
     setLoopsCount(0)
     indexState.value = calcCurrentIndex(songIndexInput)
     setCurrentSong()
-    scrollToTopInLyrics()
+    lyricRef.value.scrollToTopInLyrics()
     playlistRef.value.scrollToActive()
   }
   playerState.value.play()
@@ -109,9 +103,7 @@ function setLoopsCount($count) {
 function registerListener() {
   playerState.value.addEventListener('timeupdate', () => {
     let playerTimer = playerState.value.currentTime
-    currentLyricState.value = convertLyric.value.find(
-      (el) => playerTimer >= el.start - 0.4 && playerTimer <= el.end
-    )
+    lyricRef.value.changeCurrentLyricState(playerTimer)
     currentlyTimerState.value = formatTimer(playerTimer)
   })
   playerState.value.addEventListener('ended', () => {
@@ -120,9 +112,7 @@ function registerListener() {
       next()
     }
     isPlayingState.value = false
-    convertLyric.value.map((el) => {
-      el.over = false
-    })
+    lyricRef.value.resetLyricOver()
     if (playFromToFlagState.value) {
       play(indexState.value)
     } else {
@@ -157,24 +147,6 @@ function activeNavMobile(type = null) {
   }
 }
 
-function scrollToActiveInLyrics() {
-  scrollToActiveElement(lyricRef.value, '.active')
-}
-
-function scrollToActiveElement(element, activeClass, behavior = 'smooth', block = 'center') {
-  setTimeout(() => {
-    let scrollElement = element.querySelector(activeClass)
-    if (!scrollElement) {
-      return
-    }
-    scrollElement.scrollIntoView({ behavior, block })
-  })
-}
-
-function scrollToTopInLyrics() {
-  lyricRef.value.parentNode.scrollTo({ top: 0 })
-}
-
 function setDefaultSettingFromLocalStorage() {
   let attributes = [
     'volumeSliderState',
@@ -204,14 +176,6 @@ function setDefaultSettingFromLocalStorage() {
   if (localStorage.playToState) {
     playToState.value =
       localStorage.playToState === 'null' ? null : Number(localStorage.playToState)
-  }
-}
-
-function handleScrollLyric(evt, el) {
-  if (el.scrollTop > 0) {
-    el.previousSibling.classList.add('scrolled')
-  } else {
-    el.previousSibling.classList.remove('scrolled')
   }
 }
 
@@ -247,35 +211,6 @@ onMounted(() => {
   registerListener()
 })
 
-let convertLyric = computed(() => {
-  if (typeof currentState.value[selectedLyricTypeState.value.id] === 'undefined') {
-    return []
-  }
-
-  let lyricConverted = []
-  let split = currentState.value[selectedLyricTypeState.value.id].split(/\n\s*\n/)
-  for (let i = 0; i < split.length; i++) {
-    let subtitle = split[i]
-
-    let [idLine, timeLine, ...textLines] = subtitle.split('\n')
-    let id = parseInt(idLine.trim())
-    // type sub has no time
-    if (isNaN(id)) {
-      return [idLine, timeLine, ...textLines].map((subtitle, id) => ({
-        id,
-        text: subtitle
-      }))
-    }
-
-    // type sub has time
-    let timeString = timeLine.trim()
-    let text = textLines.join('\n').trim()
-    let [start, end] = timeLine.trim().split('-->').map(timeStringToSecond)
-    lyricConverted.push({ id, timeString, text, start, end, over: false })
-  }
-  return lyricConverted
-})
-
 let songIndexOptions = computed(() => {
   return [...Array(songsState.value.length).keys()].map((el) => el + 1)
 })
@@ -300,23 +235,12 @@ watch(playFromState, async (value) => {
 watch(playToState, async (value) => {
   localStorage.playToState = value
 })
-watch(currentLyricState, async (value) => {
-  if (value) {
-    convertLyric.value.map((el) => {
-      if (el.id <= value.id) {
-        return (el.over = true)
-      }
-      return (el.over = false)
-    })
-  }
-  scrollToActiveInLyrics()
-})
 watch(currentlyTimerState, async (value) => {
   if (value) {
     let percent = Math.round((playerState.value.currentTime * 100) / currentState.value.seconds)
     seekSliderState.value = Math.min(percent, 100)
   }
-  scrollToActiveInLyrics()
+  lyricRef.value.scrollToActiveInLyrics()
 })
 watch(playFromToPickedState, async (value) => {
   localStorage.playFromToPickedState = value
@@ -485,46 +409,12 @@ watch(playFromToPickedState, async (value) => {
     </div>
   </section>
   <!-- end:: Player Section -->
-
-  <!-- begin:: Lyric Section -->
-  <section
-    class="flex flex-col flex-nowrap w-full mx-auto bg-white overflow-hidden relative row-start-1 row-end-2 col-start-2 col-end-3 h-0 md:rounded md:shadow-md md:h-[calc(100vh-var(--playlist-height)-var(--gap-app)-var(--padding-app)*2)] transition-[height] duration-[350ms] ease-linear"
-    :class="{ 'playlist-lyrics-section-active': activeLyricsState }"
-  >
-    <div class="sticky top-0 bg-white z-10 transition">
-      <multi-select
-        class="!w-[110px] !absolute top-[5px] left-[10px]"
-        v-model="selectedLyricTypeState"
-        :options="lyricTypesOptionsState"
-        :allow-empty="false"
-        :searchable="false"
-        label="name"
-        track-by="id"
-        :show-labels="false"
-      ></multi-select>
-      <h3 class="text-lg text-center py-3 font-bold">Lyrics</h3>
-    </div>
-    <div
-      class="py-5 px-7 text-center scrollbar overflow-auto"
-      ref="lyricRef"
-      v-scroll-element="handleScrollLyric"
-    >
-      <p
-        v-html="lyric.text"
-        v-for="(lyric, index) in convertLyric"
-        :key="index"
-        class="text-dimgray transition-all cursor-pointer text-lg hover:text-blue-400 first-letter:capitalize lyrics [&:not(:last-child)]:mb-3"
-        :class="{
-          '!text-blue-500 scale-110 active': lyric.id === currentLyricState?.id,
-          'text-left': selectedLyricTypeState.id === 'lyric2',
-          'text-slate-300': lyric.over
-        }"
-        @click="setCurrentlyTimer(lyric.start || 0)"
-      ></p>
-    </div>
-  </section>
-  <!-- end:: Lyric Section -->
-
+  <lyric
+    :current-state="currentState"
+    :active-lyrics-state="activeLyricsState"
+    @set-currently-timer="setCurrentlyTimer"
+    ref="lyricRef"
+  />
   <!-- begin:: Playlist Section -->
   <playlist
     :current-state="currentState"
