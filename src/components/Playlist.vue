@@ -5,18 +5,9 @@ import { scrollToActiveElement } from '@/helpers/utils'
 const playlistRef = ref(null)
 
 defineProps({
-  showPlaylistState: {
-    type: Boolean,
-    required: true
-  },
-  songsState: {
-    type: Array,
-    required: true
-  },
-  currentSongState: {
-    type: Object,
-    required: true
-  }
+  showPlaylistState: Boolean,
+  songsState: Array,
+  currentSongState: Object
 })
 onMounted(() => {
   scrollToActive()
