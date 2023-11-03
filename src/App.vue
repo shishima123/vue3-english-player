@@ -6,11 +6,10 @@ import { computed, onMounted, ref, watch } from 'vue'
 import NavMobile from '@/components/NavMobile.vue'
 import Playlist from '@/components/Playlist.vue'
 import Lyric from '@/components/Lyric.vue'
+import SleepTimer from '@/components/SleepTimer.vue'
 
 let loopsState = ref(10)
 let loopsCountState = ref(0)
-let playFromState = ref(1)
-let playToState = ref(10)
 let currentSongState = ref({})
 let songIndexState = ref(0)
 let isPlayingState = ref(false)
@@ -20,7 +19,10 @@ let playerState = ref(new Audio())
 let seekSliderState = ref(0)
 let seekSliderFormatState = ref((v) => `${formatTimer(currentSongState.value.seconds * (v / 100))}`)
 let volumeSliderState = ref(100)
+
 let playFromToFlagState = ref(false)
+let playFromState = ref(1)
+let playToState = ref(10)
 let playFromToCustomFlagState = ref(true)
 let playFromToMappingState = ref({
   1: {
@@ -136,14 +138,15 @@ function registerListener() {
     currentlyTimerState.value = formatTimer(playerTimer)
   })
   playerState.value.addEventListener('ended', () => {
-    setLoopsCount(++loopsCountState.value)
-    if (loopsCountState.value >= loopsState.value) {
-      next()
-    }
+    lyricRef.value.scrollToTopInLyrics()
     isPlayingState.value = false
-    lyricRef.value.resetLyricOver()
     if (playFromToFlagState.value) {
-      play(songIndexState.value)
+      setLoopsCount(++loopsCountState.value)
+      if (loopsCountState.value >= loopsState.value) {
+        next()
+      } else {
+        play(songIndexState.value)
+      }
     } else {
       next()
     }
@@ -265,72 +268,78 @@ watch(playFromToPickedState, async (value) => {
     class="flex flex-col flex-nowrap order-3 w-full h-full mx-auto overflow-hidden px-[15px] md:p-[10px] bg-white text-base rounded-none md:rounded shadow-none md:shadow-md row-start-1 row-end-3 col-start-1 col-end-2 md:order-1 transition-[height] duration-[350ms] ease-linear"
     :class="{ '!h-[var(--player-mobile-height)]': showLyricsState || showPlaylistState }"
   >
-    <h2 class="w-full text-xl font-bold text-center py-4 px-1 text-ellipsis whitespace-nowrap">
-      {{ currentSongState.title }}
-    </h2>
-    <div class="mb-5">
-      <div class="flex justify-between px-1 w-full text-xs">
-        <p>{{ currentlyTimerState }}</p>
-        <p>{{ currentSongState.totalTimer }}</p>
-      </div>
-      <vue-slider
-        v-model="seekSliderState"
-        :tooltip="'active'"
-        :tooltip-formatter="seekSliderFormatState"
-        @drag-end="seekTo"
-      ></vue-slider>
-    </div>
-
-    <div class="flex items-center justify-center w-3/5 mx-auto">
-      <span class="mr-2 inline-block">
-        <font-awesome-icon icon="volume-down" />
-      </span>
-
-      <vue-slider
-        v-model="volumeSliderState"
-        :tooltip="'active'"
-        @change="setVolume"
-        :style="{ width: '100%' }"
-      ></vue-slider>
-      <span class="ml-4 inline-block">
-        <font-awesome-icon icon="volume-up" />
-      </span>
-    </div>
-    <div class="flex justify-center items-center py-5 px-4">
-      <div class="flex justify-between border border-solid border-gray-200 w-3/5 rounded-[30px]">
-        <button
-          class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-300 relative py-5 px-7 hover:scale-125 transition"
-          @click="prev"
-          v-if="songsState.length > 1"
-        >
-          <font-awesome-icon icon="step-backward" />
-        </button>
-        <button
-          class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-300 relative py-5 px-7 hover:scale-125 transition"
-          @click="next"
-          v-if="songsState.length > 1"
-        >
-          <font-awesome-icon icon="step-forward" />
-        </button>
+    <!-- begin:: Player -->
+    <div>
+      <h2 class="w-full text-xl font-bold text-center py-4 px-1 text-ellipsis whitespace-nowrap">
+        {{ currentSongState.title }}
+      </h2>
+      <div class="mb-5">
+        <div class="flex justify-between px-1 w-full text-xs">
+          <p>{{ currentlyTimerState }}</p>
+          <p>{{ currentSongState.totalTimer }}</p>
+        </div>
+        <vue-slider
+          v-model="seekSliderState"
+          :tooltip="'active'"
+          :tooltip-formatter="seekSliderFormatState"
+          @drag-end="seekTo"
+        ></vue-slider>
       </div>
 
-      <div class="absolute">
-        <button
-          class="bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
-          v-if="!isPlayingState"
-          @click="play(songIndexState)"
-        >
-          <font-awesome-icon icon="play" />
-        </button>
-        <button
-          class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
-          v-else
-          @click="pause"
-        >
-          <font-awesome-icon icon="pause" />
-        </button>
+      <div class="flex items-center justify-center w-3/5 mx-auto">
+        <span class="mr-2 inline-block">
+          <font-awesome-icon icon="volume-down" />
+        </span>
+
+        <vue-slider
+          v-model="volumeSliderState"
+          :tooltip="'active'"
+          @change="setVolume"
+          :style="{ width: '100%' }"
+        ></vue-slider>
+        <span class="ml-4 inline-block">
+          <font-awesome-icon icon="volume-up" />
+        </span>
+      </div>
+      <div class="flex justify-center items-center py-5 px-4">
+        <div class="flex justify-between border border-solid border-gray-200 w-3/5 rounded-[30px]">
+          <button
+            class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-300 relative py-5 px-7 hover:scale-125 transition"
+            @click="prev"
+            v-if="songsState.length > 1"
+          >
+            <font-awesome-icon icon="step-backward" />
+          </button>
+          <button
+            class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-300 relative py-5 px-7 hover:scale-125 transition"
+            @click="next"
+            v-if="songsState.length > 1"
+          >
+            <font-awesome-icon icon="step-forward" />
+          </button>
+        </div>
+
+        <div class="absolute">
+          <button
+            class="bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
+            v-if="!isPlayingState"
+            @click="play(songIndexState)"
+          >
+            <font-awesome-icon icon="play" />
+          </button>
+          <button
+            class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
+            v-else
+            @click="pause"
+          >
+            <font-awesome-icon icon="pause" />
+          </button>
+        </div>
       </div>
     </div>
+    <!-- end:: Player -->
+
+    <!-- begin:: Loop -->
     <fieldset class="flex justify-between items-center my-1 fieldset-border">
       <legend>Loops</legend>
       <div>
@@ -355,60 +364,64 @@ watch(playFromToPickedState, async (value) => {
         <button class="btn" @click="setLoopsCount(0)">Reset</button>
       </div>
     </fieldset>
-    <div>
-      <fieldset class="flex justify-between items-center my-1 fieldset-border">
-        <legend>Play from to</legend>
-        <div class="w-full">
-          <div class="grid grid-cols-3">
-            <label
-              v-for="(radio, index) in playFromToMappingState"
-              :key="index"
-              class="radio-container"
-            >
-              {{ radio.text }}
-              <input
-                type="radio"
-                name="playFromTo"
-                :value="index"
-                :disabled="playFromToFlagState"
-                v-model="playFromToPickedState"
-              />
-              <span class="checkmark"></span>
-            </label>
-          </div>
-          <div class="flex justify-between">
-            <div class="flex items-center">
-              <multi-select
-                class="!w-[80px]"
-                v-model="playFromState"
-                :options="songIndexOptionsComputed"
-                :searchable="false"
-                :show-labels="false"
-                :disabled="playFromToFlagState || playFromToCustomFlagState"
-                placeholder=""
-              ></multi-select>
-              <label class="mx-3">to</label>
-              <multi-select
-                class="!w-[80px]"
-                v-model="playToState"
-                :options="songIndexOptionsComputed"
-                :searchable="false"
-                :show-labels="false"
-                :disabled="playFromToFlagState || playFromToCustomFlagState"
-                placeholder=""
-              ></multi-select>
-            </div>
-            <button
-              class="btn"
-              :class="{ 'bg-zinc-100': playFromToFlagState }"
-              @click="playFromToFlagState = !playFromToFlagState"
-            >
-              {{ playFromToFlagState ? 'Cancel' : 'Set' }}
-            </button>
-          </div>
+    <!-- end:: Loop -->
+
+    <!-- begin:: Play from to -->
+    <fieldset class="flex justify-between items-center my-1 fieldset-border">
+      <legend>Play from to</legend>
+      <div class="w-full">
+        <div class="grid grid-cols-3">
+          <label
+            v-for="(radio, index) in playFromToMappingState"
+            :key="index"
+            class="radio-container"
+          >
+            {{ radio.text }}
+            <input
+              type="radio"
+              name="playFromTo"
+              :value="index"
+              :disabled="playFromToFlagState"
+              v-model="playFromToPickedState"
+            />
+            <span class="checkmark"></span>
+          </label>
         </div>
-      </fieldset>
-    </div>
+        <div class="flex justify-between">
+          <div class="flex items-center">
+            <multi-select
+              class="!w-[80px]"
+              v-model="playFromState"
+              :options="songIndexOptionsComputed"
+              :searchable="false"
+              :show-labels="false"
+              :disabled="playFromToFlagState || playFromToCustomFlagState"
+              placeholder=""
+            ></multi-select>
+            <label class="mx-3">to</label>
+            <multi-select
+              class="!w-[80px]"
+              v-model="playToState"
+              :options="songIndexOptionsComputed"
+              :searchable="false"
+              :show-labels="false"
+              :disabled="playFromToFlagState || playFromToCustomFlagState"
+              placeholder=""
+            ></multi-select>
+          </div>
+          <button
+            class="btn"
+            :class="{ 'bg-zinc-100': playFromToFlagState }"
+            @click="playFromToFlagState = !playFromToFlagState"
+          >
+            {{ playFromToFlagState ? 'Cancel' : 'Set' }}
+          </button>
+        </div>
+      </div>
+    </fieldset>
+    <!-- end:: Play from to -->
+
+    <sleep-timer @pause="pause"></sleep-timer>
   </section>
   <!-- end:: Player Section -->
   <lyric
