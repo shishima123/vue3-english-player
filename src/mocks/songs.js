@@ -2203,91 +2203,87 @@ G :   Well, I hope you find enough time for both schoolwork and sports. Good luc
     seconds: 75,
     src: './assets/audios/LPTD1.1/Unit 23 Arts and Crafts Class.mp3',
     lyric1: `1
-00:00:08,900 --> 00:00:12,633
-unit 23 arts and crafts class
+00:00:00,133 --> 00:00:03,933
+unit 23 Arts and crafts class
 
 2
-00:00:14,033 --> 00:00:18,233
+00:00:05,200 --> 00:00:09,400
 hi mom I'm back from arts and crafts class
 
 3
-00:00:18,433 --> 00:00:20,433
+00:00:09,766 --> 00:00:11,666
 look at what I'm wearing
 
 4
-00:00:20,700 --> 00:00:24,666
+00:00:12,000 --> 00:00:15,900
 well you're wearing a blue T-shirt and jeans
 
 5
-00:00:25,033 --> 00:00:28,299
+00:00:16,266 --> 00:00:19,533
 sure but what else am I wearing
 
 6
-00:00:28,433 --> 00:00:31,233
+00:00:19,733 --> 00:00:22,366
 oh those earrings are very pretty
 
 7
-00:00:31,600 --> 00:00:34,500
-is that what you're learning to make this week
+00:00:22,900 --> 00:00:25,066
+is that what you're learning to make
 
 8
-00:00:34,500 --> 00:00:36,466
-in arts and crafts class
+00:00:25,066 --> 00:00:27,766
+this week in arts and crafts class
 
 9
-00:00:36,800 --> 00:00:41,233
+00:00:28,066 --> 00:00:32,566
 yes we're learning to make jewelry from beads this week
 
 10
-00:00:41,733 --> 00:00:45,133
+00:00:32,966 --> 00:00:36,466
 the beads come in different colors and shapes
 
 11
-00:00:45,500 --> 00:00:50,000
-1st we decide what sort of jewelry we want to make
+00:00:36,900 --> 00:00:41,066
+first we decide what sort of jewelry we want to make
 
 12
-00:00:50,300 --> 00:00:53,100
+00:00:41,666 --> 00:00:44,333
 then we choose the beads we want
 
 13
-00:00:53,133 --> 00:00:56,999
+00:00:44,400 --> 00:00:48,166
 and string them on transparent plastic wire
 
 14
-00:00:57,266 --> 00:00:59,533
+00:00:48,566 --> 00:00:50,766
 that sounds like a lot of fun
 
 15
-00:00:59,933 --> 00:01:00,733
-yeah
+00:00:51,200 --> 00:00:55,900
+yeah Tom made a bead necklace for his sister
 
 16
-00:01:01,300 --> 00:01:04,666
-Tom made a bead necklace for his sister
-
-17
-00:01:04,833 --> 00:01:07,099
+00:00:56,133 --> 00:00:58,399
 and I made some earrings
 
-18
-00:01:07,633 --> 00:01:09,033
-guess what bomb
+17
+00:00:58,866 --> 00:01:00,266
+guess what bom
 
-19
-00:01:09,133 --> 00:01:12,233
+18
+00:01:00,400 --> 00:01:03,533
 I made a pair of earrings for you too
 
-20
-00:01:12,733 --> 00:01:15,099
+19
+00:01:03,966 --> 00:01:06,199
 oh these are very pretty
 
-21
-00:01:15,400 --> 00:01:17,233
+20
+00:01:06,766 --> 00:01:08,533
 thank you very much
 
-22
-00:01:17,600 --> 00:01:20,900
+21
+00:01:08,866 --> 00:01:12,299
 next week I'm going to make a necklace
 `,
     lyric2: `Arts and Crafts Class

@@ -13,7 +13,7 @@ const threatSongs = (songs) => {
   })
 }
 
-function scrollToActiveElement(element, activeClass, behavior = 'smooth', block = 'center') {
+const scrollToActiveElement = (element, activeClass, behavior = 'smooth', block = 'center') => {
   setTimeout(() => {
     let scrollElement = element.querySelector(activeClass)
     if (!scrollElement) {
