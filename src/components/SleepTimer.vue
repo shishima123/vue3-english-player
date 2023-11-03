@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 const emit = defineEmits(['pause'])
 
 let isSleepTimerActive = ref(false)
-let sleepTimeState = ref(1)
+let sleepTimeState = ref(30)
 let sleepRemainingTimeState = ref(0)
 
 let sleepRemainingTimeComputed = computed(() => {
@@ -20,7 +20,9 @@ function setSleepState() {
 }
 
 onMounted(() => {
-  sleepTimeState.value = Number(localStorage.sleepTimeState)
+  if (localStorage['sleepTimeState']) {
+    sleepTimeState.value = Number(localStorage['sleepTimeState'])
+  }
 })
 
 watch(isSleepTimerActive, async (value, oldValue) => {

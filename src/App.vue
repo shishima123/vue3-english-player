@@ -45,7 +45,7 @@ let playFromToMappingState = ref({
     from: 31,
     to: 40
   },
-  other: {
+  5: {
     text: 'Other'
   }
 })
@@ -249,7 +249,7 @@ watch(currentlyTimerState, async (value) => {
 let playFromToPickedState = ref(1)
 watch(playFromToPickedState, async (value) => {
   localStorage.playFromToPickedState = value
-  if (value === 'other') {
+  if (value == 5) {
     playFromToCustomFlagState.value = false
     return true
   }
