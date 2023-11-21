@@ -8,7 +8,7 @@
 ## Project Setup
 
 ```sh
-npm install
+yarn install
 ```
 
 ## Nodejs version v18.18.0
@@ -22,19 +22,19 @@ nvm use 18
 ### Compile and Hot-Reload for Development
 
 ```sh
-npm run dev
+yarn dev
 ```
 
 ### Compile and Minify for Production
 
 ```sh
-npm run build
+yarn build
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh
-npm run lint
+yarn lint
 ```
 ## 💁🏻 Build
 

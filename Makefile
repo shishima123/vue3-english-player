@@ -2,7 +2,7 @@
 
 build:
 	rm -rf dist
-	npm run build
+	yarn build
 
 deploy: build
 	cd dist && \
