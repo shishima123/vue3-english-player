@@ -7,6 +7,8 @@ import NavMobile from '@/components/NavMobile.vue'
 import Playlist from '@/components/Playlist.vue'
 import Lyric from '@/components/Lyric.vue'
 import SleepTimer from '@/components/SleepTimer.vue'
+import Sync from '@/components/Sync.vue'
+import { syncDownload, syncUpload } from '@/helpers/sync'
 
 let loopsState = ref(10)
 let loopsCountState = ref(0)
@@ -20,7 +22,7 @@ let seekSliderState = ref(0)
 let seekSliderFormatState = ref((v) => `${formatTimer(currentSongState.value.seconds * (v / 100))}`)
 let volumeSliderState = ref(100)
 
-let playFromToFlagState = ref(false)
+let playFromToFlagState = ref(true)
 let playFromState = ref(1)
 let playToState = ref(10)
 let playFromToCustomFlagState = ref(true)
@@ -53,6 +55,11 @@ let playFromToMappingState = ref({
 // refs
 let lyricRef = ref(null)
 let playlistRef = ref(null)
+let sleepTimerRef = ref(null)
+let syncRef = ref(null)
+
+// using for prevent sync in first load page
+let isAppFirstLoad = true
 
 // computed
 let songIndexOptionsComputed = computed(() => {
@@ -84,8 +91,11 @@ function calcCurrentSongIndex(newSongIndex) {
   return playFromState.value - 1
 }
 
-function setCurrentSong() {
-  currentSongState.value = songsState.value[songIndexState.value]
+function setCurrentSong(songIndex) {
+  currentSongState.value = songsState.value[songIndex]
+}
+
+function setPlayerSource() {
   playerState.value.src = currentSongState.value.src
 }
 
@@ -104,10 +114,10 @@ function play(songIndexInput, isClickFromList = false) {
   if (songIndexState.value !== songIndexInput) {
     setLoopsCount(0)
     songIndexState.value = calcCurrentSongIndex(songIndexInput)
-    setCurrentSong()
     lyricRef.value.scrollToTopInLyrics()
     playlistRef.value.scrollToActive()
   }
+  setPlayerSource()
   playerState.value.play()
   isPlayingState.value = true
 }
@@ -180,6 +190,7 @@ function activeNavMobile(type = null) {
 }
 
 function setDefaultSettingFromLocalStorage() {
+  pause()
   let attributes = [
     'volumeSliderState',
     'loopsState',
@@ -193,6 +204,7 @@ function setDefaultSettingFromLocalStorage() {
       eval(el).value = Number(localStorage[el])
     }
   })
+
   if (localStorage.songIndexState) {
     songIndexState.value =
       Number(localStorage.songIndexState) > songsState.value.length - 1
@@ -209,14 +221,33 @@ function setDefaultSettingFromLocalStorage() {
     playToState.value =
       localStorage.playToState === 'null' ? null : Number(localStorage.playToState)
   }
+
+  sleepTimerRef.value.setDefaultSettingFromLocalStorage()
 }
 
-onMounted(() => {
+onMounted(async () => {
   songsState.value = threatSongs(songMocks)
-  setDefaultSettingFromLocalStorage()
-  setCurrentSong()
-  registerListener()
+  await syncRef.value.setDefaultSettingFromLocalStorage()
+  await syncDownload(syncRef.value.syncFlagState)
+  await setDefaultSettingFromLocalStorage()
+  await registerListener()
+  isAppFirstLoad = false
 })
+
+function onSyncUpload() {
+  if (!syncRef.value.syncFlagState || isAppFirstLoad) {
+    return
+  }
+  let data = {}
+  data.loopsState = Number(loopsState.value)
+  data.loopsCountState = Number(loopsCountState.value)
+  data.songIndexState = Number(songIndexState.value)
+  data.playFromState = Number(playFromState.value)
+  data.playToState = Number(playToState.value)
+  data.playFromToPickedState = Number(playFromToPickedState.value)
+
+  syncUpload(data)
+}
 
 watch(volumeSliderState, async (value) => {
   localStorage.volumeSliderState = value
@@ -225,18 +256,24 @@ watch(loopsState, async (value, old) => {
   value = isNaN(value) ? old : value
   loopsState.value = value
   localStorage.loopsState = value
+  onSyncUpload()
 })
 watch(loopsCountState, async (value) => {
   localStorage.loopsCountState = value
+  onSyncUpload()
 })
 watch(songIndexState, async (value) => {
   localStorage.songIndexState = value
+  setCurrentSong(value)
+  onSyncUpload()
 })
 watch(playFromState, async (value) => {
   localStorage.playFromState = value
+  onSyncUpload()
 })
 watch(playToState, async (value) => {
   localStorage.playToState = value
+  onSyncUpload()
 })
 watch(currentlyTimerState, async (value) => {
   if (value) {
@@ -249,6 +286,8 @@ watch(currentlyTimerState, async (value) => {
 let playFromToPickedState = ref(1)
 watch(playFromToPickedState, async (value) => {
   localStorage.playFromToPickedState = value
+  onSyncUpload()
+  // 5: Other
   if (value == 5) {
     playFromToCustomFlagState.value = false
     return true
@@ -421,7 +460,11 @@ watch(playFromToPickedState, async (value) => {
     </fieldset>
     <!-- end:: Play from to -->
 
-    <sleep-timer @pause="pause"></sleep-timer>
+    <sleep-timer @pause="pause" ref="sleepTimerRef"></sleep-timer>
+    <sync
+      @set-default-setting-from-local-storage="setDefaultSettingFromLocalStorage"
+      ref="syncRef"
+    ></sync>
   </section>
   <!-- end:: Player Section -->
   <lyric

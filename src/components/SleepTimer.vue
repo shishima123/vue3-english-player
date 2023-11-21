@@ -1,10 +1,12 @@
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 const emit = defineEmits(['pause'])
 
 let isSleepTimerActive = ref(false)
 let sleepTimeState = ref(30)
 let sleepRemainingTimeState = ref(0)
+
+defineExpose({ setDefaultSettingFromLocalStorage })
 
 let sleepRemainingTimeComputed = computed(() => {
   return sleepRemainingTimeState.value ? sleepRemainingTimeState.value + ' min' : 'disabled'
@@ -19,11 +21,11 @@ function setSleepState() {
   }
 }
 
-onMounted(() => {
+function setDefaultSettingFromLocalStorage() {
   if (localStorage['sleepTimeState']) {
     sleepTimeState.value = Number(localStorage['sleepTimeState'])
   }
-})
+}
 
 watch(isSleepTimerActive, async (value, oldValue) => {
   if (value !== oldValue) {
