@@ -1,25 +1,21 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { createToast } from 'mosha-vue-toastify'
-import { syncDownload } from '@/helpers/sync'
+import { syncDownload } from '@/composables/sync'
 
 let syncFlagState = ref(true)
+let isSyncing = ref(false)
 
-const emit = defineEmits(['setDefaultSettingFromLocalStorage'])
+const emit = defineEmits(['setDefaultSettingFromLocalStorage', 'setPlayerSource'])
 defineExpose({ setDefaultSettingFromLocalStorage, syncFlagState })
 
 async function sync() {
+  isSyncing.value = true
   await syncDownload()
   await emit('setDefaultSettingFromLocalStorage')
-  showSyncCompletedNotify()
-}
-
-function showSyncCompletedNotify() {
-  createToast('Sync successfully', {
-    hideProgressBar: false,
-    transition: 'zoom',
-    timeout: 2000
-  })
+  await emit('setPlayerSource')
+  setTimeout(() => {
+    isSyncing.value = false
+  }, 500)
 }
 
 function setDefaultSettingFromLocalStorage() {
@@ -46,7 +42,30 @@ watch(syncFlagState, async (value) => {
       </p>
     </div>
     <div class="flex flex-col">
-      <button class="btn w-[90px]" @click="sync">Sync Now</button>
+      <button class="btn" :class="{ disabled: isSyncing }" @click="sync">
+        <svg
+          :class="{ 'animate-spin !inline-block': isSyncing }"
+          class="-ml-1 mr-3 h-5 w-5 text-white hidden"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
+        Sync Now
+      </button>
     </div>
   </fieldset>
 </template>

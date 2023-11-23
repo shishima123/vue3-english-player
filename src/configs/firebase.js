@@ -2,10 +2,6 @@
 import { initializeApp } from 'firebase/app'
 import { child, get, getDatabase, ref, update } from 'firebase/database'
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: 'AIzaSyC7Ojeojtk-sX0ULlH7yjqS3os5KJCXvZA',
   authDomain: 'vue3-english-player.firebaseapp.com',
@@ -16,11 +12,10 @@ const firebaseConfig = {
   appId: '1:641226859339:web:41b5dcd6bd174d3f0abece'
 }
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig)
-export function getDataSync() {
+export function getDatabaseList(path) {
   const dbRef = ref(getDatabase())
-  return get(child(dbRef, `sync`))
+  return get(child(dbRef, path))
     .then((snapshot) => {
       if (snapshot.exists()) {
         return snapshot.val()
@@ -34,9 +29,9 @@ export function getDataSync() {
     })
 }
 
-export function setDataSync(data) {
+export function setDatabaseList(path, data) {
   const db = getDatabase()
   const updates = {}
-  updates['/sync'] = data
+  updates[path] = data
   update(ref(db), updates)
 }

@@ -68,7 +68,7 @@ watch(sleepTimeState, async (value) => {
     <div class="flex flex-col">
       <button
         class="btn"
-        :class="{ 'bg-zinc-100': isSleepTimerActive }"
+        :class="{ active: isSleepTimerActive }"
         @click="isSleepTimerActive = !isSleepTimerActive"
       >
         {{ isSleepTimerActive ? 'Cancel' : 'Set' }}

@@ -53,8 +53,16 @@
     }
 
     .btn {
-        @apply w-[60px] h-[40px] border border-solid border-gray-400 shadow-md rounded-md hover:bg-gray-100 transition-all
+      @apply min-w-[70px] inline-flex items-center  justify-center px-4 py-2 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150
     }
+
+  .btn.active {
+    @apply bg-indigo-400 hover:bg-indigo-500
+  }
+
+  .btn.disabled {
+    @apply cursor-not-allowed bg-indigo-400
+  }
 
     /**** Start Radio custom ****/
     .radio-container {
