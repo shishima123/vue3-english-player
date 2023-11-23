@@ -371,7 +371,7 @@ watch(playFromToPickedState, async (value) => {
 
         <div class="absolute">
           <button
-            class="bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
+            class="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
             v-if="!isPlayingState"
             @click="play(songIndexState)"
           >
@@ -421,21 +421,29 @@ watch(playFromToPickedState, async (value) => {
       <legend>Play from to</legend>
       <div class="w-full">
         <div class="grid grid-cols-3">
-          <label
+          <div
             v-for="(radio, index) in playFromToMappingState"
             :key="index"
-            class="radio-container"
+            class="flex items-center mr-4 mb-4"
           >
-            {{ radio.text }}
             <input
+              :id="`playFromToPickedState-${index}`"
               type="radio"
+              v-model="playFromToPickedState"
               name="playFromTo"
+              class="hidden"
               :value="index"
               :disabled="playFromToFlagState"
-              v-model="playFromToPickedState"
             />
-            <span class="checkmark"></span>
-          </label>
+            <label
+              :for="`playFromToPickedState-${index}`"
+              class="flex items-center cursor-pointer"
+              :class="{ disabled: playFromToFlagState }"
+            >
+              <span class="w-4 h-4 inline-block mr-1 rounded-full border border-grey"></span>
+              {{ radio.text }}
+            </label>
+          </div>
         </div>
         <div class="flex justify-between">
           <div class="flex items-center">

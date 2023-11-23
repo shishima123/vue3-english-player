@@ -53,60 +53,39 @@
     }
 
     .btn {
-      @apply min-w-[70px] inline-flex items-center  justify-center px-4 py-2 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150
+      @apply min-w-[70px] inline-flex items-center justify-center text-sm rounded-lg px-4 py-2 border-2 border-blue-500 text-blue-500 hover:bg-blue-600 hover:text-blue-50 duration-300
     }
 
   .btn.active {
-    @apply bg-red-500 hover:bg-red-400
+    @apply bg-blue-500 border-blue-500 hover:bg-blue-400 hover:border-blue-400 text-white
   }
 
   .btn.disabled {
-    @apply cursor-not-allowed bg-indigo-400
+    @apply cursor-not-allowed bg-blue-500
   }
 
     /**** Start Radio custom ****/
-    .radio-container {
-        @apply block relative pl-[27px] mb-3 cursor-pointer select-none
+    input[type="radio"] + label span {
+      transition: background .2s,
+      transform .2s;
     }
 
-    /* Hide the browser's default checkbox */
-    .radio-container input {
-        @apply absolute opacity-0 cursor-pointer h-0 w-0
+    input[type="radio"] + label span:hover,
+    input[type="radio"] + label:hover span {
+      transform: scale(1.2);
     }
 
-    /* Create a custom checkbox */
-    .checkmark {
-        @apply absolute top-0 left-0 h-[20px] w-[20px] bg-gray-200 transition-all
+    input[type="radio"]:checked + label span {
+      box-shadow: 0px 0px 0px 2px white inset;
+      @apply bg-blue-500
     }
 
-    /* On mouse-over, add a grey background color */
-    .radio-container:hover input ~ .checkmark {
-        @apply bg-gray-300
+    input[type="radio"]:checked + label {
+      @apply text-blue-500
     }
 
-    /* When the checkbox is checked, add a blue background */
-    .radio-container input:checked ~ .checkmark {
-        @apply bg-blue-500
-    }
-
-    /* Create the checkmark/indicator (hidden when not checked) */
-    .checkmark:after {
-        content: "";
-        @apply absolute hidden
-    }
-
-    /* Show the checkmark when checked */
-    .radio-container input:checked ~ .checkmark:after {
-        @apply block
-    }
-
-    /* Style the checkmark/indicator */
-    .radio-container .checkmark:after {
-        @apply left-[7px] top-[4px] w-[6px] h-[11px] border-solid border-white border-r-[3px] border-b-[3px] rotate-45
-    }
-
-    .radio-container input[disabled] ~ .checkmark {
-        @apply opacity-60
+    input[type="radio"] + label.disabled {
+      @apply opacity-70
     }
     /**** End Radio custom ****/
 
@@ -133,7 +112,7 @@
         display: none;
     }
     /* End Customize website's scrollbar like Mac OS */
-    
+
     /**** Start Checkbox toggle switch ****/
     /* The switch - the box around the slider */
     .switch {
@@ -176,11 +155,12 @@
     }
 
     input:checked + .slider {
-        background-color: #2196F3;
+      @apply bg-blue-500
     }
 
     input:focus + .slider {
-        box-shadow: 0 0 1px #2196F3;
+      box-shadow: 0 0 1px;
+      @apply shadow-blue-500
     }
 
     input:checked + .slider:before {
