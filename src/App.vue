@@ -9,6 +9,8 @@ import Lyric from '@/components/Lyric.vue'
 import SleepTimer from '@/components/SleepTimer.vue'
 import Sync from '@/components/Sync.vue'
 import { syncDownload, syncUpload } from '@/composables/sync'
+import ModalLogin from '@/components/ModalLogin.vue'
+import { FirebaseEnums } from '@/configs/firebase'
 
 let loopsState = ref(10)
 let loopsCountState = ref(0)
@@ -229,7 +231,13 @@ function setDefaultSettingFromLocalStorage() {
 
 onMounted(async () => {
   await syncRef.value.setDefaultSettingFromLocalStorage()
-  await syncDownload(syncRef.value.syncFlagState)
+  try {
+    await syncDownload(syncRef.value.syncFlagState)
+  } catch (error) {
+    if (error.message === FirebaseEnums.permission_denied) {
+      syncRef.value.onShowModalLogin()
+    }
+  }
   await setDefaultSettingFromLocalStorage()
   await setCurrentSong()
   await setPlayerSource()
@@ -451,13 +459,15 @@ watch(playFromToPickedState, async (value) => {
               placeholder=""
             ></multi-select>
           </div>
-          <button
-            class="btn"
-            :class="{ active: playFromToFlagState }"
-            @click="playFromToFlagState = !playFromToFlagState"
-          >
-            {{ playFromToFlagState ? 'Cancel' : 'Set' }}
-          </button>
+          <div>
+            <button
+              class="btn"
+              :class="{ active: playFromToFlagState }"
+              @click="playFromToFlagState = !playFromToFlagState"
+            >
+              {{ playFromToFlagState ? 'Cancel' : 'Set' }}
+            </button>
+          </div>
         </div>
       </div>
     </fieldset>

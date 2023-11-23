@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
 import { child, get, getDatabase, ref, update } from 'firebase/database'
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC7Ojeojtk-sX0ULlH7yjqS3os5KJCXvZA',
@@ -13,6 +14,10 @@ const firebaseConfig = {
 }
 
 const app = initializeApp(firebaseConfig)
+
+export const FirebaseEnums = {
+  permission_denied: 'Permission denied'
+}
 export function getDatabaseList(path) {
   const dbRef = ref(getDatabase())
   return get(child(dbRef, path))
@@ -24,7 +29,9 @@ export function getDatabaseList(path) {
       }
     })
     .catch((error) => {
-      console.error(error)
+      if (error.message === FirebaseEnums.permission_denied) {
+        throw error
+      }
       return {}
     })
 }
@@ -34,4 +41,22 @@ export function setDatabaseList(path, data) {
   const updates = {}
   updates[path] = data
   update(ref(db), updates)
+}
+
+const auth = getAuth()
+export function signInFirebase(email, password) {
+  return signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      return userCredential.user
+    })
+    .catch((error) => {
+      console.log(error)
+      throw error
+    })
+}
+
+onAuthStateChanged(auth, (user) => {})
+
+export function getCurrentUser() {
+  return auth.currentUser
 }
