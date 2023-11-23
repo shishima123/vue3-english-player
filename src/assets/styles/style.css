@@ -57,7 +57,7 @@
     }
 
   .btn.active {
-    @apply bg-indigo-400 hover:bg-indigo-500
+    @apply bg-red-500 hover:bg-red-400
   }
 
   .btn.disabled {
