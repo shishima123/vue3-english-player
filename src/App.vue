@@ -32,25 +32,32 @@ let playFromToMappingState = ref({
   1: {
     text: '1-10',
     from: 1,
-    to: 10
+    to: 10,
+    shouldDisableSelect: true
   },
   2: {
     text: '11-20',
     from: 11,
-    to: 20
+    to: 20,
+    shouldDisableSelect: true
   },
   3: {
     text: '21-30',
     from: 21,
-    to: 30
+    to: 30,
+    shouldDisableSelect: true
   },
   4: {
     text: '31-40',
     from: 31,
-    to: 40
+    to: 40,
+    shouldDisableSelect: true
   },
   5: {
-    text: 'Other'
+    text: 'Other',
+    from: 1,
+    to: 40,
+    shouldDisableSelect: false
   }
 })
 
@@ -298,16 +305,11 @@ let playFromToPickedState = ref(1)
 watch(playFromToPickedState, async (value) => {
   localStorage.playFromToPickedState = value
   onSyncUpload()
-  // 5: Other
-  if (value == 5) {
-    playFromToCustomFlagState.value = false
-    return true
-  }
 
   if (value in playFromToMappingState.value) {
     playFromState.value = playFromToMappingState.value[value].from
     playToState.value = playFromToMappingState.value[value].to
-    playFromToCustomFlagState.value = true
+    playFromToCustomFlagState.value = playFromToMappingState.value[value].shouldDisableSelect
   }
 })
 </script>

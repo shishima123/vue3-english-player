@@ -13,7 +13,7 @@ function onClosed() {
   emit('handleAfterLogin')
 }
 
-async function onSignIn() {
+async function onSubmit() {
   isLoading.value = true
   error.value = null
   try {
@@ -37,7 +37,7 @@ async function onSignIn() {
     @closed="onClosed"
     @update:model-value="(val) => emit('update:modelValue', val)"
   >
-    <div class="w-[80vw] md:w-[300px]">
+    <form class="w-[80vw] md:w-[300px]" @submit.prevent="onSubmit">
       <button
         class="ml-auto text-left block text-xl px-2 hover:opacity-70 transition"
         @click="emit('update:modelValue', false)"
@@ -48,7 +48,7 @@ async function onSignIn() {
       <div class="mb-4">
         <label for="email" class="block text-xs mb-1">Email</label>
         <input
-          class="w-full border rounded p-2 outline-none focus:outline-none focus:border-indigo-600"
+          class="w-full border rounded p-2 outline-none focus:outline-none focus:border-green-600"
           type="email"
           name="email"
           id="email"
@@ -59,7 +59,7 @@ async function onSignIn() {
       <div class="mb-6 md:w-full">
         <label for="password" class="block text-xs mb-1">Password</label>
         <input
-          class="w-full border rounded p-2 outline-none focus:outline-none focus:border-indigo-600"
+          class="w-full border rounded p-2 outline-none focus:outline-none focus:border-green-600"
           type="password"
           name="password"
           id="password"
@@ -69,8 +69,8 @@ async function onSignIn() {
       </div>
       <span v-if="error" class="block text-red-500 text-sm mb-4">{{ error }}</span>
       <div class="w-full text-center mb-4">
-        <button @click="onSignIn" :class="{ disabled: isLoading }" class="btn">Login</button>
+        <button type="submit" :class="{ disabled: isLoading }" class="btn">Login</button>
       </div>
-    </div>
+    </form>
   </VueFinalModal>
 </template>
