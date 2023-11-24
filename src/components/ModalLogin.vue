@@ -30,7 +30,7 @@ async function onSignIn() {
 <template>
   <VueFinalModal
     class="flex justify-center items-center"
-    content-class="flex flex-col p-4 bg-white dark:bg-black rounded border border-gray-100 dark:border-gray-800"
+    content-class="flex flex-col p-4 bg-white rounded border border-gray-100"
     overlay-transition="vfm-fade"
     content-transition="vfm-fade"
     teleport-to="body"
