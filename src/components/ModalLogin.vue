@@ -1,4 +1,5 @@
 <script setup>
+import { BackwardIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import { VueFinalModal } from 'vue-final-modal'
 import { signInFirebase } from '@/configs/firebase'
 import { ref } from 'vue'
@@ -42,7 +43,7 @@ async function onSubmit() {
         class="ml-auto text-left block text-xl px-2 hover:opacity-70 transition"
         @click="emit('update:modelValue', false)"
       >
-        <font-awesome-icon :icon="['fas', 'xmark']" />
+        <span><XMarkIcon class="h-6 w-6" /></span>
       </button>
       <span class="block text-xl uppercase font-bold mb-4 text-center">Login</span>
       <div class="mb-4">

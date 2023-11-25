@@ -9,8 +9,17 @@ import Lyric from '@/components/Lyric.vue'
 import SleepTimer from '@/components/SleepTimer.vue'
 import Sync from '@/components/Sync.vue'
 import { syncDownload, syncUpload } from '@/composables/sync'
-import ModalLogin from '@/components/ModalLogin.vue'
 import { FirebaseEnums } from '@/configs/firebase'
+
+// icons
+import { PlayIcon, PauseIcon } from '@heroicons/vue/24/solid'
+
+import {
+  BackwardIcon,
+  ForwardIcon,
+  SpeakerWaveIcon,
+  SpeakerXMarkIcon
+} from '@heroicons/vue/24/outline'
 
 let loopsState = ref(10)
 let loopsCountState = ref(0)
@@ -340,7 +349,7 @@ watch(playFromToPickedState, async (value) => {
 
       <div class="flex items-center justify-center w-3/5 mx-auto">
         <span class="mr-2 inline-block">
-          <font-awesome-icon icon="volume-down" />
+          <SpeakerXMarkIcon class="h-5 w-5" />
         </span>
 
         <vue-slider
@@ -350,24 +359,24 @@ watch(playFromToPickedState, async (value) => {
           :style="{ width: '100%' }"
         ></vue-slider>
         <span class="ml-4 inline-block">
-          <font-awesome-icon icon="volume-up" />
+          <SpeakerWaveIcon class="h-5 w-5" />
         </span>
       </div>
       <div class="flex justify-center items-center py-5 px-4">
-        <div class="flex justify-between border border-solid border-gray-200 w-3/5 rounded-[30px]">
+        <div class="flex justify-between border border-solid border-gray-300 w-3/5 rounded-[30px]">
           <button
-            class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-300 relative py-5 px-7 hover:scale-125 transition"
+            class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-400 relative py-5 px-7 hover:scale-125 transition"
             @click="prev"
             v-if="songsState.length > 1"
           >
-            <font-awesome-icon icon="step-backward" />
+            <span><BackwardIcon class="h-6 w-6" /></span>
           </button>
           <button
-            class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-300 relative py-5 px-7 hover:scale-125 transition"
+            class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-400 relative py-5 px-7 hover:scale-125 transition"
             @click="next"
             v-if="songsState.length > 1"
           >
-            <font-awesome-icon icon="step-forward" />
+            <span><ForwardIcon class="h-6 w-6" /></span>
           </button>
         </div>
 
@@ -377,14 +386,14 @@ watch(playFromToPickedState, async (value) => {
             v-if="!isPlayingState"
             @click="play(songIndexState)"
           >
-            <font-awesome-icon icon="play" />
+            <span class="flex justify-center"><PlayIcon class="h-7 w-7" /></span>
           </button>
           <button
             class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
             v-else
             @click="pause"
           >
-            <font-awesome-icon icon="pause" />
+            <span class="flex justify-center"><PauseIcon class="h-7 w-7" /></span>
           </button>
         </div>
       </div>

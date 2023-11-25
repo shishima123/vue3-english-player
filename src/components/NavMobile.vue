@@ -1,4 +1,6 @@
 <script setup>
+import { QueueListIcon, MusicalNoteIcon } from '@heroicons/vue/24/outline'
+
 defineProps({
   showPlaylistState: {
     type: Boolean,
@@ -21,14 +23,18 @@ defineEmits(['activeNavMobile'])
       :class="{ 'text-blue-500 !border-b-blue-500': showPlaylistState }"
       @click="$emit('activeNavMobile', 'playlist')"
     >
-      <font-awesome-icon :icon="['fas', 'list']" />
+      <span class="flex justify-center">
+        <QueueListIcon class="h-5 w-5" />
+      </span>
     </div>
     <div
       class="px-5 py-2 w-1/2 text-center border-b-4 border-b-white border-solid transition-all duration-300"
       :class="{ 'text-blue-500 !border-b-blue-500': showLyricsState }"
       @click="$emit('activeNavMobile', 'lyrics')"
     >
-      <font-awesome-icon :icon="['fas', 'music']" />
+      <span class="flex justify-center">
+        <MusicalNoteIcon class="h-5 w-5" />
+      </span>
     </div>
   </section>
 </template>
