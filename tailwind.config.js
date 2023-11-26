@@ -2,6 +2,9 @@
 module.exports = {
   purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   content: [],
+  corePlugins: {
+    preflight: false
+  },
   theme: {
     fontFamily: {
       default: ['Nunito', 'sans-serif']

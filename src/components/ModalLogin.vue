@@ -1,14 +1,20 @@
 <script setup>
-import { BackwardIcon, XMarkIcon } from '@heroicons/vue/24/outline'
-import { VueFinalModal } from 'vue-final-modal'
 import { signInFirebase } from '@/configs/firebase'
 import { ref } from 'vue'
 const emit = defineEmits(['update:modelValue', 'handleAfterLogin'])
+
+defineExpose({ changeOpen })
 
 let email = ref('shishima21@gmail.com')
 let password = ref('')
 let error = ref(null)
 let isLoading = ref(false)
+
+let open = ref(false)
+
+function changeOpen(value) {
+  open.value = value
+}
 
 function onClosed() {
   emit('handleAfterLogin')
@@ -19,7 +25,7 @@ async function onSubmit() {
   error.value = null
   try {
     await signInFirebase(email.value, password.value)
-    emit('update:modelValue', false)
+    open.value = false
   } catch (err) {
     error.value = err.message
   } finally {
@@ -29,22 +35,15 @@ async function onSubmit() {
 </script>
 
 <template>
-  <VueFinalModal
-    class="flex justify-center items-center"
-    content-class="flex flex-col p-4 bg-white rounded border border-gray-100"
-    overlay-transition="vfm-fade"
-    content-transition="vfm-fade"
-    teleport-to="body"
-    @closed="onClosed"
-    @update:model-value="(val) => emit('update:modelValue', val)"
+  <a-modal
+    v-model:open="open"
+    title=" "
+    :footer="null"
+    width="300px"
+    :afterClose="onClosed"
+    centered
   >
-    <form class="w-[80vw] md:w-[300px]" @submit.prevent="onSubmit">
-      <button
-        class="ml-auto text-left block text-xl px-2 hover:opacity-70 transition"
-        @click="emit('update:modelValue', false)"
-      >
-        <span><XMarkIcon class="h-6 w-6" /></span>
-      </button>
+    <form @submit.prevent="onSubmit">
       <span class="block text-xl uppercase font-bold mb-4 text-center">Login</span>
       <div class="mb-4">
         <label for="email" class="block text-xs mb-1">Email</label>
@@ -69,9 +68,9 @@ async function onSubmit() {
         />
       </div>
       <span v-if="error" class="block text-red-500 text-sm mb-4">{{ error }}</span>
-      <div class="w-full text-center mb-4">
+      <div class="w-full text-center mb-1">
         <button type="submit" :class="{ disabled: isLoading }" class="btn">Login</button>
       </div>
     </form>
-  </VueFinalModal>
+  </a-modal>
 </template>

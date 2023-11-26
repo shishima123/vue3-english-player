@@ -1759,11 +1759,6 @@
   resolved "https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.4.tgz"
   integrity sha512-IDaobHimLQhjwsQ/NMwRVfa/yL7L/wriQPMhw1ZJall0KX6E1oxk29XMDeilW5qTIg5aoiqf5Udy8U/51aNoQQ==
 
-"@types/web-bluetooth@^0.0.20":
-  version "0.0.20"
-  resolved "https://registry.npmjs.org/@types/web-bluetooth/-/web-bluetooth-0.0.20.tgz"
-  integrity sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==
-
 "@vitejs/plugin-vue@^4.3.4":
   version "4.4.0"
   resolved "https://registry.npmjs.org/@vitejs/plugin-vue/-/plugin-vue-4.4.0.tgz"
@@ -1866,37 +1861,6 @@
   version "3.3.4"
   resolved "https://registry.npmjs.org/@vue/shared/-/shared-3.3.4.tgz"
   integrity sha512-7OjdcV8vQ74eiz1TZLzZP4JwqM5fA94K6yntPS5Z25r9HDuGNzaGdgvwKYq6S+MxwF0TFRwe50fIR/MYnakdkQ==
-
-"@vueuse/core@10.6.1", "@vueuse/core@^10.5.0":
-  version "10.6.1"
-  resolved "https://registry.npmjs.org/@vueuse/core/-/core-10.6.1.tgz"
-  integrity sha512-Pc26IJbqgC9VG1u6VY/xrXXfxD33hnvxBnKrLlA2LJlyHII+BSrRoTPJgGYq7qZOu61itITFUnm6QbacwZ4H8Q==
-  dependencies:
-    "@types/web-bluetooth" "^0.0.20"
-    "@vueuse/metadata" "10.6.1"
-    "@vueuse/shared" "10.6.1"
-    vue-demi ">=0.14.6"
-
-"@vueuse/integrations@^10.5.0":
-  version "10.6.1"
-  resolved "https://registry.npmjs.org/@vueuse/integrations/-/integrations-10.6.1.tgz"
-  integrity sha512-mPDupuofMJ4DPmtX/FfP1MajmWRzYDv8WSaTCo8LQ5kFznjWgmUQ16ApjYqgMquqffNY6+IRMdMgosLDRZOSZA==
-  dependencies:
-    "@vueuse/core" "10.6.1"
-    "@vueuse/shared" "10.6.1"
-    vue-demi ">=0.14.6"
-
-"@vueuse/metadata@10.6.1":
-  version "10.6.1"
-  resolved "https://registry.npmjs.org/@vueuse/metadata/-/metadata-10.6.1.tgz"
-  integrity sha512-qhdwPI65Bgcj23e5lpGfQsxcy0bMjCAsUGoXkJ7DsoeDUdasbZ2DBa4dinFCOER3lF4gwUv+UD2AlA11zdzMFw==
-
-"@vueuse/shared@10.6.1":
-  version "10.6.1"
-  resolved "https://registry.npmjs.org/@vueuse/shared/-/shared-10.6.1.tgz"
-  integrity sha512-TECVDTIedFlL0NUfHWncf3zF9Gc4VfdxfQc8JFwoVZQmxpONhLxFrlm0eHQeidHj4rdTPL3KXJa0TZCk1wnc5Q==
-  dependencies:
-    vue-demi ">=0.14.6"
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
@@ -2797,13 +2761,6 @@ flatted@^3.2.9:
   version "3.2.9"
   resolved "https://registry.npmjs.org/flatted/-/flatted-3.2.9.tgz"
   integrity sha512-36yxDn5H7OFZQla0/jFJmbIKTdZAQHngCedGxiMmpNfEZM0sdEeT+WczLQrjK6D7o2aiyLYDnkw0R3JK0Qv1RQ==
-
-focus-trap@^7.5.4:
-  version "7.5.4"
-  resolved "https://registry.npmjs.org/focus-trap/-/focus-trap-7.5.4.tgz"
-  integrity sha512-N7kHdlgsO/v+iD/dMoJKtsSqs5Dz/dXZVebRgJw23LDk+jMi/974zyiOYDziY2JPp8xivq9BmUGwIJMiuSBi7w==
-  dependencies:
-    tabbable "^6.2.0"
 
 for-each@^0.3.3:
   version "0.3.3"
@@ -4236,11 +4193,6 @@ synckit@^0.8.5:
     "@pkgr/utils" "^2.3.1"
     tslib "^2.5.0"
 
-tabbable@^6.2.0:
-  version "6.2.0"
-  resolved "https://registry.npmjs.org/tabbable/-/tabbable-6.2.0.tgz"
-  integrity sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==
-
 tailwindcss@^3.3.4:
   version "3.3.4"
   resolved "https://registry.npmjs.org/tailwindcss/-/tailwindcss-3.3.4.tgz"
@@ -4510,11 +4462,6 @@ vite@^4.4.9:
   optionalDependencies:
     fsevents "~2.3.2"
 
-vue-demi@>=0.14.6:
-  version "0.14.6"
-  resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.6.tgz"
-  integrity sha512-8QA7wrYSHKaYgUxDA5ZC24w+eHm3sYCbp0EzcDwKqN3p6HqtTCGR/GVsPyZW92unff4UlcSh++lmqDWN3ZIq4w==
-
 vue-eslint-parser@^9.3.1:
   version "9.3.1"
   resolved "https://registry.npmjs.org/vue-eslint-parser/-/vue-eslint-parser-9.3.1.tgz"
@@ -4527,20 +4474,6 @@ vue-eslint-parser@^9.3.1:
     esquery "^1.4.0"
     lodash "^4.17.21"
     semver "^7.3.6"
-
-vue-final-modal@^4.4.6:
-  version "4.4.6"
-  resolved "https://registry.npmjs.org/vue-final-modal/-/vue-final-modal-4.4.6.tgz"
-  integrity sha512-YIYEQ4HhwPOBRTuV143QjgprAl2tY8598NdsfUX2H5Z212Lr5hoZnzEfct+Nclx+c4++NZOATXj2ddFJI4ahjw==
-  dependencies:
-    "@vueuse/core" "^10.5.0"
-    "@vueuse/integrations" "^10.5.0"
-    focus-trap "^7.5.4"
-
-vue-multiselect@^3.0.0-beta.2:
-  version "3.0.0-beta.2"
-  resolved "https://registry.npmjs.org/vue-multiselect/-/vue-multiselect-3.0.0-beta.2.tgz"
-  integrity sha512-TFVHtI/KdWoD3Opzbkso8OIqkZlZEqFF7f2jlYx1ttgC4Jv/48IGlU5zn6cBR4p2bFDFGCHF5SkLCaadLhnBPQ==
 
 vue-slider-component@^4.1.0-beta.7:
   version "4.1.0-beta.7"

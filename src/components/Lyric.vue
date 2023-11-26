@@ -18,21 +18,21 @@ defineExpose({
   resetLyricOver
 })
 
-let selectedLyricTypeState = ref({ id: 'lyric1', name: 'Lyric 1' })
+let selectedLyricTypeState = ref('lyric1')
 let lyricTypesOptionsState = ref([
-  { id: 'lyric1', name: 'Lyric 1' },
-  { id: 'lyric2', name: 'Lyric 2' }
+  { value: 'lyric1', label: 'Lyric 1' },
+  { value: 'lyric2', label: 'Lyric 2' }
 ])
 let currentLyricState = ref({})
 let lyricRef = ref(null)
 
 let convertLyricComputed = computed(() => {
-  if (typeof props.currentSongState[selectedLyricTypeState.value.id] === 'undefined') {
+  if (typeof props.currentSongState[selectedLyricTypeState.value] === 'undefined') {
     return []
   }
 
   let lyricConverted = []
-  let split = props.currentSongState[selectedLyricTypeState.value.id].split(/\n\s*\n/)
+  let split = props.currentSongState[selectedLyricTypeState.value].split(/\n\s*\n/)
   for (let i = 0; i < split.length; i++) {
     let subtitle = split[i]
 
@@ -105,16 +105,11 @@ watch(currentLyricState, async (value) => {
     :class="{ 'playlist-lyrics-section-active': showLyricsState }"
   >
     <div class="sticky top-0 bg-white z-10 transition">
-      <multi-select
+      <a-select
+        v-model:value="selectedLyricTypeState"
         class="!w-[110px] !absolute top-[5px] left-[10px]"
-        v-model="selectedLyricTypeState"
         :options="lyricTypesOptionsState"
-        :allow-empty="false"
-        :searchable="false"
-        label="name"
-        track-by="id"
-        :show-labels="false"
-      ></multi-select>
+      />
       <h3 class="text-lg text-center py-3 font-bold">Lyrics</h3>
     </div>
     <div
@@ -125,17 +120,21 @@ watch(currentLyricState, async (value) => {
       <p
         v-for="(lyric, index) in convertLyricComputed"
         :key="index"
-        class="text-dimgray transition-all cursor-pointer text-lg hover:text-blue-400 first-letter:capitalize lyrics [&:not(:last-child)]:mb-3"
+        class="text-dimgray transition-all cursor-pointer text-lg hover:text-blue-400 lyrics [&:not(:last-child)]:mb-3"
         :class="{
           '!text-blue-500 scale-110 active': lyric.id === currentLyricState?.id,
-          'text-left': selectedLyricTypeState.id === 'lyric2',
+          'text-left': selectedLyricTypeState.value === 'lyric2',
           'text-slate-300': lyric.over
         }"
         @click="$emit('setCurrentlyTimer', lyric.start || 0, lyric.end)"
       >
-        <span class="text-xs" v-if="props.showTimeStringLyricState">({{ lyric.startString }})</span>
-        {{ lyric.text }}
-        <span class="text-xs" v-if="props.showTimeStringLyricState">({{ lyric.endString }})</span>
+        <span class="text-2xs text-gray-400" v-if="props.showTimeStringLyricState"
+          >({{ lyric.startString }})</span
+        >
+        <span class="first-letter:capitalize inline-block mx-1">{{ lyric.text }}</span>
+        <span class="text-2xs text-gray-400" v-if="props.showTimeStringLyricState"
+          >({{ lyric.endString }})</span
+        >
       </p>
     </div>
   </section>
