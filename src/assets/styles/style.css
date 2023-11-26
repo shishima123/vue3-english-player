@@ -64,6 +64,23 @@
     @apply cursor-not-allowed bg-blue-500
   }
 
+  .tabs {
+    @apply inline-flex items-center h-10 px-2 py-2 -mb-px text-center bg-transparent border-b-[3px] sm:px-4 whitespace-nowrap focus:outline-none text-gray-700 border-transparent hover:border-gray-400
+  }
+
+  .tabs.active {
+    @apply !text-blue-600 !border-blue-500
+  }
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s ease;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+
     /**** Start Radio custom ****/
     input[type="radio"] + label span {
       transition: background .2s,
@@ -188,5 +205,8 @@
         height: calc(100vh - var(--player-mobile-height))!important;
         box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
     }
+}
+:where(.css-dev-only-do-not-override-185kyl0).ant-btn-primary {
+  background-color: #1677ff;
 }
 

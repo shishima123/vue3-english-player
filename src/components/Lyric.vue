@@ -5,7 +5,8 @@ import { timeStringToSecond } from '@/helpers/timer'
 
 const props = defineProps({
   showLyricsState: Boolean,
-  currentSongState: Object
+  currentSongState: Object,
+  showTimeStringLyricState: Boolean
 })
 
 defineEmits(['handleScrollLyric', 'setCurrentlyTimer'])
@@ -48,8 +49,10 @@ let convertLyricComputed = computed(() => {
     // type sub has time
     let timeString = timeLine.trim()
     let text = textLines.join('\n').trim()
-    let [start, end] = timeLine.trim().split('-->').map(timeStringToSecond)
-    lyricConverted.push({ id, timeString, text, start, end, over: false })
+    let timeSplit = timeLine.trim().split('-->')
+    let [startString, endString] = timeSplit
+    let [start, end] = timeSplit.map(timeStringToSecond)
+    lyricConverted.push({ id, timeString, text, start, end, startString, endString, over: false })
   }
   return lyricConverted
 })
@@ -120,7 +123,6 @@ watch(currentLyricState, async (value) => {
       v-scroll-element="handleScrollLyric"
     >
       <p
-        v-html="lyric.text"
         v-for="(lyric, index) in convertLyricComputed"
         :key="index"
         class="text-dimgray transition-all cursor-pointer text-lg hover:text-blue-400 first-letter:capitalize lyrics [&:not(:last-child)]:mb-3"
@@ -129,8 +131,12 @@ watch(currentLyricState, async (value) => {
           'text-left': selectedLyricTypeState.id === 'lyric2',
           'text-slate-300': lyric.over
         }"
-        @click="$emit('setCurrentlyTimer', lyric.start || 0)"
-      ></p>
+        @click="$emit('setCurrentlyTimer', lyric.start || 0, lyric.end)"
+      >
+        <span class="text-xs" v-if="props.showTimeStringLyricState">({{ lyric.startString }})</span>
+        {{ lyric.text }}
+        <span class="text-xs" v-if="props.showTimeStringLyricState">({{ lyric.endString }})</span>
+      </p>
     </div>
   </section>
   <!-- end:: Lyric Section -->

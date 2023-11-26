@@ -8,17 +8,21 @@ import Playlist from '@/components/Playlist.vue'
 import Lyric from '@/components/Lyric.vue'
 import SleepTimer from '@/components/SleepTimer.vue'
 import Sync from '@/components/Sync.vue'
+import Repeat from '@/components/Repeat.vue'
 import { syncDownload, syncUpload } from '@/composables/sync'
 import { FirebaseEnums } from '@/configs/firebase'
 
 // icons
 import { PlayIcon, PauseIcon } from '@heroicons/vue/24/solid'
-
 import {
   BackwardIcon,
   ForwardIcon,
   SpeakerWaveIcon,
-  SpeakerXMarkIcon
+  SpeakerXMarkIcon,
+  AdjustmentsVerticalIcon,
+  ArrowPathIcon,
+  ClockIcon,
+  WifiIcon
 } from '@heroicons/vue/24/outline'
 
 let loopsState = ref(10)
@@ -70,11 +74,13 @@ let playFromToMappingState = ref({
   }
 })
 
+let activeTab = ref(2)
 // refs
 let lyricRef = ref(null)
 let playlistRef = ref(null)
 let sleepTimerRef = ref(null)
 let syncRef = ref(null)
+let repeatRef = ref(null)
 
 // using for prevent sync in first load page
 let isAppMounted = false
@@ -82,6 +88,13 @@ let isAppMounted = false
 // computed
 let songIndexOptionsComputed = computed(() => {
   return [...Array(songsState.value.length).keys()].map((el) => el + 1)
+})
+
+let showTimeStringLyricComputed = computed(() => {
+  if (repeatRef.value) {
+    return repeatRef.value.showTimeStringLyricState
+  }
+  return false
 })
 
 function calcCurrentSongIndex(newSongIndex) {
@@ -117,14 +130,16 @@ function setPlayerSource() {
   playerState.value.src = currentSongState.value.src
 }
 
-function setCurrentlyTimer(time) {
-  if (!time) {
+function setCurrentlyTimer(startTime, endTime) {
+  if (!startTime) {
     return false
   }
-  playerState.value.currentTime = time + 0.1
+  playerState.value.currentTime = startTime + 0.1
+
+  repeatRef.value.setTimeWhenClickLyric(startTime, endTime)
 }
 
-function play(songIndexInput, isClickFromList = false) {
+function play(songIndexInput = null, isClickFromList = false) {
   if (isClickFromList && songIndexInput === songIndexState.value && isPlayingState.value) {
     return true
   }
@@ -159,9 +174,23 @@ function setLoopsCount($count) {
   loopsCountState.value = $count
 }
 
+let playAfterDelay = null
+
 function registerListener() {
   playerState.value.addEventListener('timeupdate', () => {
     let playerTimer = playerState.value.currentTime
+
+    if (repeatRef.value.isRepeatActiveState) {
+      if (playerTimer < repeatRef.value.startTimeState) {
+        playerState.value.currentTime = repeatRef.value.startTimeState
+      } else if (playerTimer > repeatRef.value.endTimeState - 0.2) {
+        playerState.value.currentTime = repeatRef.value.startTimeState
+        pause()
+        playAfterDelay = setTimeout(() => {
+          play()
+        }, 5000)
+      }
+    }
     lyricRef.value.changeCurrentLyricState(playerTimer)
     currentlyTimerState.value = formatTimer(playerTimer)
   })
@@ -400,109 +429,139 @@ watch(playFromToPickedState, async (value) => {
     </div>
     <!-- end:: Player -->
 
-    <!-- begin:: Loop -->
-    <fieldset class="flex justify-between items-center my-1 fieldset-border">
-      <legend>Loops</legend>
-      <div>
-        <p class="text-base">
-          Played
-          <span class="text-red-600">{{ loopsCountState }}</span>
-          times
-        </p>
-        <p class="text-base">
-          <label for="loops_input">Loop for</label>
-          <input
-            id="loops_input"
-            class="p-0.5 mx-0.5 w-[30px] text-center text-base border-b border-solid border-gray-600 outline-0"
-            v-model="loopsState"
-            type="text"
-            name="loops-input"
-          />
-          <span>times</span>
-        </p>
+    <div>
+      <div
+        class="flex justify-around overflow-x-auto overflow-y-hidden border-b border-gray-200 whitespace-nowrap dark:border-gray-700"
+      >
+        <button class="tabs" :class="{ active: activeTab === 1 }" @click="activeTab = 1">
+          <span class="flex justify-center"><AdjustmentsVerticalIcon class="h-6 w-6" /></span>
+        </button>
+
+        <button class="tabs" :class="{ active: activeTab === 2 }" @click="activeTab = 2">
+          <span class="flex justify-center"><ArrowPathIcon class="h-6 w-6" /></span>
+        </button>
+
+        <button class="tabs" :class="{ active: activeTab === 3 }" @click="activeTab = 3">
+          <span class="flex justify-center"><ClockIcon class="h-6 w-6" /></span>
+        </button>
+        <button class="tabs" :class="{ active: activeTab === 4 }" @click="activeTab = 4">
+          <span class="flex justify-center"><WifiIcon class="h-6 w-6" /></span>
+        </button>
       </div>
       <div>
-        <button class="btn" @click="setLoopsCount(0)">Reset</button>
-      </div>
-    </fieldset>
-    <!-- end:: Loop -->
-
-    <!-- begin:: Play from to -->
-    <fieldset class="flex justify-between items-center my-1 fieldset-border">
-      <legend>Play from to</legend>
-      <div class="w-full">
-        <div class="grid grid-cols-3">
-          <div
-            v-for="(radio, index) in playFromToMappingState"
-            :key="index"
-            class="flex items-center mr-4 mb-4"
-          >
-            <input
-              :id="`playFromToPickedState-${index}`"
-              type="radio"
-              v-model="playFromToPickedState"
-              name="playFromTo"
-              class="hidden"
-              :value="index"
-              :disabled="playFromToFlagState"
-            />
-            <label
-              :for="`playFromToPickedState-${index}`"
-              class="flex items-center cursor-pointer"
-              :class="{ disabled: playFromToFlagState }"
-            >
-              <span class="w-4 h-4 inline-block mr-1 rounded-full border border-grey"></span>
-              {{ radio.text }}
-            </label>
-          </div>
+        <div class="pt-4" v-show="activeTab === 1">
+          <!-- begin:: Loop -->
+          <fieldset class="flex justify-between items-center my-1 fieldset-border">
+            <legend>Loops</legend>
+            <div>
+              <p class="text-base">
+                Played
+                <span class="text-red-600">{{ loopsCountState }}</span>
+                times
+              </p>
+              <p class="text-base">
+                <label for="loops_input">Loop for</label>
+                <input
+                  id="loops_input"
+                  class="p-0.5 mx-0.5 w-[30px] text-center text-base border-b border-solid border-gray-600 outline-0"
+                  v-model="loopsState"
+                  type="text"
+                  name="loops-input"
+                />
+                <label for="loops_input">times</label>
+              </p>
+            </div>
+            <div>
+              <button class="btn" @click="setLoopsCount(0)">Reset</button>
+            </div>
+          </fieldset>
+          <!-- end:: Loop -->
+          <!-- begin:: Play from to -->
+          <fieldset class="flex justify-between items-center my-1 fieldset-border">
+            <legend>Play from to</legend>
+            <div class="w-full">
+              <div class="grid grid-cols-3">
+                <div
+                  v-for="(radio, index) in playFromToMappingState"
+                  :key="index"
+                  class="flex items-center mr-4 mb-4"
+                >
+                  <input
+                    :id="`playFromToPickedState-${index}`"
+                    type="radio"
+                    v-model="playFromToPickedState"
+                    name="playFromTo"
+                    class="hidden"
+                    :value="index"
+                    :disabled="playFromToFlagState"
+                  />
+                  <label
+                    :for="`playFromToPickedState-${index}`"
+                    class="flex items-center cursor-pointer"
+                    :class="{ disabled: playFromToFlagState }"
+                  >
+                    <span class="w-4 h-4 inline-block mr-1 rounded-full border border-grey"></span>
+                    {{ radio.text }}
+                  </label>
+                </div>
+              </div>
+              <div class="flex justify-between">
+                <div class="flex items-center">
+                  <multi-select
+                    class="!w-[80px]"
+                    v-model="playFromState"
+                    :options="songIndexOptionsComputed"
+                    :searchable="false"
+                    :show-labels="false"
+                    :disabled="playFromToFlagState || playFromToCustomFlagState"
+                    placeholder=""
+                  ></multi-select>
+                  <label class="mx-3">to</label>
+                  <multi-select
+                    class="!w-[80px]"
+                    v-model="playToState"
+                    :options="songIndexOptionsComputed"
+                    :searchable="false"
+                    :show-labels="false"
+                    :disabled="playFromToFlagState || playFromToCustomFlagState"
+                    placeholder=""
+                  ></multi-select>
+                </div>
+                <div>
+                  <button
+                    class="btn"
+                    :class="{ active: playFromToFlagState }"
+                    @click="playFromToFlagState = !playFromToFlagState"
+                  >
+                    {{ playFromToFlagState ? 'Cancel' : 'Set' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <!-- end:: Play from to -->
         </div>
-        <div class="flex justify-between">
-          <div class="flex items-center">
-            <multi-select
-              class="!w-[80px]"
-              v-model="playFromState"
-              :options="songIndexOptionsComputed"
-              :searchable="false"
-              :show-labels="false"
-              :disabled="playFromToFlagState || playFromToCustomFlagState"
-              placeholder=""
-            ></multi-select>
-            <label class="mx-3">to</label>
-            <multi-select
-              class="!w-[80px]"
-              v-model="playToState"
-              :options="songIndexOptionsComputed"
-              :searchable="false"
-              :show-labels="false"
-              :disabled="playFromToFlagState || playFromToCustomFlagState"
-              placeholder=""
-            ></multi-select>
-          </div>
-          <div>
-            <button
-              class="btn"
-              :class="{ active: playFromToFlagState }"
-              @click="playFromToFlagState = !playFromToFlagState"
-            >
-              {{ playFromToFlagState ? 'Cancel' : 'Set' }}
-            </button>
-          </div>
+        <div class="pt-4" v-show="activeTab === 2">
+          <repeat ref="repeatRef" :current-song-state="currentSongState"></repeat>
+        </div>
+        <div class="pt-4" v-show="activeTab === 3">
+          <sleep-timer @pause="pause" ref="sleepTimerRef"></sleep-timer>
+        </div>
+        <div class="pt-4" v-show="activeTab === 4">
+          <sync
+            @set-default-setting-from-local-storage="setDefaultSettingFromLocalStorage"
+            @set-player-source="setPlayerSource"
+            ref="syncRef"
+          ></sync>
         </div>
       </div>
-    </fieldset>
-    <!-- end:: Play from to -->
-
-    <sleep-timer @pause="pause" ref="sleepTimerRef"></sleep-timer>
-    <sync
-      @set-default-setting-from-local-storage="setDefaultSettingFromLocalStorage"
-      @set-player-source="setPlayerSource"
-      ref="syncRef"
-    ></sync>
+    </div>
   </section>
   <!-- end:: Player Section -->
   <lyric
     :current-song-state="currentSongState"
     :show-lyrics-state="showLyricsState"
+    :show-time-string-lyric-state="showTimeStringLyricComputed"
     @set-currently-timer="setCurrentlyTimer"
     ref="lyricRef"
   />
