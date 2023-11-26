@@ -74,7 +74,7 @@ let playFromToMappingState = ref({
   }
 })
 
-let activeTab = ref(2)
+let activeTab = ref('1')
 // refs
 let lyricRef = ref(null)
 let playlistRef = ref(null)
@@ -86,8 +86,18 @@ let repeatRef = ref(null)
 let isAppMounted = false
 
 // computed
+function createObjectFromNumber(number) {
+  const obj = []
+  for (let i = 1; i <= number; i++) {
+    obj.push({
+      value: i,
+      label: i
+    })
+  }
+  return obj
+}
 let songIndexOptionsComputed = computed(() => {
-  return [...Array(songsState.value.length).keys()].map((el) => el + 1)
+  return createObjectFromNumber(songsState.value.length)
 })
 
 let showTimeStringLyricComputed = computed(() => {
@@ -252,6 +262,11 @@ function setDefaultSettingFromLocalStorage() {
     }
   })
 
+  if (localStorage.playFromToPickedState) {
+    playFromToPickedState.value =
+      localStorage.playFromToPickedState === 'null' ? '1' : localStorage.playFromToPickedState
+  }
+
   if (localStorage.songIndexState) {
     songIndexState.value =
       Number(localStorage.songIndexState) > songsState.value.length - 1
@@ -300,7 +315,7 @@ function onSyncUpload() {
   data.songIndexState = Number(songIndexState.value)
   data.playFromState = Number(playFromState.value)
   data.playToState = Number(playToState.value)
-  data.playFromToPickedState = Number(playFromToPickedState.value)
+  data.playFromToPickedState = playFromToPickedState.value
 
   syncUpload(data)
 }
@@ -339,7 +354,7 @@ watch(currentlyTimerState, async (value) => {
   lyricRef.value.scrollToActiveInLyrics()
 })
 
-let playFromToPickedState = ref(1)
+let playFromToPickedState = ref(null)
 watch(playFromToPickedState, async (value) => {
   localStorage.playFromToPickedState = value
   onSyncUpload()
@@ -353,103 +368,98 @@ watch(playFromToPickedState, async (value) => {
 </script>
 
 <template>
-  <!-- begin:: Player Section -->
-  <section
-    class="flex flex-col flex-nowrap order-3 w-full h-full mx-auto overflow-hidden px-[15px] md:p-[10px] bg-white text-base rounded-none md:rounded shadow-none md:shadow-md row-start-1 row-end-3 col-start-1 col-end-2 md:order-1 transition-[height] duration-[350ms] ease-linear"
-    :class="{ '!h-[var(--player-mobile-height)]': showLyricsState || showPlaylistState }"
+  <a-config-provider
+    :theme="{
+      token: {
+        fontFamily: 'Nunito, sans-serif',
+        colorTextBase: '#1f2937',
+        fontSize: 16
+      }
+    }"
   >
-    <!-- begin:: Player -->
-    <div>
-      <h2 class="w-full text-xl font-bold text-center py-4 px-1 text-ellipsis whitespace-nowrap">
-        {{ currentSongState.title }}
-      </h2>
-      <div class="mb-5">
-        <div class="flex justify-between px-1 w-full text-xs">
-          <p>{{ currentlyTimerState }}</p>
-          <p>{{ currentSongState.totalTimer }}</p>
-        </div>
-        <vue-slider
-          v-model="seekSliderState"
-          :tooltip="'active'"
-          :tooltip-formatter="seekSliderFormatState"
-          @drag-end="seekTo"
-        ></vue-slider>
-      </div>
-
-      <div class="flex items-center justify-center w-3/5 mx-auto">
-        <span class="mr-2 inline-block">
-          <SpeakerXMarkIcon class="h-5 w-5" />
-        </span>
-
-        <vue-slider
-          v-model="volumeSliderState"
-          :tooltip="'active'"
-          @change="setVolume"
-          :style="{ width: '100%' }"
-        ></vue-slider>
-        <span class="ml-4 inline-block">
-          <SpeakerWaveIcon class="h-5 w-5" />
-        </span>
-      </div>
-      <div class="flex justify-center items-center py-5 px-4">
-        <div class="flex justify-between border border-solid border-gray-300 w-3/5 rounded-[30px]">
-          <button
-            class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-400 relative py-5 px-7 hover:scale-125 transition"
-            @click="prev"
-            v-if="songsState.length > 1"
-          >
-            <span><BackwardIcon class="h-6 w-6" /></span>
-          </button>
-          <button
-            class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-400 relative py-5 px-7 hover:scale-125 transition"
-            @click="next"
-            v-if="songsState.length > 1"
-          >
-            <span><ForwardIcon class="h-6 w-6" /></span>
-          </button>
-        </div>
-
-        <div class="absolute">
-          <button
-            class="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
-            v-if="!isPlayingState"
-            @click="play(songIndexState)"
-          >
-            <span class="flex justify-center"><PlayIcon class="h-7 w-7" /></span>
-          </button>
-          <button
-            class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
-            v-else
-            @click="pause"
-          >
-            <span class="flex justify-center"><PauseIcon class="h-7 w-7" /></span>
-          </button>
-        </div>
-      </div>
-    </div>
-    <!-- end:: Player -->
-
-    <div>
-      <div
-        class="flex justify-around overflow-x-auto overflow-y-hidden border-b border-gray-200 whitespace-nowrap dark:border-gray-700"
-      >
-        <button class="tabs" :class="{ active: activeTab === 1 }" @click="activeTab = 1">
-          <span class="flex justify-center"><AdjustmentsVerticalIcon class="h-6 w-6" /></span>
-        </button>
-
-        <button class="tabs" :class="{ active: activeTab === 2 }" @click="activeTab = 2">
-          <span class="flex justify-center"><ArrowPathIcon class="h-6 w-6" /></span>
-        </button>
-
-        <button class="tabs" :class="{ active: activeTab === 3 }" @click="activeTab = 3">
-          <span class="flex justify-center"><ClockIcon class="h-6 w-6" /></span>
-        </button>
-        <button class="tabs" :class="{ active: activeTab === 4 }" @click="activeTab = 4">
-          <span class="flex justify-center"><WifiIcon class="h-6 w-6" /></span>
-        </button>
-      </div>
+    <!-- begin:: Player Section -->
+    <section
+      class="flex flex-col flex-nowrap order-3 w-full h-full mx-auto overflow-hidden px-[15px] md:p-[10px] bg-white text-base rounded-none md:rounded shadow-none md:shadow-md row-start-1 row-end-3 col-start-1 col-end-2 md:order-1 transition-[height] duration-[350ms] ease-linear"
+      :class="{ '!h-[var(--player-mobile-height)]': showLyricsState || showPlaylistState }"
+    >
+      <!-- begin:: Player -->
       <div>
-        <div class="pt-4" v-show="activeTab === 1">
+        <h2 class="w-full text-xl font-bold text-center py-4 px-1 text-ellipsis whitespace-nowrap">
+          {{ currentSongState.title }}
+        </h2>
+        <div class="mb-5">
+          <div class="flex justify-between px-1 w-full text-xs">
+            <p>{{ currentlyTimerState }}</p>
+            <p>{{ currentSongState.totalTimer }}</p>
+          </div>
+          <vue-slider
+            v-model="seekSliderState"
+            :tooltip="'active'"
+            :tooltip-formatter="seekSliderFormatState"
+            @drag-end="seekTo"
+          ></vue-slider>
+        </div>
+
+        <div class="flex items-center justify-center w-3/5 mx-auto">
+          <span class="mr-2 inline-block">
+            <SpeakerXMarkIcon class="h-5 w-5" />
+          </span>
+
+          <vue-slider
+            v-model="volumeSliderState"
+            :tooltip="'active'"
+            @change="setVolume"
+            :style="{ width: '100%' }"
+          ></vue-slider>
+          <span class="ml-4 inline-block">
+            <SpeakerWaveIcon class="h-5 w-5" />
+          </span>
+        </div>
+        <div class="flex justify-center items-center py-5 px-4">
+          <div
+            class="flex justify-between border border-solid border-gray-300 w-3/5 rounded-[30px]"
+          >
+            <button
+              class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-400 relative py-5 px-7 hover:scale-125 transition bg-transparent"
+              @click="prev"
+              v-if="songsState.length > 1"
+            >
+              <span><BackwardIcon class="h-6 w-6" /></span>
+            </button>
+            <button
+              class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-400 relative py-5 px-7 hover:scale-125 transition bg-transparent"
+              @click="next"
+              v-if="songsState.length > 1"
+            >
+              <span><ForwardIcon class="h-6 w-6" /></span>
+            </button>
+          </div>
+
+          <div class="absolute">
+            <button
+              class="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
+              v-if="!isPlayingState"
+              @click="play(songIndexState)"
+            >
+              <span class="flex justify-center"><PlayIcon class="h-7 w-7" /></span>
+            </button>
+            <button
+              class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
+              v-else
+              @click="pause"
+            >
+              <span class="flex justify-center"><PauseIcon class="h-7 w-7" /></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- end:: Player -->
+
+      <a-tabs v-model:activeKey="activeTab" centered class="custom-padding">
+        <a-tab-pane key="1" force-render>
+          <template #tab>
+            <AdjustmentsVerticalIcon class="h-6 w-6" />
+          </template>
           <!-- begin:: Loop -->
           <fieldset class="flex justify-between items-center my-1 fieldset-border">
             <legend>Loops</legend>
@@ -480,52 +490,35 @@ watch(playFromToPickedState, async (value) => {
           <fieldset class="flex justify-between items-center my-1 fieldset-border">
             <legend>Play from to</legend>
             <div class="w-full">
-              <div class="grid grid-cols-3">
-                <div
+              <a-radio-group
+                v-model:value="playFromToPickedState"
+                name="playFromTo"
+                class="grid grid-cols-3"
+              >
+                <a-radio
                   v-for="(radio, index) in playFromToMappingState"
                   :key="index"
-                  class="flex items-center mr-4 mb-4"
+                  :value="index"
+                  :disabled="playFromToFlagState"
+                  class="mb-2"
+                  >{{ radio.text }}</a-radio
                 >
-                  <input
-                    :id="`playFromToPickedState-${index}`"
-                    type="radio"
-                    v-model="playFromToPickedState"
-                    name="playFromTo"
-                    class="hidden"
-                    :value="index"
-                    :disabled="playFromToFlagState"
-                  />
-                  <label
-                    :for="`playFromToPickedState-${index}`"
-                    class="flex items-center cursor-pointer"
-                    :class="{ disabled: playFromToFlagState }"
-                  >
-                    <span class="w-4 h-4 inline-block mr-1 rounded-full border border-grey"></span>
-                    {{ radio.text }}
-                  </label>
-                </div>
-              </div>
+              </a-radio-group>
               <div class="flex justify-between">
                 <div class="flex items-center">
-                  <multi-select
-                    class="!w-[80px]"
-                    v-model="playFromState"
+                  <a-select
+                    v-model:value="playFromState"
+                    class="w-[65px]"
                     :options="songIndexOptionsComputed"
-                    :searchable="false"
-                    :show-labels="false"
                     :disabled="playFromToFlagState || playFromToCustomFlagState"
-                    placeholder=""
-                  ></multi-select>
+                  ></a-select>
                   <label class="mx-3">to</label>
-                  <multi-select
-                    class="!w-[80px]"
-                    v-model="playToState"
+                  <a-select
+                    v-model:value="playToState"
+                    class="w-[65px]"
                     :options="songIndexOptionsComputed"
-                    :searchable="false"
-                    :show-labels="false"
                     :disabled="playFromToFlagState || playFromToCustomFlagState"
-                    placeholder=""
-                  ></multi-select>
+                  ></a-select>
                 </div>
                 <div>
                   <button
@@ -540,48 +533,57 @@ watch(playFromToPickedState, async (value) => {
             </div>
           </fieldset>
           <!-- end:: Play from to -->
-        </div>
-        <div class="pt-4" v-show="activeTab === 2">
+        </a-tab-pane>
+        <a-tab-pane key="2" force-render>
+          <template #tab>
+            <ArrowPathIcon class="h-6 w-6" />
+          </template>
           <repeat ref="repeatRef" :current-song-state="currentSongState"></repeat>
-        </div>
-        <div class="pt-4" v-show="activeTab === 3">
+        </a-tab-pane>
+        <a-tab-pane key="3" force-render>
+          <template #tab>
+            <span class="flex justify-center"><ClockIcon class="h-6 w-6" /></span>
+          </template>
           <sleep-timer @pause="pause" ref="sleepTimerRef"></sleep-timer>
-        </div>
-        <div class="pt-4" v-show="activeTab === 4">
+        </a-tab-pane>
+        <a-tab-pane key="4" force-render>
+          <template #tab>
+            <WifiIcon class="h-6 w-6" />
+          </template>
           <sync
             @set-default-setting-from-local-storage="setDefaultSettingFromLocalStorage"
             @set-player-source="setPlayerSource"
             ref="syncRef"
           ></sync>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- end:: Player Section -->
-  <lyric
-    :current-song-state="currentSongState"
-    :show-lyrics-state="showLyricsState"
-    :show-time-string-lyric-state="showTimeStringLyricComputed"
-    @set-currently-timer="setCurrentlyTimer"
-    ref="lyricRef"
-  />
-  <!-- begin:: Playlist Section -->
-  <playlist
-    :current-song-state="currentSongState"
-    :songs-state="songsState"
-    :show-playlist-state="showPlaylistState"
-    @play="play"
-    ref="playlistRef"
-  />
-  <!-- end:: Playlist Section -->
+        </a-tab-pane>
+      </a-tabs>
+    </section>
+    <!-- end:: Player Section -->
+    <lyric
+      :current-song-state="currentSongState"
+      :show-lyrics-state="showLyricsState"
+      :show-time-string-lyric-state="showTimeStringLyricComputed"
+      @set-currently-timer="setCurrentlyTimer"
+      ref="lyricRef"
+    />
+    <!-- begin:: Playlist Section -->
+    <playlist
+      :current-song-state="currentSongState"
+      :songs-state="songsState"
+      :show-playlist-state="showPlaylistState"
+      @play="play"
+      ref="playlistRef"
+    />
+    <!-- end:: Playlist Section -->
 
-  <!-- begin:: Nav mobile -->
-  <nav-mobile
-    @activeNavMobile="activeNavMobile"
-    :show-lyrics-state="showLyricsState"
-    :show-playlist-state="showPlaylistState"
-  />
-  <!-- end:: Nav mobile -->
+    <!-- begin:: Nav mobile -->
+    <nav-mobile
+      @activeNavMobile="activeNavMobile"
+      :show-lyrics-state="showLyricsState"
+      :show-playlist-state="showPlaylistState"
+    />
+    <!-- end:: Nav mobile -->
+  </a-config-provider>
 </template>
 
 <style scoped></style>

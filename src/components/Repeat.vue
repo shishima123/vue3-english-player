@@ -3,7 +3,7 @@ import { onMounted, ref, watch } from 'vue'
 import dayjs from 'dayjs'
 import { formatTimer, timeStringToSecond } from '@/helpers/timer'
 
-let repeatType = ref('time')
+let repeatTypeState = ref('time')
 let isRepeatActiveState = ref(false)
 let seekSliderState = ref([0, 100])
 let startTimePickerState = ref(dayjs('00:00', 'mm:ss'))
@@ -13,6 +13,7 @@ let endTimeState = ref()
 let delayState = ref(5)
 let seekSliderFormatState = ref((v) => `${formatTimer(props.currentSongState.seconds * (v / 100))}`)
 let showTimeStringLyricState = ref(false)
+let isDelayActiveState = ref(true)
 
 const props = defineProps({
   currentSongState: Object
@@ -72,7 +73,7 @@ function onChangeEndTimePicker(time) {
 }
 
 function setTimeWhenClickLyric(startTime, endTime) {
-  if (isRepeatActiveState.value && repeatType.value === 'lyric') {
+  if (isRepeatActiveState.value && repeatTypeState.value === 'lyric') {
     let startSeek = Math.round((startTime * 100) / props.currentSongState.seconds)
     let endSeek = Math.round((endTime * 100) / props.currentSongState.seconds)
     seekSliderState.value = [startSeek, endSeek]
@@ -86,35 +87,11 @@ function setTimeWhenClickLyric(startTime, endTime) {
   <fieldset class="my-1 fieldset-border">
     <legend>Repeat</legend>
     <div class="flex justify-between items-center">
-      <div class="">
-        <div class="flex items-center mb-2">
-          <input
-            id="repeat-time"
-            type="radio"
-            name="playFromTo"
-            class="hidden"
-            value="time"
-            v-model="repeatType"
-          />
-          <label for="repeat-time" class="flex items-center cursor-pointer">
-            <span class="w-4 h-4 inline-block mr-1 rounded-full border border-grey"></span>
-            Time
-          </label>
-        </div>
-        <div class="flex items-center mb-3">
-          <input
-            id="repeat-lyric"
-            type="radio"
-            name="playFromTo"
-            class="hidden"
-            value="lyric"
-            v-model="repeatType"
-          />
-          <label for="repeat-lyric" class="flex items-center cursor-pointer">
-            <span class="w-4 h-4 inline-block mr-1 rounded-full border border-grey"></span>
-            Lyric
-          </label>
-        </div>
+      <div class="mb-3">
+        <a-radio-group v-model:value="repeatTypeState" name="repeatType">
+          <a-radio value="time" class="flex py-1">Time</a-radio>
+          <a-radio value="lyric" class="flex py-1">Lyric</a-radio>
+        </a-radio-group>
       </div>
       <div class="flex flex-col">
         <button
@@ -133,7 +110,7 @@ function setTimeWhenClickLyric(startTime, endTime) {
         :tooltip="'active'"
         :tooltip-formatter="seekSliderFormatState"
         :lazy="true"
-        :disabled="repeatType === 'lyric'"
+        :disabled="repeatTypeState === 'lyric'"
       ></vue-slider>
     </div>
 
@@ -147,7 +124,7 @@ function setTimeWhenClickLyric(startTime, endTime) {
           :show-now="false"
           :disabledTime="disabledTime"
           :allowClear="false"
-          :disabled="repeatType === 'lyric'"
+          :disabled="repeatTypeState === 'lyric'"
           @change="onChangeStartTimePicker"
         />
       </div>
@@ -160,33 +137,27 @@ function setTimeWhenClickLyric(startTime, endTime) {
           :show-now="false"
           :disabledTime="disabledTime"
           :allowClear="false"
-          :disabled="repeatType === 'lyric'"
+          :disabled="repeatTypeState === 'lyric'"
           @change="onChangeEndTimePicker"
         />
       </div>
     </div>
     <div>
-      <div class="mb-3">
-        <p class="text-base">
-          <label for="delay_input">Delay</label>
-          <input
-            id="delay_input"
-            class="p-0.5 mx-0.5 w-[30px] text-center text-base border-b border-solid border-gray-600 outline-0"
-            v-model="delayState"
-            type="text"
-            name="loops-input"
-          />
-          <span for="delay_input">seconds</span>
-        </p>
+      <div class="flex items-center text-base mb-3">
+        <a-switch v-model:checked="isDelayActiveState" />
+        <label class="ml-2" for="delay_input">Delay</label>
+        <input
+          id="delay_input"
+          class="p-0.5 mx-0.5 w-[30px] text-center text-base border-b border-solid border-gray-600 outline-0"
+          v-model="delayState"
+          type="text"
+          name="loops-input"
+        />
+        <label for="delay_input">seconds</label>
       </div>
-      <div>
-        <p class="text-base">
-          <label class="switch mr-2">
-            <input type="checkbox" v-model="showTimeStringLyricState" />
-            <span class="slider round"></span>
-          </label>
-          Show Time in Lyric
-        </p>
+      <div class="flex items-center text-base">
+        <a-switch v-model:checked="showTimeStringLyricState" />
+        <span class="ml-2">Show Time in Lyric</span>
       </div>
     </div>
   </fieldset>

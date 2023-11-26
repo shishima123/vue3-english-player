@@ -10,6 +10,7 @@ import { ArrowPathIcon } from '@heroicons/vue/24/outline'
 let syncFlagState = ref(true)
 let isSyncing = ref(false)
 const showModalLogin = ref(false)
+let modalLoginRef = ref()
 
 const emit = defineEmits(['setDefaultSettingFromLocalStorage', 'setPlayerSource'])
 defineExpose({ setDefaultSettingFromLocalStorage, onShowModalLogin, syncFlagState })
@@ -41,7 +42,7 @@ function handleAfterLogin() {
 }
 
 function onShowModalLogin() {
-  showModalLogin.value = true
+  modalLoginRef.value.changeOpen(true)
 }
 
 function setDefaultSettingFromLocalStorage() {
@@ -65,13 +66,10 @@ watch(syncFlagState, async (value) => {
   <fieldset class="flex justify-between items-center my-1 fieldset-border">
     <legend>Sync</legend>
     <div>
-      <p class="text-base">
-        <label class="switch mr-2">
-          <input type="checkbox" v-model="syncFlagState" />
-          <span class="slider round"></span>
-        </label>
-        Auto Sync
-      </p>
+      <div class="flex items-center text-base">
+        <a-switch v-model:checked="syncFlagState" />
+        <span class="ml-2">Auto Sync</span>
+      </div>
     </div>
     <div class="flex flex-col">
       <button class="btn" :class="{ disabled: isSyncing }" @click="sync">
@@ -82,5 +80,5 @@ watch(syncFlagState, async (value) => {
       </button>
     </div>
   </fieldset>
-  <modal-login v-model="showModalLogin" @handleAfterLogin="handleAfterLogin" @sync="sync" />
+  <modal-login ref="modalLoginRef" @handleAfterLogin="handleAfterLogin" @sync="sync" />
 </template>
