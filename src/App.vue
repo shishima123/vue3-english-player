@@ -9,7 +9,6 @@ import Lyric from '@/components/Lyric.vue'
 import SleepTimer from '@/components/SleepTimer.vue'
 import Sync from '@/components/Sync.vue'
 import Repeat from '@/components/Repeat.vue'
-import { syncDownload, syncUpload } from '@/composables/sync'
 import { FirebaseEnums } from '@/configs/firebase'
 
 // icons
@@ -22,11 +21,13 @@ import {
   AdjustmentsVerticalIcon,
   ArrowPathIcon,
   ClockIcon,
-  WifiIcon
+  CloudArrowDownIcon
 } from '@heroicons/vue/24/outline'
 
 import { useNavMobileStore } from '@/stores/navMobile'
 const navMobileStore = useNavMobileStore()
+import { useSyncStore } from '@/stores/sync'
+const syncStore = useSyncStore()
 
 let loopsState = ref(10)
 let loopsCountState = ref(0)
@@ -82,7 +83,6 @@ let activeTab = ref('1')
 let lyricRef = ref(null)
 let playlistRef = ref(null)
 let sleepTimerRef = ref(null)
-let syncRef = ref(null)
 let repeatRef = ref(null)
 
 // using for prevent sync in first load page
@@ -272,18 +272,19 @@ function setDefaultSettingFromLocalStorage() {
   }
 
   sleepTimerRef.value.setDefaultSettingFromLocalStorage()
+  syncStore.setDefaultSettingFromLocalStorage()
 }
 
 onMounted(async () => {
-  await syncRef.value.setDefaultSettingFromLocalStorage()
+  await setDefaultSettingFromLocalStorage()
   try {
-    await syncDownload(syncRef.value.syncFlagState)
+    await syncStore.syncDownload()
   } catch (error) {
     if (error.message === FirebaseEnums.permission_denied) {
-      syncRef.value.onShowModalLogin()
+      syncStore.onShowModalLogin()
     }
   }
-  await setDefaultSettingFromLocalStorage()
+
   await setCurrentSong()
   await setPlayerSource()
   await registerListener()
@@ -291,7 +292,7 @@ onMounted(async () => {
 })
 
 function onSyncUpload() {
-  if (!syncRef.value.syncFlagState || !isAppMounted) {
+  if (!syncStore.syncFlagState || !isAppMounted) {
     return
   }
   let data = {}
@@ -302,7 +303,7 @@ function onSyncUpload() {
   data.playToState = Number(playToState.value)
   data.playFromToPickedState = playFromToPickedState.value
 
-  syncUpload(data)
+  syncStore.syncUpload(data)
 }
 
 watch(volumeSliderState, async (value) => {
@@ -536,12 +537,11 @@ watch(playFromToPickedState, async (value) => {
         </a-tab-pane>
         <a-tab-pane key="4" force-render>
           <template #tab>
-            <WifiIcon class="h-6 w-6" />
+            <CloudArrowDownIcon class="h-6 w-6" />
           </template>
           <sync
             @set-default-setting-from-local-storage="setDefaultSettingFromLocalStorage"
             @set-player-source="setPlayerSource"
-            ref="syncRef"
           ></sync>
         </a-tab-pane>
       </a-tabs>
@@ -569,5 +569,3 @@ watch(playFromToPickedState, async (value) => {
     <!-- end:: Nav mobile -->
   </a-config-provider>
 </template>
-
-<style scoped></style>
