@@ -23,4 +23,14 @@ const scrollToActiveElement = (element, activeClass, behavior = 'smooth', block 
   })
 }
 
-export { threatSongs, scrollToActiveElement }
+const range = (start, end) => {
+  const result = []
+
+  for (let i = start; i < end; i++) {
+    result.push(i)
+  }
+
+  return result
+}
+
+export { threatSongs, scrollToActiveElement, range }

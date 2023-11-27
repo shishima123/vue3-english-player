@@ -13,6 +13,7 @@ import { FirebaseEnums } from '@/configs/firebase'
 import { useNavMobileStore } from '@/stores/navMobile'
 import { useSyncStore } from '@/stores/sync'
 import { useSleepTimerStore } from '@/stores/sleepTimer'
+import { useRepeatStore } from '@/stores/repeat'
 
 // icons
 import { PlayIcon, PauseIcon } from '@heroicons/vue/24/solid'
@@ -30,6 +31,7 @@ import {
 const navMobileStore = useNavMobileStore()
 const syncStore = useSyncStore()
 const sleepTimerStore = useSleepTimerStore()
+const repeatStore = useRepeatStore()
 
 let loopsState = ref(10)
 let loopsCountState = ref(0)
@@ -84,7 +86,6 @@ let activeTab = ref('1')
 // refs
 let lyricRef = ref(null)
 let playlistRef = ref(null)
-let repeatRef = ref(null)
 
 // using for prevent sync in first load page
 let isAppMounted = false
@@ -105,8 +106,8 @@ let songIndexOptionsComputed = computed(() => {
 })
 
 let showTimeStringLyricComputed = computed(() => {
-  if (repeatRef.value) {
-    return repeatRef.value.showTimeStringLyricState
+  if (repeatStore.showTimeStringLyricState) {
+    return repeatStore.showTimeStringLyricState
   }
   return false
 })
@@ -150,7 +151,7 @@ function setCurrentlyTimer(startTime, endTime) {
   }
   playerState.value.currentTime = startTime + 0.1
 
-  repeatRef.value.setTimeWhenClickLyric(startTime, endTime)
+  repeatStore.setTimeWhenClickLyric(startTime, endTime, currentSongState)
 }
 
 function play(songIndexInput = null, isClickFromList = false) {
@@ -188,21 +189,24 @@ function setLoopsCount($count) {
   loopsCountState.value = $count
 }
 
-let playAfterDelay = null
-
 function registerListener() {
   playerState.value.addEventListener('timeupdate', () => {
     let playerTimer = playerState.value.currentTime
 
-    if (repeatRef.value.isRepeatActiveState) {
-      if (playerTimer < repeatRef.value.startTimeState) {
-        playerState.value.currentTime = repeatRef.value.startTimeState
-      } else if (playerTimer > repeatRef.value.endTimeState - 0.2) {
-        playerState.value.currentTime = repeatRef.value.startTimeState
-        pause()
-        playAfterDelay = setTimeout(() => {
-          play()
-        }, 5000)
+    // repeat
+    if (repeatStore.isRepeatActiveState) {
+      if (playerTimer < repeatStore.startTimeState) {
+        playerState.value.currentTime = repeatStore.startTimeState
+      } else if (playerTimer > repeatStore.endTimeState - 0.2) {
+        playerState.value.currentTime = repeatStore.startTimeState
+
+        // sleep
+        if (repeatStore.isSleepActiveState) {
+          pause()
+          repeatStore.playAfterSleepState = setTimeout(() => {
+            play()
+          }, repeatStore.sleepTimeState)
+        }
       }
     }
     lyricRef.value.changeCurrentLyricState(playerTimer)
@@ -528,7 +532,7 @@ watch(playFromToPickedState, async (value) => {
           <template #tab>
             <ArrowPathIcon class="h-6 w-6" />
           </template>
-          <repeat ref="repeatRef" :current-song-state="currentSongState"></repeat>
+          <repeat :current-song-state="currentSongState"></repeat>
         </a-tab-pane>
         <a-tab-pane key="3" force-render>
           <template #tab>
