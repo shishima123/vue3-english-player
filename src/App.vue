@@ -25,6 +25,9 @@ import {
   WifiIcon
 } from '@heroicons/vue/24/outline'
 
+import { useNavMobileStore } from '@/stores/navMobile'
+const navMobileStore = useNavMobileStore()
+
 let loopsState = ref(10)
 let loopsCountState = ref(0)
 let currentSongState = ref({})
@@ -228,24 +231,6 @@ function setVolume() {
   playerState.value.volume = volumeSliderState.value / 100
 }
 
-let showPlaylistState = ref(false)
-let showLyricsState = ref(false)
-function activeNavMobile(type = null) {
-  switch (type) {
-    case 'playlist':
-      showLyricsState.value = false
-      showPlaylistState.value = !showPlaylistState.value
-      break
-    case 'lyrics':
-      showLyricsState.value = !showLyricsState.value
-      showPlaylistState.value = false
-      break
-    default:
-      showLyricsState.value = false
-      showPlaylistState.value = false
-  }
-}
-
 function setDefaultSettingFromLocalStorage() {
   pause()
   let attributes = [
@@ -380,7 +365,10 @@ watch(playFromToPickedState, async (value) => {
     <!-- begin:: Player Section -->
     <section
       class="flex flex-col flex-nowrap order-3 w-full h-full mx-auto overflow-hidden px-[15px] md:p-[10px] bg-white text-base rounded-none md:rounded shadow-none md:shadow-md row-start-1 row-end-3 col-start-1 col-end-2 md:order-1 transition-[height] duration-[350ms] ease-linear"
-      :class="{ '!h-[var(--player-mobile-height)]': showLyricsState || showPlaylistState }"
+      :class="{
+        '!h-[var(--player-mobile-height)]':
+          navMobileStore.showLyricsState || navMobileStore.showPlaylistState
+      }"
     >
       <!-- begin:: Player -->
       <div>
@@ -561,7 +549,7 @@ watch(playFromToPickedState, async (value) => {
     <!-- end:: Player Section -->
     <lyric
       :current-song-state="currentSongState"
-      :show-lyrics-state="showLyricsState"
+      :show-lyrics-state="navMobileStore.showLyricsState"
       :show-time-string-lyric-state="showTimeStringLyricComputed"
       @set-currently-timer="setCurrentlyTimer"
       ref="lyricRef"
@@ -570,18 +558,14 @@ watch(playFromToPickedState, async (value) => {
     <playlist
       :current-song-state="currentSongState"
       :songs-state="songsState"
-      :show-playlist-state="showPlaylistState"
+      :show-playlist-state="navMobileStore.showPlaylistState"
       @play="play"
       ref="playlistRef"
     />
     <!-- end:: Playlist Section -->
 
     <!-- begin:: Nav mobile -->
-    <nav-mobile
-      @activeNavMobile="activeNavMobile"
-      :show-lyrics-state="showLyricsState"
-      :show-playlist-state="showPlaylistState"
-    />
+    <nav-mobile />
     <!-- end:: Nav mobile -->
   </a-config-provider>
 </template>
