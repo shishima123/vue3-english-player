@@ -1,29 +1,25 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
+import { useSleepTimerStore } from '@/stores/sleepTimer'
+import { storeToRefs } from 'pinia'
+
 const emit = defineEmits(['pause'])
+const sleepTimerStore = useSleepTimerStore()
 
-let isSleepTimerActive = ref(false)
-let sleepTimeState = ref(30)
-let sleepRemainingTimeState = ref(0)
-
-defineExpose({ setDefaultSettingFromLocalStorage })
+const { isSleepTimerActive } = storeToRefs(sleepTimerStore)
 
 let sleepRemainingTimeComputed = computed(() => {
-  return sleepRemainingTimeState.value ? sleepRemainingTimeState.value + ' min' : 'disabled'
+  return sleepTimerStore.sleepRemainingTimeState
+    ? sleepTimerStore.sleepRemainingTimeState + ' min'
+    : 'disabled'
 })
 
 let sleepInterval = null
 function setSleepState() {
-  sleepRemainingTimeState.value--
-  if (sleepRemainingTimeState.value === 0) {
+  sleepTimerStore.sleepRemainingTimeState--
+  if (sleepTimerStore.sleepRemainingTimeState === 0) {
     emit('pause')
     isSleepTimerActive.value = false
-  }
-}
-
-function setDefaultSettingFromLocalStorage() {
-  if (localStorage['sleepTimeState']) {
-    sleepTimeState.value = Number(localStorage['sleepTimeState'])
   }
 }
 
@@ -31,14 +27,10 @@ watch(isSleepTimerActive, async (value, oldValue) => {
   if (value !== oldValue) {
     clearInterval(sleepInterval)
     if (value) {
-      sleepRemainingTimeState.value = sleepTimeState.value
+      sleepTimerStore.sleepRemainingTimeState = sleepTimerStore.sleepTimeState
       sleepInterval = setInterval(setSleepState, 1000 * 60)
     }
   }
-})
-
-watch(sleepTimeState, async (value) => {
-  localStorage.sleepTimeState = value
 })
 </script>
 
@@ -57,7 +49,7 @@ watch(sleepTimeState, async (value) => {
           After
           <input
             class="p-0.5 mx-0.5 w-[30px] text-center text-base border-b border-solid border-gray-600 outline-0"
-            v-model="sleepTimeState"
+            v-model="sleepTimerStore.sleepTimeState"
             type="text"
             name="loops-input"
           />

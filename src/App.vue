@@ -10,6 +10,9 @@ import SleepTimer from '@/components/SleepTimer.vue'
 import Sync from '@/components/Sync.vue'
 import Repeat from '@/components/Repeat.vue'
 import { FirebaseEnums } from '@/configs/firebase'
+import { useNavMobileStore } from '@/stores/navMobile'
+import { useSyncStore } from '@/stores/sync'
+import { useSleepTimerStore } from '@/stores/sleepTimer'
 
 // icons
 import { PlayIcon, PauseIcon } from '@heroicons/vue/24/solid'
@@ -24,10 +27,9 @@ import {
   CloudArrowDownIcon
 } from '@heroicons/vue/24/outline'
 
-import { useNavMobileStore } from '@/stores/navMobile'
 const navMobileStore = useNavMobileStore()
-import { useSyncStore } from '@/stores/sync'
 const syncStore = useSyncStore()
+const sleepTimerStore = useSleepTimerStore()
 
 let loopsState = ref(10)
 let loopsCountState = ref(0)
@@ -82,7 +84,6 @@ let activeTab = ref('1')
 // refs
 let lyricRef = ref(null)
 let playlistRef = ref(null)
-let sleepTimerRef = ref(null)
 let repeatRef = ref(null)
 
 // using for prevent sync in first load page
@@ -271,7 +272,7 @@ function setDefaultSettingFromLocalStorage() {
         : Number(localStorage.playToState)
   }
 
-  sleepTimerRef.value.setDefaultSettingFromLocalStorage()
+  sleepTimerStore.setDefaultSettingFromLocalStorage()
   syncStore.setDefaultSettingFromLocalStorage()
 }
 
@@ -532,8 +533,14 @@ watch(playFromToPickedState, async (value) => {
         <a-tab-pane key="3" force-render>
           <template #tab>
             <span class="flex justify-center"><ClockIcon class="h-6 w-6" /></span>
+            <span
+              v-if="sleepTimerStore.isSleepTimerActive"
+              class="absolute flex h-3 w-3 top-[5px] right-[0px] text-2xs text-emerald-500"
+            >
+              {{ sleepTimerStore.sleepRemainingTimeState }}
+            </span>
           </template>
-          <sleep-timer @pause="pause" ref="sleepTimerRef"></sleep-timer>
+          <sleep-timer @pause="pause"></sleep-timer>
         </a-tab-pane>
         <a-tab-pane key="4" force-render>
           <template #tab>
