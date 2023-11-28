@@ -33,4 +33,15 @@ const range = (start, end) => {
   return result
 }
 
-export { threatSongs, scrollToActiveElement, range }
+function createSelectObjectFromNumber(number) {
+  const obj = []
+  for (let i = 1; i <= number; i++) {
+    obj.push({
+      value: i,
+      label: i
+    })
+  }
+  return obj
+}
+
+export { threatSongs, scrollToActiveElement, range, createSelectObjectFromNumber }

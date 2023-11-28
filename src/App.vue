@@ -9,11 +9,13 @@ import Lyric from '@/components/Lyric.vue'
 import SleepTimer from '@/components/SleepTimer.vue'
 import Sync from '@/components/Sync.vue'
 import Repeat from '@/components/Repeat.vue'
+import Replay from '@/components/Replay.vue'
 import { FirebaseEnums } from '@/configs/firebase'
 import { useNavMobileStore } from '@/stores/navMobile'
 import { useSyncStore } from '@/stores/sync'
 import { useSleepTimerStore } from '@/stores/sleepTimer'
 import { useRepeatStore } from '@/stores/repeat'
+import { useReplayStore } from '@/stores/replay'
 
 // icons
 import { PlayIcon, PauseIcon } from '@heroicons/vue/24/solid'
@@ -32,9 +34,8 @@ const navMobileStore = useNavMobileStore()
 const syncStore = useSyncStore()
 const sleepTimerStore = useSleepTimerStore()
 const repeatStore = useRepeatStore()
+const replayStore = useReplayStore()
 
-let loopsState = ref(10)
-let loopsCountState = ref(0)
 let currentSongState = ref({})
 let songIndexState = ref(0)
 let isPlayingState = ref(false)
@@ -45,43 +46,6 @@ let seekSliderState = ref(0)
 let seekSliderFormatState = ref((v) => `${formatTimer(currentSongState.value.seconds * (v / 100))}`)
 let volumeSliderState = ref(100)
 
-let playFromToFlagState = ref(true)
-let playFromState = ref(1)
-let playToState = ref(10)
-let playFromToCustomFlagState = ref(true)
-let playFromToMappingState = ref({
-  1: {
-    text: '1-10',
-    from: 1,
-    to: 10,
-    shouldDisableSelect: true
-  },
-  2: {
-    text: '11-20',
-    from: 11,
-    to: 20,
-    shouldDisableSelect: true
-  },
-  3: {
-    text: '21-30',
-    from: 21,
-    to: 30,
-    shouldDisableSelect: true
-  },
-  4: {
-    text: '31-40',
-    from: 31,
-    to: 40,
-    shouldDisableSelect: true
-  },
-  5: {
-    text: 'Other',
-    from: 1,
-    to: 40,
-    shouldDisableSelect: false
-  }
-})
-
 let activeTab = ref('1')
 // refs
 let lyricRef = ref(null)
@@ -91,19 +55,6 @@ let playlistRef = ref(null)
 let isAppMounted = false
 
 // computed
-function createObjectFromNumber(number) {
-  const obj = []
-  for (let i = 1; i <= number; i++) {
-    obj.push({
-      value: i,
-      label: i
-    })
-  }
-  return obj
-}
-let songIndexOptionsComputed = computed(() => {
-  return createObjectFromNumber(songsState.value.length)
-})
 
 let showTimeStringLyricComputed = computed(() => {
   if (repeatStore.showTimeStringLyricState) {
@@ -113,28 +64,33 @@ let showTimeStringLyricComputed = computed(() => {
 })
 
 function calcCurrentSongIndex(newSongIndex) {
-  if (!playFromToFlagState.value || (!playFromState.value && !playToState.value)) {
+  if (
+    !replayStore.replayFlagState ||
+    (!replayStore.replayFromState && !replayStore.replayToState)
+  ) {
     return newSongIndex
   }
 
   if (newSongIndex === songsState.value.length - 1) {
-    return playToState.value - 1
+    return replayStore.replayToState - 1
   }
 
   if (newSongIndex === 0) {
-    return playFromState.value - 1
+    return replayStore.replayFromState - 1
   }
 
-  let from = Number(playFromState.value ? playFromState.value : 0)
-  let to = Number(playToState.value ? playToState.value : songsState.value.length - 1)
+  let from = Number(replayStore.replayFromState ? replayStore.replayFromState : 0)
+  let to = Number(
+    replayStore.replayToState ? replayStore.replayToState : songsState.value.length - 1
+  )
   let range = to - from + 1
   let normalizedIndex = (newSongIndex - from + 1) % range
   newSongIndex = from + normalizedIndex - 1
 
-  if (playFromState.value <= newSongIndex && newSongIndex <= playToState.value) {
+  if (replayStore.replayFromState <= newSongIndex && newSongIndex <= replayStore.replayToState) {
     return newSongIndex
   }
-  return playFromState.value - 1
+  return replayStore.replayFromState - 1
 }
 
 function setCurrentSong() {
@@ -160,7 +116,7 @@ function play(songIndexInput = null, isClickFromList = false) {
   }
 
   if (songIndexState.value !== songIndexInput) {
-    setLoopsCount(0)
+    replayStore.setLoopsCount(0)
     songIndexState.value = calcCurrentSongIndex(songIndexInput)
     setPlayerSource()
     lyricRef.value.scrollToTopInLyrics()
@@ -183,10 +139,6 @@ function next() {
 function prev() {
   let newSongIndex = (songIndexState.value - 1 + songsState.value.length) % songsState.value.length
   play(newSongIndex)
-}
-
-function setLoopsCount($count) {
-  loopsCountState.value = $count
 }
 
 function registerListener() {
@@ -215,9 +167,9 @@ function registerListener() {
   playerState.value.addEventListener('ended', () => {
     lyricRef.value.scrollToTopInLyrics()
     isPlayingState.value = false
-    if (playFromToFlagState.value) {
-      setLoopsCount(++loopsCountState.value)
-      if (loopsCountState.value >= loopsState.value) {
+    if (replayStore.replayFlagState) {
+      replayStore.setLoopsCount(++replayStore.loopsCountState)
+      if (replayStore.loopsCountState >= replayStore.loopsState) {
         next()
       } else {
         play(songIndexState.value)
@@ -238,24 +190,12 @@ function setVolume() {
 
 function setDefaultSettingFromLocalStorage() {
   pause()
-  let attributes = [
-    'volumeSliderState',
-    'loopsState',
-    'loopsCountState',
-    'playFromState',
-    'playToState',
-    'playFromToPickedState'
-  ]
+  let attributes = ['volumeSliderState']
   attributes.forEach((el) => {
     if (localStorage[el]) {
       eval(el).value = Number(localStorage[el])
     }
   })
-
-  if (localStorage.playFromToPickedState) {
-    playFromToPickedState.value =
-      localStorage.playFromToPickedState === 'null' ? '1' : localStorage.playFromToPickedState
-  }
 
   if (localStorage.songIndexState) {
     songIndexState.value =
@@ -264,20 +204,21 @@ function setDefaultSettingFromLocalStorage() {
         : Number(localStorage.songIndexState)
   }
 
-  if (localStorage.playFromState) {
-    playFromState.value =
-      localStorage.playFromState === 'null' ? 1 : Number(localStorage.playFromState)
+  if (localStorage.replayFromState) {
+    replayStore.replayFromState =
+      localStorage.replayFromState === 'null' ? 1 : Number(localStorage.replayFromState)
   }
 
-  if (localStorage.playToState) {
-    playToState.value =
-      localStorage.playToState === 'null'
+  if (localStorage.replayToState) {
+    replayStore.replayToState =
+      localStorage.replayToState === 'null'
         ? songsState.value.length
-        : Number(localStorage.playToState)
+        : Number(localStorage.replayToState)
   }
 
   sleepTimerStore.setDefaultSettingFromLocalStorage()
   syncStore.setDefaultSettingFromLocalStorage()
+  replayStore.setDefaultSettingFromLocalStorage()
 }
 
 onMounted(async () => {
@@ -301,12 +242,12 @@ function onSyncUpload() {
     return
   }
   let data = {}
-  data.loopsState = Number(loopsState.value)
-  data.loopsCountState = Number(loopsCountState.value)
+  data.loopsState = Number(replayStore.loopsState)
+  data.loopsCountState = Number(replayStore.loopsCountState)
   data.songIndexState = Number(songIndexState.value)
-  data.playFromState = Number(playFromState.value)
-  data.playToState = Number(playToState.value)
-  data.playFromToPickedState = playFromToPickedState.value
+  data.replayFromState = Number(replayStore.replayFromState)
+  data.replayToState = Number(replayStore.replayToState)
+  data.replayPickedState = replayStore.replayPickedState
 
   syncStore.syncUpload(data)
 }
@@ -314,27 +255,10 @@ function onSyncUpload() {
 watch(volumeSliderState, async (value) => {
   localStorage.volumeSliderState = value
 })
-watch(loopsState, async (value, old) => {
-  value = isNaN(value) ? old : value
-  loopsState.value = value
-  localStorage.loopsState = value
-  onSyncUpload()
-})
-watch(loopsCountState, async (value) => {
-  localStorage.loopsCountState = value
-  onSyncUpload()
-})
+
 watch(songIndexState, async (value) => {
   localStorage.songIndexState = value
   setCurrentSong()
-  onSyncUpload()
-})
-watch(playFromState, async (value) => {
-  localStorage.playFromState = value
-  onSyncUpload()
-})
-watch(playToState, async (value) => {
-  localStorage.playToState = value
   onSyncUpload()
 })
 watch(currentlyTimerState, async (value) => {
@@ -343,18 +267,6 @@ watch(currentlyTimerState, async (value) => {
     seekSliderState.value = Math.min(percent, 100)
   }
   lyricRef.value.scrollToActiveInLyrics()
-})
-
-let playFromToPickedState = ref(null)
-watch(playFromToPickedState, async (value) => {
-  localStorage.playFromToPickedState = value
-  onSyncUpload()
-
-  if (value in playFromToMappingState.value) {
-    playFromState.value = playFromToMappingState.value[value].from
-    playToState.value = playFromToMappingState.value[value].to
-    playFromToCustomFlagState.value = playFromToMappingState.value[value].shouldDisableSelect
-  }
 })
 </script>
 
@@ -454,79 +366,7 @@ watch(playFromToPickedState, async (value) => {
           <template #tab>
             <AdjustmentsVerticalIcon class="h-6 w-6" />
           </template>
-          <!-- begin:: Loop -->
-          <fieldset class="flex justify-between items-center my-1 fieldset-border">
-            <legend>Loops</legend>
-            <div>
-              <p class="text-base">
-                Played
-                <span class="text-red-600">{{ loopsCountState }}</span>
-                times
-              </p>
-              <p class="text-base">
-                <label for="loops_input">Loop for</label>
-                <input
-                  id="loops_input"
-                  class="p-0.5 mx-0.5 w-[30px] text-center text-base border-b border-solid border-gray-600 outline-0"
-                  v-model="loopsState"
-                  type="text"
-                  name="loops-input"
-                />
-                <label for="loops_input">times</label>
-              </p>
-            </div>
-            <div>
-              <button class="btn" @click="setLoopsCount(0)">Reset</button>
-            </div>
-          </fieldset>
-          <!-- end:: Loop -->
-          <!-- begin:: Play from to -->
-          <fieldset class="flex justify-between items-center my-1 fieldset-border">
-            <legend>Play from to</legend>
-            <div class="w-full">
-              <a-radio-group
-                v-model:value="playFromToPickedState"
-                name="playFromTo"
-                class="grid grid-cols-3"
-              >
-                <a-radio
-                  v-for="(radio, index) in playFromToMappingState"
-                  :key="index"
-                  :value="index"
-                  :disabled="playFromToFlagState"
-                  class="mb-2"
-                  >{{ radio.text }}</a-radio
-                >
-              </a-radio-group>
-              <div class="flex justify-between">
-                <div class="flex items-center">
-                  <a-select
-                    v-model:value="playFromState"
-                    class="w-[65px]"
-                    :options="songIndexOptionsComputed"
-                    :disabled="playFromToFlagState || playFromToCustomFlagState"
-                  ></a-select>
-                  <label class="mx-3">to</label>
-                  <a-select
-                    v-model:value="playToState"
-                    class="w-[65px]"
-                    :options="songIndexOptionsComputed"
-                    :disabled="playFromToFlagState || playFromToCustomFlagState"
-                  ></a-select>
-                </div>
-                <div>
-                  <button
-                    class="btn"
-                    :class="{ active: playFromToFlagState }"
-                    @click="playFromToFlagState = !playFromToFlagState"
-                  >
-                    {{ playFromToFlagState ? 'Cancel' : 'Set' }}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </fieldset>
-          <!-- end:: Play from to -->
+          <replay :songs-state="songsState" />
         </a-tab-pane>
         <a-tab-pane key="2" force-render>
           <template #tab>
