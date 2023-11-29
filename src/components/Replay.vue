@@ -1,15 +1,14 @@
 <script setup>
 import { computed } from 'vue'
 import { useReplayStore } from '@/stores/replay'
+import { usePlayerStore } from '@/stores/player'
 import { createSelectObjectFromNumber } from '@/helpers/utils'
-const replayStore = useReplayStore()
 
-const props = defineProps({
-  songsState: Array
-})
+const replayStore = useReplayStore()
+const playerStore = usePlayerStore()
 
 let songIndexOptionsComputed = computed(() => {
-  return createSelectObjectFromNumber(props.songsState.length)
+  return createSelectObjectFromNumber(playerStore.songsState.length)
 })
 </script>
 

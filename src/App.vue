@@ -1,7 +1,5 @@
 <script setup>
 import { formatTimer } from './helpers/timer'
-import { threatSongs } from '@/helpers/utils'
-import songMocks from '@/mocks/songs'
 import { onMounted, ref, watch } from 'vue'
 import NavMobile from '@/components/NavMobile.vue'
 import Playlist from '@/components/Playlist.vue'
@@ -18,6 +16,7 @@ import { useRepeatStore } from '@/stores/repeat'
 import { useReplayStore } from '@/stores/replay'
 import { useLyricStore } from '@/stores/lyric'
 import { usePlayerStore } from '@/stores/player'
+import { usePlaylistStore } from '@/stores/playlist'
 
 // icons
 import { PlayIcon, PauseIcon } from '@heroicons/vue/24/solid'
@@ -39,11 +38,11 @@ const repeatStore = useRepeatStore()
 const replayStore = useReplayStore()
 const lyricStore = useLyricStore()
 const playerStore = usePlayerStore()
+const playlistStore = usePlaylistStore()
 
 let songIndexState = ref(0)
 let isPlayingState = ref(false)
 let currentlyTimerState = ref('00:00')
-let songsState = ref(threatSongs(songMocks))
 let playerState = ref(new Audio())
 let seekSliderState = ref(0)
 let seekSliderFormatState = ref(
@@ -52,8 +51,6 @@ let seekSliderFormatState = ref(
 let volumeSliderState = ref(100)
 
 let activeTab = ref('1')
-// refs
-let playlistRef = ref(null)
 
 // using for prevent sync in first load page
 let isAppMounted = false
@@ -68,7 +65,7 @@ function calcCurrentSongIndex(newSongIndex) {
     return newSongIndex
   }
 
-  if (newSongIndex === songsState.value.length - 1) {
+  if (newSongIndex === playerStore.songsState.length - 1) {
     return replayStore.replayToState - 1
   }
 
@@ -78,7 +75,7 @@ function calcCurrentSongIndex(newSongIndex) {
 
   let from = Number(replayStore.replayFromState ? replayStore.replayFromState : 0)
   let to = Number(
-    replayStore.replayToState ? replayStore.replayToState : songsState.value.length - 1
+    replayStore.replayToState ? replayStore.replayToState : playerStore.songsState.length - 1
   )
   let range = to - from + 1
   let normalizedIndex = (newSongIndex - from + 1) % range
@@ -91,7 +88,7 @@ function calcCurrentSongIndex(newSongIndex) {
 }
 
 function setCurrentSong() {
-  playerStore.currentSongState = songsState.value[songIndexState.value]
+  playerStore.currentSongState = playerStore.songsState[songIndexState.value]
 }
 
 function setPlayerSource() {
@@ -117,7 +114,7 @@ function play(songIndexInput = null, isClickFromList = false) {
     songIndexState.value = calcCurrentSongIndex(songIndexInput)
     setPlayerSource()
     lyricStore.scrollToTopInLyrics()
-    playlistRef.value.scrollToActive()
+    playlistStore.scrollToActive()
   }
   playerState.value.play()
   isPlayingState.value = true
@@ -129,12 +126,13 @@ function pause() {
 }
 
 function next() {
-  let newSongIndex = (songIndexState.value + 1) % songsState.value.length
+  let newSongIndex = (songIndexState.value + 1) % playerStore.songsState.length
   play(newSongIndex)
 }
 
 function prev() {
-  let newSongIndex = (songIndexState.value - 1 + songsState.value.length) % songsState.value.length
+  let newSongIndex =
+    (songIndexState.value - 1 + playerStore.songsState.length) % playerStore.songsState.length
   play(newSongIndex)
 }
 
@@ -197,7 +195,7 @@ function setDefaultSettingFromLocalStorage() {
 
   if (localStorage.songIndexState) {
     songIndexState.value =
-      Number(localStorage.songIndexState) > songsState.value.length - 1
+      Number(localStorage.songIndexState) > playerStore.songsState.length - 1
         ? 0
         : Number(localStorage.songIndexState)
   }
@@ -210,7 +208,7 @@ function setDefaultSettingFromLocalStorage() {
   if (localStorage.replayToState) {
     replayStore.replayToState =
       localStorage.replayToState === 'null'
-        ? songsState.value.length
+        ? playerStore.songsState.length
         : Number(localStorage.replayToState)
   }
 
@@ -328,14 +326,12 @@ watch(currentlyTimerState, async (value) => {
             <button
               class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-400 relative py-5 px-7 hover:scale-125 transition bg-transparent"
               @click="prev"
-              v-if="songsState.length > 1"
             >
               <span><BackwardIcon class="h-6 w-6" /></span>
             </button>
             <button
               class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-400 relative py-5 px-7 hover:scale-125 transition bg-transparent"
               @click="next"
-              v-if="songsState.length > 1"
             >
               <span><ForwardIcon class="h-6 w-6" /></span>
             </button>
@@ -366,7 +362,7 @@ watch(currentlyTimerState, async (value) => {
           <template #tab>
             <AdjustmentsVerticalIcon class="h-6 w-6" />
           </template>
-          <replay :songs-state="songsState" />
+          <replay />
         </a-tab-pane>
         <a-tab-pane key="2" force-render>
           <template #tab>
@@ -402,10 +398,8 @@ watch(currentlyTimerState, async (value) => {
     <!-- begin:: Playlist Section -->
     <playlist
       :current-song-state="playerStore.currentSongState"
-      :songs-state="songsState"
       :show-playlist-state="navMobileStore.showPlaylistState"
       @play="play"
-      ref="playlistRef"
     />
     <!-- end:: Playlist Section -->
 
