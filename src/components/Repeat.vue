@@ -2,85 +2,66 @@
 import { onMounted, ref, watch } from 'vue'
 import dayjs from 'dayjs'
 import { formatTimer, timeStringToSecond } from '@/helpers/timer'
+import { useRepeatStore } from '@/stores/repeat'
+import { storeToRefs } from 'pinia'
+import { range } from '@/helpers/utils'
+import { usePlayerStore } from '@/stores/player'
 
-let repeatTypeState = ref('time')
-let isRepeatActiveState = ref(false)
-let seekSliderState = ref([0, 100])
+// store
+const repeatStore = useRepeatStore()
+const playerStore = usePlayerStore()
+
+// ref
+const { seekSliderState } = storeToRefs(repeatStore)
 let startTimePickerState = ref(dayjs('00:00', 'mm:ss'))
 let endTimePickerState = ref()
-let startTimeState = ref()
-let endTimeState = ref()
-let delayState = ref(5)
-let seekSliderFormatState = ref((v) => `${formatTimer(props.currentSongState.seconds * (v / 100))}`)
-let showTimeStringLyricState = ref(false)
-let isDelayActiveState = ref(true)
 
-const props = defineProps({
-  currentSongState: Object
-})
-
-defineExpose({
-  setTimeWhenClickLyric,
-  isRepeatActiveState,
-  startTimeState,
-  endTimeState,
-  showTimeStringLyricState
-})
+let seekSliderFormatState = ref(
+  (v) => `${formatTimer(playerStore.currentSongState.seconds * (v / 100))}`
+)
 
 const disabledTime = () => {
   return {
-    disabledMinutes: () => range(2, 60)
+    disabledMinutes: () => range(Math.floor(playerStore.currentSongState.seconds / 60) + 1, 60)
   }
 }
-onMounted(() => {
-  setTimeout(() => {
-    endTimePickerState.value = dayjs(formatTimer(props.currentSongState.seconds), 'mm:ss')
-  })
-})
-
-const range = (start, end) => {
-  const result = []
-
-  for (let i = start; i < end; i++) {
-    result.push(i)
-  }
-
-  return result
-}
-watch(seekSliderState, (value) => {
-  startTimePickerState.value = dayjs(
-    formatTimer(props.currentSongState.seconds * (value[0] / 100)),
-    'mm:ss'
-  )
-  endTimePickerState.value = dayjs(
-    formatTimer(props.currentSongState.seconds * (value[1] / 100)),
-    'mm:ss'
-  )
-
-  startTimeState.value = props.currentSongState.seconds * (value[0] / 100)
-  endTimeState.value = props.currentSongState.seconds * (value[1] / 100)
-})
 
 function onChangeStartTimePicker(time) {
   let startSeek = timeStringToSecond(time.format('HH:mm:ss'))
-  let endSeek = seekSliderState.value[1]
-  seekSliderState.value = [startSeek, endSeek]
-}
-function onChangeEndTimePicker(time) {
-  let startSeek = seekSliderState.value[0]
-  let endSeek = timeStringToSecond(time.format('HH:mm:ss'))
-  seekSliderState.value = [startSeek, endSeek]
+  let endSeek = repeatStore.seekSliderState[1]
+  repeatStore.seekSliderState = [startSeek, endSeek]
 }
 
-function setTimeWhenClickLyric(startTime, endTime) {
-  if (isRepeatActiveState.value && repeatTypeState.value === 'lyric') {
-    let startSeek = Math.round((startTime * 100) / props.currentSongState.seconds)
-    let endSeek = Math.round((endTime * 100) / props.currentSongState.seconds)
-    seekSliderState.value = [startSeek, endSeek]
-    startTimeState.value = startTime
-    endTimeState.value = endTime
-  }
+function onChangeEndTimePicker(time) {
+  let startSeek = repeatStore.seekSliderState[0]
+  let endSeek = timeStringToSecond(time.format('HH:mm:ss'))
+  repeatStore.seekSliderState = [startSeek, endSeek]
 }
+
+function onChangeRepeatActive() {
+  repeatStore.isRepeatActiveState = !repeatStore.isRepeatActiveState
+  clearTimeout(repeatStore.playAfterSleepState)
+}
+
+onMounted(() => {
+  setTimeout(() => {
+    endTimePickerState.value = dayjs(formatTimer(playerStore.currentSongState.seconds), 'mm:ss')
+  })
+})
+
+watch(seekSliderState, (value) => {
+  startTimePickerState.value = dayjs(
+    formatTimer(playerStore.currentSongState.seconds * (value[0] / 100)),
+    'mm:ss'
+  )
+  endTimePickerState.value = dayjs(
+    formatTimer(playerStore.currentSongState.seconds * (value[1] / 100)),
+    'mm:ss'
+  )
+
+  repeatStore.startTimeState = playerStore.currentSongState.seconds * (value[0] / 100)
+  repeatStore.endTimeState = playerStore.currentSongState.seconds * (value[1] / 100)
+})
 </script>
 
 <template>
@@ -88,7 +69,7 @@ function setTimeWhenClickLyric(startTime, endTime) {
     <legend>Repeat</legend>
     <div class="flex justify-between items-center">
       <div class="mb-3">
-        <a-radio-group v-model:value="repeatTypeState" name="repeatType">
+        <a-radio-group v-model:value="repeatStore.repeatTypeState" name="repeatType">
           <a-radio value="time" class="flex py-1">Time</a-radio>
           <a-radio value="lyric" class="flex py-1">Lyric</a-radio>
         </a-radio-group>
@@ -96,21 +77,21 @@ function setTimeWhenClickLyric(startTime, endTime) {
       <div class="flex flex-col">
         <button
           class="btn"
-          :class="{ active: isRepeatActiveState }"
-          @click="isRepeatActiveState = !isRepeatActiveState"
+          :class="{ active: repeatStore.isRepeatActiveState }"
+          @click="onChangeRepeatActive"
         >
-          {{ isRepeatActiveState ? 'Cancel' : 'Set' }}
+          {{ repeatStore.isRepeatActiveState ? 'Cancel' : 'Set' }}
         </button>
       </div>
     </div>
 
     <div class="mb-4">
       <vue-slider
-        v-model="seekSliderState"
+        v-model="repeatStore.seekSliderState"
         :tooltip="'active'"
         :tooltip-formatter="seekSliderFormatState"
         :lazy="true"
-        :disabled="repeatTypeState === 'lyric'"
+        :disabled="repeatStore.repeatTypeState === 'lyric'"
       ></vue-slider>
     </div>
 
@@ -124,7 +105,7 @@ function setTimeWhenClickLyric(startTime, endTime) {
           :show-now="false"
           :disabledTime="disabledTime"
           :allowClear="false"
-          :disabled="repeatTypeState === 'lyric'"
+          :disabled="repeatStore.repeatTypeState === 'lyric'"
           @change="onChangeStartTimePicker"
         />
       </div>
@@ -137,26 +118,26 @@ function setTimeWhenClickLyric(startTime, endTime) {
           :show-now="false"
           :disabledTime="disabledTime"
           :allowClear="false"
-          :disabled="repeatTypeState === 'lyric'"
+          :disabled="repeatStore.repeatTypeState === 'lyric'"
           @change="onChangeEndTimePicker"
         />
       </div>
     </div>
     <div>
       <div class="flex items-center text-base mb-3">
-        <a-switch v-model:checked="isDelayActiveState" />
-        <label class="ml-2" for="delay_input">Delay</label>
+        <a-switch v-model:checked="repeatStore.isSleepActiveState" />
+        <label class="ml-2" for="sleep_input">Sleep</label>
         <input
-          id="delay_input"
+          id="sleep_input"
           class="p-0.5 mx-0.5 w-[30px] text-center text-base border-b border-solid border-gray-600 outline-0"
-          v-model="delayState"
+          v-model="repeatStore.sleepTimeState"
           type="text"
-          name="loops-input"
+          name="sleep-input"
         />
-        <label for="delay_input">seconds</label>
+        <label for="sleep_input">seconds</label>
       </div>
       <div class="flex items-center text-base">
-        <a-switch v-model:checked="showTimeStringLyricState" />
+        <a-switch v-model:checked="repeatStore.showTimeStringLyricState" />
         <span class="ml-2">Show Time in Lyric</span>
       </div>
     </div>

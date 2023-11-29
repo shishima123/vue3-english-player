@@ -23,4 +23,25 @@ const scrollToActiveElement = (element, activeClass, behavior = 'smooth', block 
   })
 }
 
-export { threatSongs, scrollToActiveElement }
+const range = (start, end) => {
+  const result = []
+
+  for (let i = start; i < end; i++) {
+    result.push(i)
+  }
+
+  return result
+}
+
+function createSelectObjectFromNumber(number) {
+  const obj = []
+  for (let i = 1; i <= number; i++) {
+    obj.push({
+      value: i,
+      label: i
+    })
+  }
+  return obj
+}
+
+export { threatSongs, scrollToActiveElement, range, createSelectObjectFromNumber }
