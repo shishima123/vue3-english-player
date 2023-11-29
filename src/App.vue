@@ -76,7 +76,7 @@ onMounted(async () => {
       }"
     >
       <player />
-      <a-tabs v-model:activeKey="activeTab" centered class="custom-padding">
+      <a-tabs v-model:activeKey="activeTab" centered class="custom-padding" animated>
         <a-tab-pane key="1" force-render>
           <template #tab>
             <AdjustmentsVerticalIcon class="h-6 w-6" />
