@@ -35,6 +35,7 @@ export const usePlayerStore = defineStore('player', () => {
     if (songIndexState.value !== songIndexInput) {
       replayStore.setLoopsCount(0)
       songIndexState.value = calcCurrentSongIndex(songIndexInput)
+      setCurrentSong()
       setPlayerSource()
       lyricStore.scrollToTopInLyrics()
       playlistStore.scrollToActive()
@@ -160,7 +161,6 @@ export const usePlayerStore = defineStore('player', () => {
 
   watch(songIndexState, async (value) => {
     localStorage.songIndexState = value
-    setCurrentSong()
     await syncStore.syncUpload()
   })
   watch(currentlyTimerState, async (value) => {
