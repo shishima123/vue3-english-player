@@ -5,8 +5,10 @@ import { scrollToActiveElement } from '@/helpers/utils'
 import { usePlayerStore } from '@/stores/player'
 
 export const useLyricStore = defineStore('lyric', () => {
+  // store
   const playerStore = usePlayerStore()
 
+  // ref
   let currentLyricState = ref({})
   let selectedLyricTypeState = ref('lyric1')
   let lyricRef = ref()

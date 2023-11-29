@@ -1,10 +1,14 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { usePlayerStore } from '@/stores/player'
+import { useSyncStore } from '@/stores/sync'
 
 export const useRepeatStore = defineStore('repeat', () => {
+  // store
   const playerStore = usePlayerStore()
+  const syncStore = useSyncStore()
 
+  // ref
   let isRepeatActiveState = ref(false)
   let startTimeState = ref()
   let endTimeState = ref()
@@ -24,6 +28,11 @@ export const useRepeatStore = defineStore('repeat', () => {
       endTimeState.value = endTime
     }
   }
+
+  watch(sleepTimeState, async (value) => {
+    localStorage.sleepTimeState = value
+    await syncStore.syncUpload()
+  })
 
   return {
     isRepeatActiveState,

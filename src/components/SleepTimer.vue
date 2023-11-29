@@ -2,27 +2,31 @@
 import { computed, watch } from 'vue'
 import { useSleepTimerStore } from '@/stores/sleepTimer'
 import { storeToRefs } from 'pinia'
+import { usePlayerStore } from '@/stores/player'
 
-const emit = defineEmits(['pause'])
+// store
 const sleepTimerStore = useSleepTimerStore()
+const playerStore = usePlayerStore()
 
+// ref
 const { isSleepTimerActive } = storeToRefs(sleepTimerStore)
 
+// computed
 let sleepRemainingTimeComputed = computed(() => {
   return sleepTimerStore.sleepRemainingTimeState
     ? sleepTimerStore.sleepRemainingTimeState + ' min'
     : 'disabled'
 })
 
-let sleepInterval = null
 function setSleepState() {
   sleepTimerStore.sleepRemainingTimeState--
   if (sleepTimerStore.sleepRemainingTimeState === 0) {
-    emit('pause')
+    playerStore.pause()
     isSleepTimerActive.value = false
   }
 }
 
+let sleepInterval = null
 watch(isSleepTimerActive, async (value, oldValue) => {
   if (value !== oldValue) {
     clearInterval(sleepInterval)

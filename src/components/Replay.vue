@@ -4,9 +4,11 @@ import { useReplayStore } from '@/stores/replay'
 import { usePlayerStore } from '@/stores/player'
 import { createSelectObjectFromNumber } from '@/helpers/utils'
 
+// store
 const replayStore = useReplayStore()
 const playerStore = usePlayerStore()
 
+// computed
 let songIndexOptionsComputed = computed(() => {
   return createSelectObjectFromNumber(playerStore.songsState.length)
 })

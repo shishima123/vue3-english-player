@@ -5,51 +5,33 @@ import { formatTimer, timeStringToSecond } from '@/helpers/timer'
 import { useRepeatStore } from '@/stores/repeat'
 import { storeToRefs } from 'pinia'
 import { range } from '@/helpers/utils'
+import { usePlayerStore } from '@/stores/player'
 
+// store
 const repeatStore = useRepeatStore()
+const playerStore = usePlayerStore()
 
+// ref
 const { seekSliderState } = storeToRefs(repeatStore)
-
 let startTimePickerState = ref(dayjs('00:00', 'mm:ss'))
 let endTimePickerState = ref()
 
-let seekSliderFormatState = ref((v) => `${formatTimer(props.currentSongState.seconds * (v / 100))}`)
-
-const props = defineProps({
-  currentSongState: Object
-})
+let seekSliderFormatState = ref(
+  (v) => `${formatTimer(playerStore.currentSongState.seconds * (v / 100))}`
+)
 
 const disabledTime = () => {
   return {
-    disabledMinutes: () => range(Math.floor(props.currentSongState.seconds / 60) + 1, 60)
+    disabledMinutes: () => range(Math.floor(playerStore.currentSongState.seconds / 60) + 1, 60)
   }
 }
-
-onMounted(() => {
-  setTimeout(() => {
-    endTimePickerState.value = dayjs(formatTimer(props.currentSongState.seconds), 'mm:ss')
-  })
-})
-
-watch(seekSliderState, (value) => {
-  startTimePickerState.value = dayjs(
-    formatTimer(props.currentSongState.seconds * (value[0] / 100)),
-    'mm:ss'
-  )
-  endTimePickerState.value = dayjs(
-    formatTimer(props.currentSongState.seconds * (value[1] / 100)),
-    'mm:ss'
-  )
-
-  repeatStore.startTimeState = props.currentSongState.seconds * (value[0] / 100)
-  repeatStore.endTimeState = props.currentSongState.seconds * (value[1] / 100)
-})
 
 function onChangeStartTimePicker(time) {
   let startSeek = timeStringToSecond(time.format('HH:mm:ss'))
   let endSeek = repeatStore.seekSliderState[1]
   repeatStore.seekSliderState = [startSeek, endSeek]
 }
+
 function onChangeEndTimePicker(time) {
   let startSeek = repeatStore.seekSliderState[0]
   let endSeek = timeStringToSecond(time.format('HH:mm:ss'))
@@ -60,6 +42,26 @@ function onChangeRepeatActive() {
   repeatStore.isRepeatActiveState = !repeatStore.isRepeatActiveState
   clearTimeout(repeatStore.playAfterSleepState)
 }
+
+onMounted(() => {
+  setTimeout(() => {
+    endTimePickerState.value = dayjs(formatTimer(playerStore.currentSongState.seconds), 'mm:ss')
+  })
+})
+
+watch(seekSliderState, (value) => {
+  startTimePickerState.value = dayjs(
+    formatTimer(playerStore.currentSongState.seconds * (value[0] / 100)),
+    'mm:ss'
+  )
+  endTimePickerState.value = dayjs(
+    formatTimer(playerStore.currentSongState.seconds * (value[1] / 100)),
+    'mm:ss'
+  )
+
+  repeatStore.startTimeState = playerStore.currentSongState.seconds * (value[0] / 100)
+  repeatStore.endTimeState = playerStore.currentSongState.seconds * (value[1] / 100)
+})
 </script>
 
 <template>

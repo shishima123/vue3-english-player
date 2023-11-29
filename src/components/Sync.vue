@@ -4,17 +4,23 @@ import { FirebaseEnums, getCurrentUser, signInFirebase } from '@/configs/firebas
 import { useSyncStore } from '@/stores/sync'
 // icons
 import { ArrowPathIcon } from '@heroicons/vue/24/outline'
+import { usePlayerStore } from '@/stores/player'
 
+const emit = defineEmits(['setDefaultSettingFromLocalStorage'])
+
+// store
 const syncStore = useSyncStore()
-const emit = defineEmits(['setDefaultSettingFromLocalStorage', 'setPlayerSource'])
+const playerStore = usePlayerStore()
 
+// ref
 let isSyncing = ref(false)
-async function sync() {
+
+async function onSync() {
   isSyncing.value = true
   try {
     await syncStore.syncDownload(true)
     await emit('setDefaultSettingFromLocalStorage')
-    await emit('setPlayerSource')
+    await playerStore.setPlayerSource()
   } catch (error) {
     if (error.message === FirebaseEnums.permission_denied) {
       syncStore.onShowModalLogin()
@@ -37,7 +43,7 @@ async function onSubmit() {
   error.value = null
   try {
     await signInFirebase(email.value, password.value)
-    // syncStore.onHideModalLogin()
+    syncStore.onHideModalLogin()
   } catch (err) {
     error.value = err.message
   } finally {
@@ -48,7 +54,7 @@ async function onSubmit() {
 function onClosed() {
   let user = getCurrentUser()
   if (user) {
-    sync()
+    onSync()
   } else {
     syncStore.onTurnOffSync()
   }
@@ -65,7 +71,7 @@ function onClosed() {
       </div>
     </div>
     <div class="flex flex-col">
-      <button class="btn" :class="{ disabled: isSyncing }" @click="sync">
+      <button class="btn" :class="{ disabled: isSyncing }" @click="onSync">
         Sync Now
         <span class="flex justify-center ml-2" :class="{ 'animate-spin': isSyncing }">
           <ArrowPathIcon class="h-5 w-5" />

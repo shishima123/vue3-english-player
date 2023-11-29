@@ -1,7 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
+import { usePlayerStore } from '@/stores/player'
+import { useSyncStore } from '@/stores/sync'
 
 export const useReplayStore = defineStore('replay', () => {
+  // store
+  const playerStore = usePlayerStore()
+  const syncStore = useSyncStore()
+
+  // ref
   let replayFlagState = ref(true)
   let replayFromState = ref(1)
   let replayToState = ref(10)
@@ -16,7 +23,7 @@ export const useReplayStore = defineStore('replay', () => {
   }
 
   function setDefaultSettingFromLocalStorage() {
-    let attributes = ['loopsState', 'loopsCountState', 'replayFromState', 'replayToState']
+    let attributes = ['loopsState', 'loopsCountState']
     attributes.forEach((el) => {
       if (localStorage[el]) {
         eval(el).value = Number(localStorage[el])
@@ -26,38 +33,50 @@ export const useReplayStore = defineStore('replay', () => {
       replayPickedState.value =
         localStorage.replayPickedState === 'null' ? '1' : localStorage.replayPickedState
     }
+
+    if (localStorage.replayFromState) {
+      replayFromState.value =
+        localStorage.replayFromState === 'null' ? 1 : Number(localStorage.replayFromState)
+    }
+
+    if (localStorage.replayToState) {
+      replayToState.value =
+        localStorage.replayToState === 'null'
+          ? playerStore.songsState.length
+          : Number(localStorage.replayToState)
+    }
   }
 
   watch(replayPickedState, async (value) => {
     localStorage.replayPickedState = value
-    // onSyncUpload()
     if (value in replayMappingState.value) {
       replayFromState.value = replayMappingState.value[value].from
       replayToState.value = replayMappingState.value[value].to
       replayCustomFlagState.value = replayMappingState.value[value].shouldDisableSelect
     }
+    await syncStore.syncUpload()
   })
 
   watch(replayFromState, async (value) => {
     localStorage.replayFromState = value
-    // onSyncUpload()
+    await syncStore.syncUpload()
   })
 
   watch(replayToState, async (value) => {
     localStorage.replayToState = value
-    // onSyncUpload()
+    await syncStore.syncUpload()
   })
 
   watch(loopsState, async (value, old) => {
     value = isNaN(value) ? old : value
     loopsState.value = value
     localStorage.loopsState = value
-    // onSyncUpload()
+    await syncStore.syncUpload()
   })
 
   watch(loopsCountState, async (value) => {
     localStorage.loopsCountState = value
-    // onSyncUpload()
+    await syncStore.syncUpload()
   })
 
   return {

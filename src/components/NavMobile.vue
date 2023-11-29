@@ -1,7 +1,8 @@
 <script setup>
+import { useNavMobileStore } from '@/stores/navMobile'
 import { QueueListIcon, MusicalNoteIcon } from '@heroicons/vue/24/outline'
 
-import { useNavMobileStore } from '@/stores/navMobile'
+// store
 const navMobileStore = useNavMobileStore()
 </script>
 

@@ -3,21 +3,23 @@ import { computed, ref } from 'vue'
 import { useNavMobileStore } from '@/stores/navMobile'
 import { useRepeatStore } from '@/stores/repeat'
 import { useLyricStore } from '@/stores/lyric'
+import { usePlayerStore } from '@/stores/player'
 import { storeToRefs } from 'pinia'
 
-defineEmits(['setCurrentlyTimer'])
-
+// store
 const navMobileStore = useNavMobileStore()
 const repeatStore = useRepeatStore()
 const lyricStore = useLyricStore()
+const playerStore = usePlayerStore()
 
+// ref
 let { lyricRef } = storeToRefs(lyricStore)
-
 let lyricTypesOptionsState = ref([
   { value: 'lyric1', label: 'Lyric 1' },
   { value: 'lyric2', label: 'Lyric 2' }
 ])
 
+// computed
 let showTimeStringLyricComputed = computed(() => {
   if (repeatStore.showTimeStringLyricState) {
     return repeatStore.showTimeStringLyricState
@@ -50,7 +52,7 @@ let showTimeStringLyricComputed = computed(() => {
           'text-left': lyricStore.selectedLyricTypeState === 'lyric2',
           'text-slate-300': lyric.over
         }"
-        @click="$emit('setCurrentlyTimer', lyric.start || 0, lyric.end)"
+        @click="playerStore.setCurrentlyTimer(lyric.start || 0, lyric.end)"
       >
         <span class="text-2xs text-gray-400" v-if="showTimeStringLyricComputed"
           >({{ lyric.startString }})</span

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useNavMobileStore = defineStore('navMobile', () => {
+  // ref
   let showPlaylistState = ref(false)
   let showLyricsState = ref(false)
 

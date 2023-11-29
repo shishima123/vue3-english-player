@@ -5,17 +5,17 @@ import { useNavMobileStore } from '@/stores/navMobile'
 import { storeToRefs } from 'pinia'
 import { usePlayerStore } from '@/stores/player'
 
+// store
 const playlistStore = usePlaylistStore()
 const navMobileStore = useNavMobileStore()
 const playerStore = usePlayerStore()
 
+// ref
 const { playlistRef } = storeToRefs(playlistStore)
 
 onMounted(() => {
   playlistStore.scrollToActive()
 })
-
-defineEmits(['play'])
 </script>
 
 <template>
@@ -29,7 +29,7 @@ defineEmits(['play'])
         v-for="(song, key) in playerStore.songsState"
         :key="song.id"
         class="grid grid-cols-1 py-[10px] px-4 cursor-pointer border-b border-solid border-slate-200 hover:bg-sky-100 transition"
-        @click="$emit('play', key, true)"
+        @click="playerStore.play(key, true)"
         :class="{
           'bg-sky-200 !border-sky-200 active': song.id === playerStore.currentSongState.id
         }"
