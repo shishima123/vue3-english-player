@@ -2,7 +2,7 @@
 import { formatTimer } from './helpers/timer'
 import { threatSongs } from '@/helpers/utils'
 import songMocks from '@/mocks/songs'
-import { computed, onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import NavMobile from '@/components/NavMobile.vue'
 import Playlist from '@/components/Playlist.vue'
 import Lyric from '@/components/Lyric.vue'
@@ -16,6 +16,8 @@ import { useSyncStore } from '@/stores/sync'
 import { useSleepTimerStore } from '@/stores/sleepTimer'
 import { useRepeatStore } from '@/stores/repeat'
 import { useReplayStore } from '@/stores/replay'
+import { useLyricStore } from '@/stores/lyric'
+import { usePlayerStore } from '@/stores/player'
 
 // icons
 import { PlayIcon, PauseIcon } from '@heroicons/vue/24/solid'
@@ -35,33 +37,28 @@ const syncStore = useSyncStore()
 const sleepTimerStore = useSleepTimerStore()
 const repeatStore = useRepeatStore()
 const replayStore = useReplayStore()
+const lyricStore = useLyricStore()
+const playerStore = usePlayerStore()
 
-let currentSongState = ref({})
 let songIndexState = ref(0)
 let isPlayingState = ref(false)
 let currentlyTimerState = ref('00:00')
 let songsState = ref(threatSongs(songMocks))
 let playerState = ref(new Audio())
 let seekSliderState = ref(0)
-let seekSliderFormatState = ref((v) => `${formatTimer(currentSongState.value.seconds * (v / 100))}`)
+let seekSliderFormatState = ref(
+  (v) => `${formatTimer(playerStore.currentSongState.seconds * (v / 100))}`
+)
 let volumeSliderState = ref(100)
 
 let activeTab = ref('1')
 // refs
-let lyricRef = ref(null)
 let playlistRef = ref(null)
 
 // using for prevent sync in first load page
 let isAppMounted = false
 
 // computed
-
-let showTimeStringLyricComputed = computed(() => {
-  if (repeatStore.showTimeStringLyricState) {
-    return repeatStore.showTimeStringLyricState
-  }
-  return false
-})
 
 function calcCurrentSongIndex(newSongIndex) {
   if (
@@ -94,11 +91,11 @@ function calcCurrentSongIndex(newSongIndex) {
 }
 
 function setCurrentSong() {
-  currentSongState.value = songsState.value[songIndexState.value]
+  playerStore.currentSongState = songsState.value[songIndexState.value]
 }
 
 function setPlayerSource() {
-  playerState.value.src = currentSongState.value.src
+  playerState.value.src = playerStore.currentSongState.src
 }
 
 function setCurrentlyTimer(startTime, endTime) {
@@ -107,7 +104,7 @@ function setCurrentlyTimer(startTime, endTime) {
   }
   playerState.value.currentTime = startTime + 0.1
 
-  repeatStore.setTimeWhenClickLyric(startTime, endTime, currentSongState)
+  repeatStore.setTimeWhenClickLyric(startTime, endTime)
 }
 
 function play(songIndexInput = null, isClickFromList = false) {
@@ -119,7 +116,7 @@ function play(songIndexInput = null, isClickFromList = false) {
     replayStore.setLoopsCount(0)
     songIndexState.value = calcCurrentSongIndex(songIndexInput)
     setPlayerSource()
-    lyricRef.value.scrollToTopInLyrics()
+    lyricStore.scrollToTopInLyrics()
     playlistRef.value.scrollToActive()
   }
   playerState.value.play()
@@ -161,11 +158,11 @@ function registerListener() {
         }
       }
     }
-    lyricRef.value.changeCurrentLyricState(playerTimer)
+    lyricStore.changeCurrentLyricState(playerTimer)
     currentlyTimerState.value = formatTimer(playerTimer)
   })
   playerState.value.addEventListener('ended', () => {
-    lyricRef.value.scrollToTopInLyrics()
+    lyricStore.scrollToTopInLyrics()
     isPlayingState.value = false
     if (replayStore.replayFlagState) {
       replayStore.setLoopsCount(++replayStore.loopsCountState)
@@ -181,7 +178,8 @@ function registerListener() {
 }
 
 function seekTo() {
-  playerState.value.currentTime = currentSongState.value.seconds * (seekSliderState.value / 100)
+  playerState.value.currentTime =
+    playerStore.currentSongState.seconds * (seekSliderState.value / 100)
 }
 
 function setVolume() {
@@ -263,10 +261,12 @@ watch(songIndexState, async (value) => {
 })
 watch(currentlyTimerState, async (value) => {
   if (value) {
-    let percent = Math.round((playerState.value.currentTime * 100) / currentSongState.value.seconds)
+    let percent = Math.round(
+      (playerState.value.currentTime * 100) / playerStore.currentSongState.seconds
+    )
     seekSliderState.value = Math.min(percent, 100)
   }
-  lyricRef.value.scrollToActiveInLyrics()
+  lyricStore.scrollToActiveInLyrics()
 })
 </script>
 
@@ -291,12 +291,12 @@ watch(currentlyTimerState, async (value) => {
       <!-- begin:: Player -->
       <div>
         <h2 class="w-full text-xl font-bold text-center py-4 px-1 text-ellipsis whitespace-nowrap">
-          {{ currentSongState.title }}
+          {{ playerStore.currentSongState.title }}
         </h2>
         <div class="mb-5">
           <div class="flex justify-between px-1 w-full text-xs">
             <p>{{ currentlyTimerState }}</p>
-            <p>{{ currentSongState.totalTimer }}</p>
+            <p>{{ playerStore.currentSongState.totalTimer }}</p>
           </div>
           <vue-slider
             v-model="seekSliderState"
@@ -372,7 +372,7 @@ watch(currentlyTimerState, async (value) => {
           <template #tab>
             <ArrowPathIcon class="h-6 w-6" />
           </template>
-          <repeat :current-song-state="currentSongState"></repeat>
+          <repeat :current-song-state="playerStore.currentSongState"></repeat>
         </a-tab-pane>
         <a-tab-pane key="3" force-render>
           <template #tab>
@@ -398,16 +398,10 @@ watch(currentlyTimerState, async (value) => {
       </a-tabs>
     </section>
     <!-- end:: Player Section -->
-    <lyric
-      :current-song-state="currentSongState"
-      :show-lyrics-state="navMobileStore.showLyricsState"
-      :show-time-string-lyric-state="showTimeStringLyricComputed"
-      @set-currently-timer="setCurrentlyTimer"
-      ref="lyricRef"
-    />
+    <lyric @set-currently-timer="setCurrentlyTimer" />
     <!-- begin:: Playlist Section -->
     <playlist
-      :current-song-state="currentSongState"
+      :current-song-state="playerStore.currentSongState"
       :songs-state="songsState"
       :show-playlist-state="navMobileStore.showPlaylistState"
       @play="play"

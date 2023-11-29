@@ -1,7 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { usePlayerStore } from '@/stores/player'
 
 export const useRepeatStore = defineStore('repeat', () => {
+  const playerStore = usePlayerStore()
+
   let isRepeatActiveState = ref(false)
   let startTimeState = ref()
   let endTimeState = ref()
@@ -12,10 +15,10 @@ export const useRepeatStore = defineStore('repeat', () => {
   let playAfterSleepState = ref()
   let sleepTimeState = ref(5)
 
-  function setTimeWhenClickLyric(startTime, endTime, currentSongState) {
+  function setTimeWhenClickLyric(startTime, endTime) {
     if (isRepeatActiveState.value && repeatTypeState.value === 'lyric') {
-      let startSeek = Math.round((startTime * 100) / currentSongState.value.seconds)
-      let endSeek = Math.round((endTime * 100) / currentSongState.value.seconds)
+      let startSeek = Math.round((startTime * 100) / playerStore.currentSongState.seconds)
+      let endSeek = Math.round((endTime * 100) / playerStore.currentSongState.seconds)
       seekSliderState.value = [startSeek, endSeek]
       startTimeState.value = startTime
       endTimeState.value = endTime

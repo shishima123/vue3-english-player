@@ -11,17 +11,6 @@ const app = createApp(App)
 
 app.component('VueSlider', VueSlider)
 
-app.directive('scroll-element', {
-  created: function (el, binding) {
-    let f = function (evt) {
-      if (binding.value(evt, el)) {
-        el.removeEventListener('scroll', f)
-      }
-    }
-    el.addEventListener('scroll', f)
-  }
-})
-
 app.use(createPinia())
 app.use(ConfigProvider)
 app.use(TimePicker)
