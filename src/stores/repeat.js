@@ -14,20 +14,10 @@ export const useRepeatStore = defineStore('repeat', () => {
   let endTimeState = ref()
   let showTimeStringLyricState = ref(false)
   let repeatTypeState = ref('time')
-  let seekSliderState = ref([0, 100])
+  let seekSliderState = ref([0, 0])
   let isSleepActiveState = ref(true)
   let playAfterSleepState = ref()
   let sleepTimeState = ref(5)
-
-  function setTimeWhenClickLyric(startTime, endTime) {
-    if (isRepeatActiveState.value && repeatTypeState.value === 'lyric') {
-      let startSeek = Math.round((startTime * 100) / playerStore.currentSongState.seconds)
-      let endSeek = Math.round((endTime * 100) / playerStore.currentSongState.seconds)
-      seekSliderState.value = [startSeek, endSeek]
-      startTimeState.value = startTime
-      endTimeState.value = endTime
-    }
-  }
 
   watch(sleepTimeState, async (value) => {
     localStorage.sleepTimeState = value
@@ -44,6 +34,26 @@ export const useRepeatStore = defineStore('repeat', () => {
     isSleepActiveState,
     playAfterSleepState,
     sleepTimeState,
-    setTimeWhenClickLyric
+    setTimeWhenClickLyric,
+    updateSeekSlider,
+    resetSeekSlider
+  }
+
+  function setTimeWhenClickLyric(startTime, endTime) {
+    if (isRepeatActiveState.value && repeatTypeState.value === 'lyric') {
+      let startSeek = Math.round(startTime)
+      let endSeek = Math.round(endTime)
+      seekSliderState.value = [startSeek, endSeek]
+      startTimeState.value = startTime
+      endTimeState.value = endTime
+    }
+  }
+
+  function updateSeekSlider() {
+    seekSliderState.value = [0, playerStore.currentSongState.seconds]
+  }
+
+  function resetSeekSlider() {
+    seekSliderState.value = [0, 0]
   }
 })

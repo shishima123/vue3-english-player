@@ -38,7 +38,8 @@ export const useLyricStore = defineStore('lyric', () => {
       let text = textLines.join('\n').trim()
       let timeSplit = timeLine.trim().split('-->')
       let [startString, endString] = timeSplit
-      let [start, end] = timeSplit.map(timeStringToSecond)
+      let start = timeStringToSecond(timeSplit[0])
+      let end = timeStringToSecond(timeSplit[1])
       lyricConverted.push({ id, timeString, text, start, end, startString, endString, over: false })
     }
     return lyricConverted
@@ -46,7 +47,7 @@ export const useLyricStore = defineStore('lyric', () => {
 
   function changeCurrentLyricState(playerTimer) {
     currentLyricState.value = convertLyricComputed.value.find(
-      (el) => playerTimer >= el.start - 0.4 && playerTimer <= el.end
+      (el) => playerTimer >= el.start && playerTimer <= el.end
     )
   }
 

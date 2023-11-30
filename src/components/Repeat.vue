@@ -16,9 +16,7 @@ const { seekSliderState } = storeToRefs(repeatStore)
 let startTimePickerState = ref(dayjs('00:00', 'mm:ss'))
 let endTimePickerState = ref()
 
-let seekSliderFormatState = ref(
-  (v) => `${formatTimer(playerStore.currentSongState.seconds * (v / 100))}`
-)
+let seekSliderFormatState = ref((v) => `${formatTimer(v)}`)
 
 const disabledTime = () => {
   return {
@@ -28,6 +26,10 @@ const disabledTime = () => {
 
 function onChangeStartTimePicker(time) {
   let startSeek = timeStringToSecond(time.format('HH:mm:ss'))
+  if (startSeek > playerStore.currentSongState.seconds) {
+    startTimePickerState.value = dayjs(formatTimer(playerStore.currentSongState.seconds), 'mm:ss')
+    startSeek = Math.min(startSeek, playerStore.currentSongState.seconds)
+  }
   let endSeek = repeatStore.seekSliderState[1]
   repeatStore.seekSliderState = [startSeek, endSeek]
 }
@@ -35,6 +37,10 @@ function onChangeStartTimePicker(time) {
 function onChangeEndTimePicker(time) {
   let startSeek = repeatStore.seekSliderState[0]
   let endSeek = timeStringToSecond(time.format('HH:mm:ss'))
+  if (endSeek > playerStore.currentSongState.seconds) {
+    endTimePickerState.value = dayjs(formatTimer(playerStore.currentSongState.seconds), 'mm:ss')
+    endSeek = Math.min(endSeek, playerStore.currentSongState.seconds)
+  }
   repeatStore.seekSliderState = [startSeek, endSeek]
 }
 
@@ -50,17 +56,13 @@ onMounted(() => {
 })
 
 watch(seekSliderState, (value) => {
-  startTimePickerState.value = dayjs(
-    formatTimer(playerStore.currentSongState.seconds * (value[0] / 100)),
-    'mm:ss'
-  )
-  endTimePickerState.value = dayjs(
-    formatTimer(playerStore.currentSongState.seconds * (value[1] / 100)),
-    'mm:ss'
-  )
+  startTimePickerState.value = dayjs(formatTimer(value[0]), 'mm:ss')
+  endTimePickerState.value = dayjs(formatTimer(value[1]), 'mm:ss')
 
-  repeatStore.startTimeState = playerStore.currentSongState.seconds * (value[0] / 100)
-  repeatStore.endTimeState = playerStore.currentSongState.seconds * (value[1] / 100)
+  if (repeatStore.repeatTypeState === 'time') {
+    repeatStore.startTimeState = value[0]
+    repeatStore.endTimeState = value[1]
+  }
 })
 </script>
 
@@ -88,9 +90,13 @@ watch(seekSliderState, (value) => {
     <div class="mb-4">
       <vue-slider
         v-model="repeatStore.seekSliderState"
+        :min="0"
+        :max="playerStore.currentSongState.seconds"
+        :interval="1"
+        contained
+        lazy
         :tooltip="'active'"
         :tooltip-formatter="seekSliderFormatState"
-        :lazy="true"
         :disabled="repeatStore.repeatTypeState === 'lyric'"
       ></vue-slider>
     </div>
@@ -99,6 +105,7 @@ watch(seekSliderState, (value) => {
       <div>
         <span class="mr-2">Start</span>
         <a-time-picker
+          :inputReadOnly="true"
           class="w-[90px]"
           v-model:value="startTimePickerState"
           format="mm:ss"
@@ -112,6 +119,7 @@ watch(seekSliderState, (value) => {
       <div>
         <span class="mr-2">End</span>
         <a-time-picker
+          inputReadOnly
           class="w-[90px]"
           v-model:value="endTimePickerState"
           format="mm:ss"

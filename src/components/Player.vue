@@ -15,13 +15,10 @@ import {
 const playerStore = usePlayerStore()
 
 // ref
-let seekSliderFormatState = ref(
-  (v) => `${formatTimer(playerStore.currentSongState.seconds * (v / 100))}`
-)
+let seekSliderFormatState = ref((v) => `${formatTimer(v)}`)
 
 function seekTo() {
-  playerStore.playerState.currentTime =
-    playerStore.currentSongState.seconds * (playerStore.seekSliderState / 100)
+  playerStore.playerState.currentTime = playerStore.seekSliderState
 }
 
 function setVolume() {
@@ -42,6 +39,11 @@ function setVolume() {
       </div>
       <vue-slider
         v-model="playerStore.seekSliderState"
+        :min="0"
+        :max="playerStore.currentSongState.seconds"
+        :interval="1"
+        lazy
+        contained
         :tooltip="'active'"
         :tooltip-formatter="seekSliderFormatState"
         @drag-end="seekTo"

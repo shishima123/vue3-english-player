@@ -27,20 +27,22 @@ export const usePlayerStore = defineStore('player', () => {
   let seekSliderState = ref(0)
   let volumeSliderState = ref(100)
 
-  function play(songIndexInput = null, isClickFromList = false) {
+  async function play(songIndexInput = null, isClickFromList = false) {
     if (isClickFromList && songIndexInput === songIndexState.value && isPlayingState.value) {
       return true
     }
 
     if (songIndexState.value !== songIndexInput) {
+      await repeatStore.resetSeekSlider()
       replayStore.setLoopsCount(0)
       songIndexState.value = calcCurrentSongIndex(songIndexInput)
-      setCurrentSong()
-      setPlayerSource()
+      await setCurrentSong()
+      await setPlayerSource()
       lyricStore.scrollToTopInLyrics()
       playlistStore.scrollToActive()
+      await repeatStore.updateSeekSlider()
     }
-    playerState.value.play()
+    await playerState.value.play()
     isPlayingState.value = true
   }
 
@@ -98,7 +100,7 @@ export const usePlayerStore = defineStore('player', () => {
     if (!startTime) {
       return false
     }
-    playerState.value.currentTime = startTime + 0.1
+    playerState.value.currentTime = startTime
 
     repeatStore.setTimeWhenClickLyric(startTime, endTime)
   }
@@ -110,26 +112,28 @@ export const usePlayerStore = defineStore('player', () => {
   function registerListener() {
     playerState.value.addEventListener('timeupdate', () => {
       let playerTimer = playerState.value.currentTime
-
+      seekSliderState.value = Math.round(playerState.value.currentTime)
       // repeat
       if (repeatStore.isRepeatActiveState) {
         if (playerTimer < repeatStore.startTimeState) {
           playerState.value.currentTime = repeatStore.startTimeState
-        } else if (playerTimer > repeatStore.endTimeState - 0.2) {
+        } else if (playerTimer > repeatStore.endTimeState) {
           playerState.value.currentTime = repeatStore.startTimeState
 
           // sleep
           if (repeatStore.isSleepActiveState) {
-            pause()
+            playerState.value.pause()
             repeatStore.playAfterSleepState = setTimeout(() => {
-              play()
-            }, repeatStore.sleepTimeState)
+              playerState.value.play()
+            }, repeatStore.sleepTimeState * 1000)
           }
         }
       }
       lyricStore.changeCurrentLyricState(playerTimer)
       currentlyTimerState.value = formatTimer(playerTimer)
+      lyricStore.scrollToActiveInLyrics()
     })
+
     playerState.value.addEventListener('ended', () => {
       lyricStore.scrollToTopInLyrics()
       isPlayingState.value = false
@@ -162,15 +166,6 @@ export const usePlayerStore = defineStore('player', () => {
   watch(songIndexState, async (value) => {
     localStorage.songIndexState = value
     await syncStore.syncUpload()
-  })
-  watch(currentlyTimerState, async (value) => {
-    if (value) {
-      let percent = Math.round(
-        (playerState.value.currentTime * 100) / currentSongState.value.seconds
-      )
-      seekSliderState.value = Math.min(percent, 100)
-    }
-    lyricStore.scrollToActiveInLyrics()
   })
   watch(volumeSliderState, async (value) => {
     localStorage.volumeSliderState = value

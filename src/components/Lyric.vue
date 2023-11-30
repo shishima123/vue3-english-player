@@ -48,7 +48,7 @@ let showTimeStringLyricComputed = computed(() => {
         :key="index"
         class="text-dimgray transition-all cursor-pointer text-lg hover:text-blue-400 lyrics [&:not(:last-child)]:mb-3"
         :class="{
-          '!text-blue-500 scale-110 active': lyric.id === lyricStore.currentLyricState?.id,
+          '!text-blue-500 active': lyric.id === lyricStore.currentLyricState?.id,
           'text-left': lyricStore.selectedLyricTypeState === 'lyric2',
           'text-slate-300': lyric.over
         }"

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import NavMobile from '@/components/NavMobile.vue'
 import Playlist from '@/components/Playlist.vue'
 import Lyric from '@/components/Lyric.vue'
@@ -13,6 +13,7 @@ import { useSyncStore } from '@/stores/sync'
 import { useSleepTimerStore } from '@/stores/sleepTimer'
 import { usePlayerStore } from '@/stores/player'
 import { useReplayStore } from '@/stores/replay'
+import { useRepeatStore } from '@/stores/repeat'
 import Player from '@/components/Player.vue'
 
 // icons
@@ -29,6 +30,7 @@ const syncStore = useSyncStore()
 const sleepTimerStore = useSleepTimerStore()
 const replayStore = useReplayStore()
 const playerStore = usePlayerStore()
+const repeatStore = useRepeatStore()
 
 // ref
 let activeTab = ref('1')
@@ -39,6 +41,10 @@ function setDefaultSettingFromLocalStorage() {
   sleepTimerStore.setDefaultSettingFromLocalStorage()
   syncStore.setDefaultSettingFromLocalStorage()
   replayStore.setDefaultSettingFromLocalStorage()
+
+  if (localStorage.activeTab) {
+    activeTab.value = localStorage.activeTab
+  }
 }
 
 onMounted(async () => {
@@ -54,6 +60,11 @@ onMounted(async () => {
   await playerStore.setCurrentSong()
   await playerStore.setPlayerSource()
   await playerStore.registerListener()
+  await repeatStore.updateSeekSlider()
+})
+
+watch(activeTab, async (value) => {
+  localStorage.activeTab = value
 })
 </script>
 
