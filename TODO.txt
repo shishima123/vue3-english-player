@@ -1,0 +1,9 @@
+Fix
+- [VueSlider error]: The "value" must be less than or equal to the "max"
+- sync
+- click lyric thi player.time khong chinh xac
+- show time in lyric khi chon lyric type 2
+- input border treen ios
+
+Add
+- Lyric 3: Phien am IPA
