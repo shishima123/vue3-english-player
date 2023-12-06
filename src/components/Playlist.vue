@@ -29,7 +29,7 @@ onMounted(() => {
         v-for="(song, key) in playerStore.songsState"
         :key="song.id"
         class="grid grid-cols-1 py-[10px] px-4 cursor-pointer border-b border-solid border-slate-200 hover:bg-sky-100 transition"
-        @click="playerStore.play(key, true)"
+        @click="playerStore.changeSong(key)"
         :class="{
           'bg-sky-200 !border-sky-200 active': song.id === playerStore.currentSongState.id
         }"

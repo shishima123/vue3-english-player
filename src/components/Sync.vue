@@ -20,6 +20,7 @@ async function onSync() {
   try {
     await syncStore.syncDownload(true)
     await emit('setDefaultSettingFromLocalStorage')
+    await playerStore.setCurrentSong()
     await playerStore.setPlayerSource()
   } catch (error) {
     if (error.message === FirebaseEnums.permission_denied) {

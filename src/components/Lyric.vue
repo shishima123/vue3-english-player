@@ -21,10 +21,11 @@ let lyricTypesOptionsState = ref([
 
 // computed
 let showTimeStringLyricComputed = computed(() => {
-  if (repeatStore.showTimeStringLyricState) {
-    return repeatStore.showTimeStringLyricState
+  if (!repeatStore.showTimeStringLyricState || lyricStore.selectedLyricTypeState !== 'lyric1') {
+    return false
   }
-  return false
+
+  return repeatStore.showTimeStringLyricState
 })
 </script>
 

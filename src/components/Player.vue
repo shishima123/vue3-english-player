@@ -85,7 +85,7 @@ function setVolume() {
         <button
           class="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
           v-if="!playerStore.isPlayingState"
-          @click="playerStore.play(playerStore.songIndexState)"
+          @click="playerStore.play()"
         >
           <span class="flex justify-center"><PlayIcon class="h-7 w-7" /></span>
         </button>

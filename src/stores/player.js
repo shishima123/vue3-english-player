@@ -27,23 +27,28 @@ export const usePlayerStore = defineStore('player', () => {
   let seekSliderState = ref(0)
   let volumeSliderState = ref(100)
 
-  async function play(songIndexInput = null, isClickFromList = false) {
-    if (isClickFromList && songIndexInput === songIndexState.value && isPlayingState.value) {
+  function play() {
+    playerState.value.play()
+    isPlayingState.value = true
+  }
+
+  async function changeSong(songIndexInput = null) {
+    if (songIndexState.value === songIndexInput) {
       return true
     }
 
-    if (songIndexState.value !== songIndexInput) {
-      await repeatStore.resetSeekSlider()
-      replayStore.setLoopsCount(0)
-      songIndexState.value = calcCurrentSongIndex(songIndexInput)
-      await setCurrentSong()
-      await setPlayerSource()
-      lyricStore.scrollToTopInLyrics()
-      playlistStore.scrollToActive()
-      await repeatStore.updateSeekSlider()
+    await repeatStore.resetSeekSlider()
+    replayStore.setLoopsCount(0)
+    songIndexState.value = calcCurrentSongIndex(songIndexInput)
+    await setCurrentSong()
+    await setPlayerSource()
+    lyricStore.scrollToTopInLyrics()
+    playlistStore.scrollToActive()
+    await repeatStore.updateSeekSlider()
+
+    if (isPlayingState.value) {
+      play()
     }
-    await playerState.value.play()
-    isPlayingState.value = true
   }
 
   function pause() {
@@ -51,15 +56,15 @@ export const usePlayerStore = defineStore('player', () => {
     isPlayingState.value = false
   }
 
-  function next() {
+  async function next() {
     let newSongIndex = (songIndexState.value + 1) % songsState.value.length
-    play(newSongIndex)
+    await changeSong(newSongIndex)
   }
 
-  function prev() {
+  async function prev() {
     let newSongIndex =
       (songIndexState.value - 1 + songsState.value.length) % songsState.value.length
-    play(newSongIndex)
+    await changeSong(newSongIndex)
   }
 
   function calcCurrentSongIndex(newSongIndex) {
@@ -142,7 +147,7 @@ export const usePlayerStore = defineStore('player', () => {
         if (replayStore.loopsCountState >= replayStore.loopsState) {
           next()
         } else {
-          play(songIndexState.value)
+          play()
         }
       } else {
         next()
@@ -184,6 +189,7 @@ export const usePlayerStore = defineStore('player', () => {
     pause,
     prev,
     next,
+    changeSong,
     setCurrentlyTimer,
     setCurrentSong,
     setDefaultSettingFromLocalStorage,
