@@ -1,6 +1,5 @@
 Fix
 - [VueSlider error]: The "value" must be less than or equal to the "max"
-- click lyric thi player.time khong chinh xac
 - input border treen ios
 
 Add
