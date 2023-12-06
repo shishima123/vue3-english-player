@@ -45,6 +45,7 @@ export const usePlayerStore = defineStore('player', () => {
     lyricStore.scrollToTopInLyrics()
     playlistStore.scrollToActive()
     await repeatStore.updateSeekSlider()
+    repeatStore.disableRepeat()
 
     if (isPlayingState.value) {
       play()

@@ -351,6 +351,14 @@
     height: auto;
   }
 
+  textarea,
+  input[type="text"],
+  input[type="button"],
+  input[type="submit"] {
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+
   /* Make elements with the HTML hidden attribute stay hidden by default */
   [hidden] {
     display: none;

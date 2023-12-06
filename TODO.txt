@@ -1,6 +1,5 @@
 Fix
 - [VueSlider error]: The "value" must be less than or equal to the "max"
-- input border treen ios
 
 Add
 - Lyric 3: Phien am IPA

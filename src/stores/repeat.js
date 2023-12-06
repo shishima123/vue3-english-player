@@ -36,7 +36,8 @@ export const useRepeatStore = defineStore('repeat', () => {
     sleepTimeState,
     setTimeWhenClickLyric,
     updateSeekSlider,
-    resetSeekSlider
+    resetSeekSlider,
+    disableRepeat
   }
 
   function setTimeWhenClickLyric(startTime, endTime) {
@@ -55,5 +56,10 @@ export const useRepeatStore = defineStore('repeat', () => {
 
   function resetSeekSlider() {
     seekSliderState.value = [0, 0]
+  }
+
+  function disableRepeat() {
+    isRepeatActiveState.value = false
+    clearTimeout(playAfterSleepState.value)
   }
 })
