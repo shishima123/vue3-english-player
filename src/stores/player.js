@@ -141,8 +141,8 @@ export const usePlayerStore = defineStore('player', () => {
     })
 
     playerState.value.addEventListener('ended', () => {
+      resetSeekSlider()
       lyricStore.scrollToTopInLyrics()
-      isPlayingState.value = false
       if (replayStore.replayFlagState) {
         replayStore.setLoopsCount(++replayStore.loopsCountState)
         if (replayStore.loopsCountState >= replayStore.loopsState) {
@@ -167,6 +167,10 @@ export const usePlayerStore = defineStore('player', () => {
           ? 0
           : Number(localStorage.songIndexState)
     }
+  }
+
+  function resetSeekSlider() {
+    seekSliderState.value = 0
   }
 
   watch(songIndexState, async (value) => {
