@@ -4,7 +4,16 @@ import './assets/styles/style.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import VueSlider from 'vue-slider-component'
-import { ConfigProvider, TimePicker, Switch, Radio, Select, Tabs, Modal } from 'ant-design-vue'
+import {
+  ConfigProvider,
+  TimePicker,
+  Switch,
+  Radio,
+  Select,
+  Tabs,
+  Modal,
+  InputNumber
+} from 'ant-design-vue'
 import App from './App.vue'
 
 const app = createApp(App)
@@ -19,5 +28,6 @@ app.use(Radio)
 app.use(Select)
 app.use(Tabs)
 app.use(Modal)
+app.use(InputNumber)
 
 app.mount('#app')

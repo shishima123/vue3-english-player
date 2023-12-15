@@ -121,10 +121,10 @@ export const usePlayerStore = defineStore('player', () => {
       seekSliderState.value = Math.round(playerState.value.currentTime)
       // repeat
       if (repeatStore.isRepeatActiveState) {
-        if (playerTimer < repeatStore.startTimeState) {
-          playerState.value.currentTime = repeatStore.startTimeState
-        } else if (playerTimer > repeatStore.endTimeState) {
-          playerState.value.currentTime = repeatStore.startTimeState
+        if (playerTimer < repeatStore.startTimeComputed) {
+          playerState.value.currentTime = repeatStore.startTimeComputed
+        } else if (playerTimer > repeatStore.endTimeComputed) {
+          playerState.value.currentTime = repeatStore.startTimeComputed
 
           // sleep
           if (repeatStore.isSleepActiveState) {

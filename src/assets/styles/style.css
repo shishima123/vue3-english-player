@@ -472,3 +472,6 @@
 .ant-tabs.custom-padding .ant-tabs-tab {
   @apply px-3
 }
+.ant-input-number-group-wrapper.input-sync .ant-input-number .ant-input-number-input {
+  @apply text-sm text-center
+}

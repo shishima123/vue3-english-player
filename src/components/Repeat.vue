@@ -7,6 +7,9 @@ import { storeToRefs } from 'pinia'
 import { range } from '@/helpers/utils'
 import { usePlayerStore } from '@/stores/player'
 
+// icons
+import { AdjustmentsVerticalIcon, XCircleIcon } from '@heroicons/vue/24/outline'
+
 // store
 const repeatStore = useRepeatStore()
 const playerStore = usePlayerStore()
@@ -132,7 +135,7 @@ watch(seekSliderState, (value) => {
       </div>
     </div>
     <div>
-      <div class="flex items-center text-base mb-3">
+      <div class="flex items-center text-base h-[32px] mb-2">
         <a-switch v-model:checked="repeatStore.isSleepActiveState" />
         <label class="ml-2" for="sleep_input">Sleep</label>
         <input
@@ -144,9 +147,71 @@ watch(seekSliderState, (value) => {
         />
         <label for="sleep_input">seconds</label>
       </div>
-      <div class="flex items-center text-base">
+      <div class="flex items-center text-base h-[32px] mb-2">
         <a-switch v-model:checked="repeatStore.showTimeStringLyricState" />
         <span class="ml-2">Show Time in Lyric</span>
+      </div>
+      <div class="flex items-center h-[32px] mb-2">
+        <a-switch v-model:checked="repeatStore.syncStartActiveState" />
+        <label class="mx-2 w-[80px]" for="sleep_input">Sync Start</label>
+        <a-input-number
+          class="w-[100px] flex-grow input-sync"
+          v-model:value="repeatStore.syncStartValueState"
+          :keyboard="false"
+          :controls="false"
+        >
+          <template #addonBefore>
+            <button
+              class="w-[32px] m-[-4px_-11px] h-[32px] bg-transparent"
+              @click="repeatStore.changeSyncValue('syncStartValueState', '-')"
+            >
+              -
+            </button>
+          </template>
+          <template #addonAfter>
+            <button
+              class="w-[32px] m-[-4px_-11px] h-[32px] bg-transparent"
+              @click="repeatStore.changeSyncValue('syncStartValueState', '+')"
+            >
+              +
+            </button>
+          </template>
+        </a-input-number>
+        <XCircleIcon
+          class="h-5 w-5 ml-2 hover:text-blue-500 cursor-pointer transition"
+          @click="repeatStore.resetSyncValueState('syncStartValueState')"
+        />
+      </div>
+      <div class="flex items-center h-[32px]">
+        <a-switch v-model:checked="repeatStore.syncEndActiveState" />
+        <span class="mx-2 w-[80px]">Sync End</span>
+        <a-input-number
+          class="w-[100px] flex-grow input-sync"
+          v-model:value="repeatStore.syncEndValueState"
+          :keyboard="false"
+          :controls="false"
+        >
+          <template #addonBefore>
+            <button
+              class="w-[32px] m-[-4px_-11px] h-[32px] bg-transparent"
+              @click="repeatStore.changeSyncValue('syncEndValueState', '-')"
+            >
+              -
+            </button>
+          </template>
+          <template #addonAfter>
+            <button
+              class="w-[32px] m-[-4px_-11px] h-[32px] bg-transparent"
+              @click="repeatStore.changeSyncValue('syncEndValueState', '+')"
+            >
+              +
+            </button>
+          </template>
+        </a-input-number>
+        <XCircleIcon
+          class="h-5 w-5 ml-2 hover:text-blue-500 cursor-pointer transition"
+          @click="repeatStore.resetSyncValueState('syncEndValueState')"
+        />
       </div>
     </div>
   </fieldset>
