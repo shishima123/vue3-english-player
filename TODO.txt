@@ -1,7 +1,7 @@
 Fix
-- [VueSlider error]: The "value" must be less than or equal to the "max"
+- Fix loi chinh ta cua lyric
 
 Add
 - Lyric 3: Phien am IPA
-- increase decrease thoi gian cho repeat
 - Add button increase decrease cho input number
+- Them cac playlist khac
