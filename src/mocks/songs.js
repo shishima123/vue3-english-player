@@ -6,107 +6,133 @@ const songs = [
     src: './assets/audios/LPTD1.1/Unit 1 A Picnic by the River.mp3',
     lyric1: `1
 00:00:02,066 --> 00:00:03,799
-nature and the environment
+Nature and the environment
+/ˈneɪtʃər ənd ðə ɪnˈvaɪrənmənt/
 
 2
 00:00:04,666 --> 00:00:07,499
-unit one a picnic by the river
+Unit One: A Picnic by the River
+/ˈjuːnɪt wʌn ə ˈpɪknɪk baɪ ðə ˈrɪvər/
 
 3
 00:00:08,733 --> 00:00:10,466
-this is a good spot
+This is a good spot
+/ðɪs ɪz ə ɡʊd spɒt/
 
 4
 00:00:10,500 --> 00:00:13,866
-let's stop and have our picnic next to the river
+Let's stop and have our picnic next to the river
+/lets stɒp ənd hæv aʊr ˈpɪknɪk nɛkst tuː ðə ˈrɪvər/
 
 5
 00:00:13,966 --> 00:00:17,199
-good idea walking always makes me hungry
+Good idea. Walking always makes me hungry
+/ɡʊd aɪˈdiə wɔːkɪŋ ɔːlˈweɪz meɪks mi ˈhʌŋɡri/
 
 6
 00:00:17,200 --> 00:00:18,700
 I'm ready for lunch
+/aɪm ˈrɛdi fɔr lʌntʃ/
 
 7
 00:00:18,733 --> 00:00:20,933
-we can sit here on the grass
+We can sit here on the grass
+/wi kæn sɪt hɪr ɒn ðə ɡræs/
 
 8
 00:00:21,066 --> 00:00:22,066
-oh no
+Oh no
+/oʊ noʊ/
 
 9
 00:00:22,300 --> 00:00:26,066
-someone forgot to throw these empty paper bags away
+Someone forgot to throw these empty paper bags away
+/ˈsəmˌwʌn fəˈɡɒt tuː θroʊ ˈðiz ˈɛmpti ˈpeɪpər bæɡz əˈweɪ/
 
 10
 00:00:26,166 --> 00:00:28,299
-there is litter everywhere
+There is litter everywhere
+/ðɛr ɪz ˈlɪtər ˈɛvrɪwɛr/
 
 11
 00:00:28,366 --> 00:00:31,466
-why do people always leave litter around
+Why do people always leave litter around?
+/waɪ duː ˈpipəl ɔːlˈweɪz liv ˈlɪtər əˈraʊnd/
 
 12
 00:00:31,500 --> 00:00:33,466
-it's not a nice thing to do
+It's not a nice thing to do
+/ɪts nɒt ə naɪs θɪŋ tuː duː/
 
 13
 00:00:33,466 --> 00:00:35,866
-it spoils other people's picnics
+It spoils other people's picnics
+/ɪt spɔɪlz ˈʌðər ˈpipəlz ˈpɪknɪks/
 
 14
 00:00:35,866 --> 00:00:37,599
 I think they are lazy
+/aɪ θɪŋk ðeɪ ər ˈleɪzi/
 
 15
 00:00:37,666 --> 00:00:39,799
-or maybe they just don't care
+Or maybe they just don't care
+/ɔr ˈmeɪbi ðeɪ ˈdʒʌst doʊnt kɛr/
 
 16
 00:00:40,266 --> 00:00:43,866
-look there are some empty cans and glass bottles
+Look, there are some empty cans and glass bottles
+/lʊk ðɛr ər ˈsəm ˈɛmpti kænz ənd ɡlæs ˈbɒtəlz/
 
 17
 00:00:43,866 --> 00:00:45,366
-under that tree too
+Under that tree too
+/ˈʌndər ðæt tri tuː/
 
 18
 00:00:45,566 --> 00:00:47,999
-people should clean up before they leave
+People should clean up before they leave
+/ˈpipəl ʃʊd klin ʌp bɪˈfɔr ðeɪ liv/
 
 19
 00:00:48,066 --> 00:00:50,399
-and not leave litter lying around
+And not leave litter lying around
+/ænd nɒt liv ˈlɪtər ˈlaɪɪŋ əˈraʊnd/
 
 20
 00:00:50,400 --> 00:00:52,133
-that's right well
+That's right. Well
+/ðæts raɪt. wɛl/
 
 21
 00:00:52,366 --> 00:00:53,466
-after our picnic
+After our picnic
+/ˈæftər aʊr ˈpɪknɪk/
 
 22
 00:00:53,733 --> 00:00:56,066
-let's pick up all the litter we can
+Let's pick up all the litter we can
+/lɛts pɪk ʌp ɔl ðə ˈlɪtər wi kæn/
 
 23
 00:00:56,100 --> 00:00:57,800
-and take it out of here
+And take it out of here
+/ænd teɪk ɪt aʊt əv hɪr/
 
 24
 00:00:58,066 --> 00:00:59,699
-okay and next week
+Okay, and next week
+/oʊˈkeɪ ənd nɛkst wik/
 
 25
 00:00:59,700 --> 00:01:02,733
-let's come back with friends and pick up some more
+Let's come back with friends and pick up some more
+/lɛts kʌm bæk wɪð frɛndz ənd pɪk ʌp səm mɔr/
 
 26
 00:01:02,733 --> 00:01:03,933
-good idea
+Good idea!
+/ɡʊd aɪˈdiə/
 `,
     lyric2: `A Picnic by the River
 W:   This is a good spot. Let’s stop and have our picnic next to the river.
@@ -126,83 +152,103 @@ W:   Good idea!`
     src: './assets/audios/LPTD1.1/Unit 2 Let’s Recycle.mp3',
     lyric1: `1
 00:00:00,300 --> 00:00:02,666
-unit 2 let's recycle
+Unit 2, let's recycle
+/ˈjuːnɪt tuː, lɛts riːˈsaɪkl/
 
 2
 00:00:03,933 --> 00:00:07,333
-hi Jane have you heard about the new laws to help
+Hi, Jane! Have you heard about the new laws to help
+/haɪ, ʤeɪn! hæv jʊ hɜrd əˈbaʊt ðə nuː lɔz tuː hɛlp/
 
 3
 00:00:07,333 --> 00:00:08,299
-people recycle
+People recycle?
+/ˈpipəl riːˈsaɪkl/
 
 4
 00:00:08,400 --> 00:00:11,200
 I heard about them on the news last night
+/aɪ hɜrd əˈbaʊt ðəm ɒn ðə nuz læst naɪt/
 
 5
 00:00:11,366 --> 00:00:13,399
 I don't think I like them
+/aɪ doʊnt θɪŋk aɪ laɪk ðəm/
 
 6
 00:00:13,733 --> 00:00:16,799
-the government wants to keep the environment clean
+The government wants to keep the environment clean
+/ðə ˈɡʌvərnmənt wænts tuː kiːp ðə ɪnˈvaɪrənmənt klin/
 
 7
 00:00:16,866 --> 00:00:18,399
-by recycling paper
+By recycling paper
+/baɪ riːˈsaɪklɪŋ ˈpeɪpər/
 
 8
 00:00:18,400 --> 00:00:21,733
-metal and glass instead of throwing these things away
+Metal, and glass instead of throwing these things away
+/ˈmɛtəl ənd ɡlæs ɪnˈstɛd əv ˈθroʊɪŋ θiz ˈθɪŋz əˈweɪ/
 
 9
 00:00:21,933 --> 00:00:24,399
-but who wants to pay an extra 50
+But who wants to pay an extra 50
+/bət hu wʊd wænts tuː peɪ ən ˈɛkstrə ˈfɪfti/
 
 10
 00:00:24,500 --> 00:00:27,500
-cents each time you buy a cup of coffee
+Cents each time you buy a cup of coffee?
+/sɛnts itʃ taɪm jʊ baɪ ə kʌp əv ˈkɔfi/
 
 11
 00:00:27,800 --> 00:00:29,366
-that's a lot of money
+That's a lot of money
+/ðæts ə lɒt əv ˈmʌni/
 
 12
 00:00:29,533 --> 00:00:31,566
-¢50 it's only
+50 cents? It's only
+/ˈfɪfti sɛnts? Its ˈoʊnli/
 
 13
 00:00:31,566 --> 00:00:33,999
-¢5 extra for a paper cup
+5 cents extra for a paper cup
+/faɪv sɛnts ˈɛkstrə fɔr ə ˈpeɪpər kʌp/
 
 14
 00:00:34,000 --> 00:00:40,133
-I thought it was ¢50 no it's only ¢5 don't worry and
+I thought it was 50 cents. No, it's only 5 cents. Don't worry, and
+/aɪ θɔt ɪt wəz ˈfɪfti sɛnts. noʊ, ɪts ˈoʊnli faɪv sɛnts. doʊnt ˈwʌri, ænd/
 
 15
 00:00:40,133 --> 00:00:43,133
-you can get your money back when you return the cup
+You can get your money back when you return the cup
+/ju kæn ɡɛt jʊr ˈmʌni bæk wɛn jʊ rɪˈtɜrn ðə kʌp/
 
 16
 00:00:43,133 --> 00:00:44,099
-that's fair
+That's fair
+/ðæts fɛr/
 
 17
 00:00:44,333 --> 00:00:47,399
-well maybe the government is right after all
+Well, maybe the government is right after all
+/wɛl, ˈmeɪbi ðə ˈɡʌvərnmənt ɪz raɪt ˈæftər ɔl/
 
 18
 00:00:47,800 --> 00:00:52,066
 I'll return all the paper coffee cups I use from now on
+/aɪl rɪˈtɜrn ɔl ðə ˈpeɪpər ˈkɔfi kʌps aɪ juz frəm naʊ ɑn/
 
 19
 00:00:52,300 --> 00:00:55,000
-good we all need to recycle
+Good! We all need to recycle
+/ɡʊd! wi ɔl nid tuː riːˈsaɪkl/
 
 20
 00:00:55,000 --> 00:00:57,266
-it helps to keep the environment clean
+It helps to keep the environment clean
+/ɪt hɛlps tuː kiːp ðə ɪnˈvaɪrənmənt klin/
 `,
     lyric2: `Let’s Recycle!
 M:   Hi, Jane! Have you heard about the new laws to help people recycle?
@@ -222,83 +268,103 @@ M:   Good! We all need to recycle. It helps to keep the environment clean.`
     src: './assets/audios/LPTD1.1/Unit 3 Growing Roses.mp3',
     lyric1: `1
 00:00:00,200 --> 00:00:02,733
-unit 3 growing roses
+Unit 3: Growing Roses
+/ˈjuːnɪt θriː: ˈɡroʊɪŋ ˈroʊzɪz/
 
 2
 00:00:04,133 --> 00:00:05,466
-excuse me ma'am
+Excuse me, ma'am
+/ɪkˈskjuz miː mæm/
 
 3
 00:00:05,533 --> 00:00:08,399
 I have a problem with my rose bush
+/aɪ hæv ə ˈprɑbləm wɪð maɪ roʊz bʊʃ/
 
 4
 00:00:08,500 --> 00:00:11,600
-it used to produce a lot of pink roses
+It used to produce a lot of pink roses
+/ɪt juːzd tuː prəˈdus ə lɑt əv pɪŋk ˈroʊzɪz/
 
 5
 00:00:11,733 --> 00:00:14,966
 but now it doesn't produce any flowers at all
+/bət naʊ ɪt ˈdəzənt prəˈdus ˈɛni ˈflaʊərz ət ɔl/
 
 6
 00:00:15,066 --> 00:00:18,333
-I see that does seem like a problem
+I see. That does seem like a problem
+/aɪ siː. ðæt dəz sim laɪk ə ˈprɑbləm/
 
 7
 00:00:18,666 --> 00:00:21,166
-do the leaves on the plant look healthy
+Do the leaves on the plant look healthy?
+/duː ðə ˈlivz ɒn ðə plænt lʊk ˈhɛlθi/
 
 8
 00:00:21,333 --> 00:00:25,566
-not really the leaves used to be very green
+Not really. The leaves used to be very green
+/nɑt ˈrɪli. ðə ˈlivz juːzd tuː bi ˈvɛri ɡrin/
 
 9
 00:00:25,733 --> 00:00:28,566
-now most of them have turned brown
+Now most of them have turned brown
+/naʊ moʊst əv ðəm hæv tɜrnd braʊn/
 
 10
 00:00:28,566 --> 00:00:32,499
-well I think your rose bush needs some fertilizer
+Well, I think your rose bush needs some fertilizer
+/wɛl, aɪ θɪŋk jʊər roʊz bʊʃ nidz səm ˈfaɪlɪˌzaɪtər/
 
 11
 00:00:32,733 --> 00:00:36,733
-okay what sort of fertilizer do you think I should use
+Okay, what sort of fertilizer do you think I should use?
+/ˈoʊkeɪ, wət sɔrt əv ˈfaɪlɪˌzaɪtər dʊ jʊ θɪŋk aɪ ʃʊd juz/
 
 12
 00:00:36,966 --> 00:00:39,899
-this liquid fertilizer is very good
+This liquid fertilizer is very good
+/ðɪs ˈlɪkwɪd ˈfaɪlɪˌzaɪtər ɪz ˈvɛri ɡʊd/
 
 13
 00:00:40,100 --> 00:00:43,266
-it will help make your rose leaves green again
+It will help make your rose leaves green again
+/ɪt wɪl hɛlp meɪk jʊər roʊz ˈlivz ɡrin əˈɡɛn/
 
 14
 00:00:43,800 --> 00:00:47,000
-then the plant should produce roses quite soon
+Then the plant should produce roses quite soon
+/ðɛn ðə plænt ʃʊd prəˈdus ˈroʊzɪz kwaɪt sun/
 
 15
 00:00:47,300 --> 00:00:50,666
-the fertilizer costs about $10
+The fertilizer costs about $10
+/ðə ˈfaɪlɪˌzaɪtər kɒsts əˈbaʊt tɛn ˈdɒlərz/
 
 16
 00:00:50,866 --> 00:00:54,199
-how long will it take for my rose bush to recover
+How long will it take for my rose bush to recover?
+/haʊ lɔŋ wɪl ɪt teɪk fɔr maɪ roʊz bʊʃ tuː rɪˈkʌvər/
 
 17
 00:00:54,366 --> 00:00:56,299
-about 2 weeks I think
+About 2 weeks, I think
+/əˈbaʊt tuː wiks, aɪ θɪŋk/
 
 18
 00:00:56,333 --> 00:00:58,299
-great I'll take it
+Great, I'll take it
+/ɡreɪt, aɪl teɪk ɪt/
 
 19
 00:00:58,366 --> 00:01:00,466
-thank you so much for your help
+Thank you so much for your help
+/θæŋk jʊ soʊ mʌtʃ fɔr jʊr hɛlp/
 
 20
 00:01:00,466 --> 00:01:01,566
-you're welcome
+You're welcome!
+/jʊr ˈwɛlkəm/
 `,
     lyric2: `Growing Roses
 M:   Excuse me, ma’am. I have a problem with rose bush. It used to produce a lot of pink roses. But now it doesn’t produce any flowers at all.
@@ -320,87 +386,108 @@ W:   You’re welcome!`
     src: './assets/audios/LPTD1.1/Unit 4 Bird Watching.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:02,466
-unit 4 bird watching
+Unit 4: Bird Watching
+/juːˈnɪt fɔr: bɜrd ˈwɒtʃɪŋ/
 
 2
 00:00:03,566 --> 00:00:06,299
 I want to go bird watching tomorrow
+/aɪ wɒnt tə ɡoʊ bɜrd ˈwɒtʃɪŋ təˈmɒr.oʊ/
 
 3
 00:00:06,566 --> 00:00:09,366
-do you know a good area for birds
+Do you know a good area for birds?
+/du jʊ noʊ ə ɡʊd ˈɛriə fɔr bɜrdz/
 
 4
 00:00:09,966 --> 00:00:12,499
-there is a quiet park near here
+There is a quiet park near here
+/ðɛr ɪz ə ˈkwaɪət pɑrk nɪr hɪr/
 
 5
 00:00:12,600 --> 00:00:16,000
-there are always many beautiful birds there
+There are always many beautiful birds there
+/ðɛr ɑr ˈɔlweɪz ˈmɛni ˈbjutɪfəl bɜrdz ðɛr/
 
 6
 00:00:16,500 --> 00:00:18,133
-will I be able to see
+Will I be able to see
+/wɪl aɪ bi ˈeɪbl̩ tu si/
 
 7
 00:00:18,166 --> 00:00:20,499
-different types of birds in this area
+different types of birds in this area?
+/ˈdɪfərənt taɪps əv bɜrdz ɪn ðɪs ˈɛriə/
 
 8
 00:00:21,066 --> 00:00:22,699
-yes I think so
+Yes, I think so
+/jɛs, aɪ ˈθɪŋk soʊ/
 
 9
 00:00:22,900 --> 00:00:25,000
-if you use binoculars
+If you use binoculars
+/ɪf jʊ jus bɪˈnɑkjələrz/
 
 10
 00:00:25,000 --> 00:00:28,600
 you can see the birds even if they are far away
+/ju kæn si ðə bɜrdz ˈivən ɪf ðeɪ ər fɑr əˈweɪ/
 
 11
 00:00:29,166 --> 00:00:29,966
-great
+Great!
+/ɡreɪt/
 
 12
 00:00:30,300 --> 00:00:34,333
 I have a book about all the different types of birds
+/aɪ hæv ə bʊk əˈbaʊt ɔl ðə ˈdɪfərənt taɪps əv bɜrdz/
 
 13
 00:00:34,666 --> 00:00:38,399
-it seems as if you really like bird watching
+It seems as if you really like bird watching
+/ɪt simz əz ɪf jʊ ˈrɪli laɪk bɜrd ˈwɒtʃɪŋ/
 
 14
 00:00:38,700 --> 00:00:43,000
-yes I do would you like to come with me tomorrow
+Yes, I do. Would you like to come with me tomorrow?
+/jɛs, aɪ du. wʊd jʊ laɪk tu kʌm wɪð mi təˈmɒr.oʊ/
 
 15
 00:00:43,366 --> 00:00:47,533
-no thank you I think bird watching is boring
+No, thank you. I think bird watching is boring
+/noʊ, θæŋk jʊ. aɪ θɪŋk bɜrd ˈwɒtʃɪŋ ɪz ˈbɔrɪŋ/
 
 16
 00:00:47,966 --> 00:00:49,266
-that's not true
+That's not true
+/ðæts nɑt truː/
 
 17
 00:00:49,733 --> 00:00:51,899
-birds are very interesting
+Birds are very interesting
+/bɜrdz ər ˈvɛri ˈɪntrəstɪŋ/
 
 18
 00:00:52,300 --> 00:00:54,800
-some birds have colorful feathers
+Some birds have colorful feathers
+/səm bɜrdz hæv ˈkʌlərfəl ˈfɛðərz/
 
 19
 00:00:55,200 --> 00:00:57,700
-some birds sing beautiful songs
+Some birds sing beautiful songs
+/səm bɜrdz sɪŋ ˈbjutɪfəl sɔŋz/
 
 20
 00:00:58,300 --> 00:01:02,133
-some birds make special nests to lay eggs in
+Some birds make special nests to lay eggs in
+/səm bɜrdz meɪk ˈspɛʃəl nɛsts tu leɪ ɛɡz ɪn/
 
 21
 00:01:02,533 --> 00:01:07,333
-really maybe I will go bird watching one day after all
+Really? Maybe I will go bird watching one day after all
+/ˈrɪli? ˈmeɪbi aɪ wɪl ɡoʊ bɜrd ˈwɒtʃɪŋ wʌn deɪ ˈæftər ɔl/
 `,
     lyric2: `Bird Watching
 B :   I want to go bird watching tomorrow. Do you know a good area for birds?
@@ -421,83 +508,103 @@ G :   Really? Maybe I will go bird watching one day after all!`
     src: './assets/audios/LPTD1.1/Unit 5 Trees in the Forest.mp3',
     lyric1: `1
 00:00:00,133 --> 00:00:02,899
-unit 5 trees in the forest
+Unit 5 Trees in the Forest
+/ˈjuːnɪt faɪv triːz ɪn ðə ˈfɒrɪst/
 
 2
 00:00:04,500 --> 00:00:07,466
-there are many forests in North America
+There are many forests in North America
+/ðeər ər ˈmɛni ˈfɒrɪsts ɪn nɔrθ əˈmɛrɪkə/
 
 3
 00:00:07,866 --> 00:00:10,599
-there are many trees in these forests
+There are many trees in these forests
+/ðeər ər ˈmɛni triz ɪn ðiz ˈfɒrɪsts/
 
 4
 00:00:11,200 --> 00:00:15,066
-some of these trees are more than 200ft tall
+Some of these trees are more than two hundred feet tall
+/səm əv ðiz triz ər mɔr ˈðæn tuː ˈhʌndrəd fit tɔl/
 
 5
 00:00:15,600 --> 00:00:18,533
-some are over 500 years old
+Some are over five hundred years old
+/səm ər ˈoʊvər faɪv ˈhʌndrəd jɪrz oʊld/
 
 6
 00:00:19,300 --> 00:00:22,533
-several kinds of trees grow in these forests
+Several kinds of trees grow in these forests
+/ˈsɛvrəl kaɪndz əv triz ɡroʊ ɪn ðiz ˈfɒrɪsts/
 
 7
 00:00:22,600 --> 00:00:25,700
-fur cedar and pine are 3
+Fir, cedar, and pine are three.
+/fɜr, ˈsiːdər, ənd paɪn ər θriː/
 
 8
 00:00:27,166 --> 00:00:29,799
-these trees grow in different areas
+These trees grow in different areas
+/ðiz triz ɡroʊ ɪn ˈdɪfərənt ˈɛriəz/
 
 9
 00:00:30,200 --> 00:00:32,166
-some grow in forests
+Some grow in forests
+/səm ɡroʊ ɪn ˈfɒrɪsts/
 
 10
 00:00:32,466 --> 00:00:34,566
-some grow on the mountains
+Some grow on the mountains
+/səm ɡroʊ ɒn ðə ˈmaʊntənz/
 
 11
 00:00:35,466 --> 00:00:37,999
-people who lived in this place long ago
+People who lived in this place long ago
+/ˈpipəl hu lɪvd ɪn ðɪs pleɪs lɔŋ əˈɡoʊ/
 
 12
 00:00:38,300 --> 00:00:41,666
-used these trees to make things out of wood
+Used these trees to make things out of wood
+/juzd ðiz triz tə meɪk ˈθɪŋz aʊt əv wʊd/
 
 13
 00:00:43,100 --> 00:00:46,700
-many of these trees are now in special areas
+Many of these trees are now in special areas
+/ˈmɛni əv ðiz triz ər naʊ ɪn ˈspɛʃəl ˈɛriəz/
 
 14
 00:00:47,366 --> 00:00:50,133
-these areas are called forest reserves
+These areas are called forest reserves
+/ðiz ˈɛriəz ər kɔld ˈfɒrɪst rɪˈzɜrvz/
 
 15
 00:00:50,133 --> 00:00:51,799
-or national parks
+Or national parks
+/ɔr ˈnæʃənl pɑrks/
 
 16
 00:00:52,466 --> 00:00:55,599
-some parks charge a small entrance fee
+Some parks charge a small entrance fee
+/səm pɑrks ʧɑrdʒ ə smɔl ˈɛntrəns fi/
 
 17
 00:00:56,366 --> 00:00:59,599
-visitors must pay the fee to enter the parks
+Visitors must pay the fee to enter the parks
+/ˈvɪzɪtərz mʌst peɪ ðə fi tə ˈɛntər ðə pɑrks/
 
 18
 00:01:00,133 --> 00:01:03,766
-then they can walk among the beautiful old trees
+Then they can walk among the beautiful old trees
+/ðɛn ðeɪ kæn wɔk əˈmʌŋ ðə ˈbjutəfəl oʊld triz/
 
 19
 00:01:04,266 --> 00:01:07,533
-they must take care not to damage the trees
+They must take care not to damage the trees
+/ðeɪ mʌst teɪk kɛr nɑt tə ˈdæmɪdʒ ðə triz/
 
 20
 00:01:07,933 --> 00:01:10,966
-we should all take care of forests
+We should all take care of forests
+/wi ʃʊd ɔl teɪk kɛr əv ˈfɒrɪsts/
 `,
     lyric2: `Trees in the Forest
 B :   There are many forests in North America.
@@ -525,87 +632,108 @@ We should all take care of forests.`
     src: './assets/audios/LPTD1.1/Unit 6 An Easy Way to Shop.mp3',
     lyric1: `1
 00:00:01,666 --> 00:00:03,733
-science and technology
+Science and Technology
+/ˈsaɪəns ənd tɛkˈnɒlədʒi/
 
 2
 00:00:04,500 --> 00:00:07,500
-unit 6 an easy way to shop
+Unit 6 An Easy Way to Shop
+/ˈjuːnɪt sɪks ən ˈizi weɪ tə ʃɒp/
 
 3
 00:00:08,966 --> 00:00:12,666
-hey Steve look at my new MP 3 player
+Hey Steve, look at my new MP3 player
+/heɪ stiv, lʊk æt maɪ nu MP3 pleɪər/
 
 4
 00:00:12,900 --> 00:00:14,933
-wow it looks cool
+Wow, it looks cool
+/waʊ, ɪt lʊks kul/
 
 5
 00:00:15,066 --> 00:00:16,699
-where did you buy it
+Where did you buy it?
+/ˈwɛr dɪd ju baɪ ɪt/
 
 6
 00:00:16,800 --> 00:00:20,600
 I bought it online at an electronics website
+/aɪ bɔt ɪt ɒnˈlaɪn æt ən ɪˌlɛkˈtrɒnɪks ˈwɛbsaɪt/
 
 7
 00:00:20,966 --> 00:00:24,099
 I'm not very good at using a computer
+/aɪm nɑt ˈvɛri ɡʊd ət ˈjuzɪŋ ə kəmˈpjuːtər/
 
 8
 00:00:24,300 --> 00:00:27,000
-is it hard to buy things online
+Is it hard to buy things online?
+/ɪz ɪt hɑrd tə baɪ ˈθɪŋz ɒnˈlaɪn/
 
 9
 00:00:27,600 --> 00:00:29,266
-it's really easy
+It's really easy
+/ɪts ˈrɪli ˈizi/
 
 10
 00:00:29,500 --> 00:00:32,266
-all you do is go to the website
+All you do is go to the website
+/ɔl ju du ɪz ɡoʊ tə ðə ˈwɛbsaɪt/
 
 11
 00:00:32,300 --> 00:00:34,933
-and choose the item you want to look at
+And choose the item you want to look at
+/ænd ʧuz ðə ˈaɪtəm ju wɑnt tə lʊk æt/
 
 12
 00:00:35,166 --> 00:00:38,999
-there are so many items to choose from on the website
+There are so many items to choose from on the website
+/ðer ər soʊ ˈmɛni ˈaɪtəmz tə ʧuz frʌm ɒn ðə ˈwɛbsaɪt/
 
 13
 00:00:39,733 --> 00:00:41,866
-after you choose what you want to buy
+After you choose what you want to buy
+/ˈæftər ju ʧuz wət ju wɑnt tə baɪ/
 
 14
 00:00:42,133 --> 00:00:44,466
-you click on the checkout button
+You click on the checkout button
+/ju klɪk ɒn ðə ˈʧɛkaʊt ˈbʌtən/
 
 15
 00:00:45,266 --> 00:00:47,199
-that does seem easy
+That does seem easy
+/ðæt dʌz sim ˈizi/
 
 16
 00:00:47,500 --> 00:00:48,600
-yes it is
+Yes, it is
+/jɛs, ɪt ɪz/
 
 17
 00:00:48,733 --> 00:00:52,366
-it only takes about a week for your item to come
+It only takes about a week for your item to come
+/ɪt ˈoʊnli teɪks əˈbaʊt ə wik fɔr jʊr ˈaɪtəm tə kʌm/
 
 18
 00:00:52,666 --> 00:00:55,099
-of course if you are in a hurry
+Of course, if you are in a hurry
+/əv ˈkɔrs, ɪf ju ər ɪn ə ˈhɜri/
 
 19
 00:00:55,100 --> 00:00:58,100
-you can pay more to get it sent faster
+You can pay more to get it sent faster
+/ju kæn peɪ mɔr tə ɡɛt ɪt sɛnt ˈfæstər/
 
 20
 00:00:58,700 --> 00:01:01,533
-do you pay for the item when it comes
+Do you pay for the item when it comes?
+/du jʊ peɪ fɔr ðə ˈaɪtəm wɛn ɪt kʌmz/
 
 21
 00:01:01,733 --> 00:01:05,899
-no you have to pay for it online with a credit card
+No, you have to pay for it online with a credit card
+/noʊ, jʊ hæv tuː peɪ fɔr ɪt ɒnˈlaɪn wɪð ə ˈkrɛdɪt kɑrd/
 `,
     lyric2: `An Easy Way to Shop
 G :   Hey, Steve. Look at new MP3 player!
@@ -625,91 +753,113 @@ G :   No, you have to pay for it online with a credit card.`
     src: './assets/audios/LPTD1.1/Unit 7 Cell Phone Messages.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:02,999
-unit 7 cell phone messages
+Unit 7 Cell Phone Messages
+/ˈjuːnɪt ˈsɛv.ən sɛl foʊn ˈmɛsɪdʒɪz/
 
 2
 00:00:04,300 --> 00:00:06,700
 I need to check my messages
+/aɪ nid tu ʧɛk maɪ ˈmɛsɪdʒɪz/
 
 3
 00:00:06,700 --> 00:00:08,900
-how are you going to do that
+How are you going to do that?
+/haʊ ər jʊ ˈɡoʊɪŋ tu dʊ ðæt/
 
 4
 00:00:08,900 --> 00:00:11,200
-we are in the middle of the freeway
+We are in the middle of the freeway
+/wi ər ɪn ðə ˈmɪdəl əv ðə ˈfriˌweɪ/
 
 5
 00:00:11,200 --> 00:00:13,800
 I'm going to use my cell phone
+/aɪm ˈɡoʊɪŋ tu juz maɪ sɛl foʊn/
 
 6
 00:00:13,800 --> 00:00:15,966
-haven't you ever done that
+Haven't you ever done that?
+/ˈhævənt jʊ ˈɛvər dʌn ðæt/
 
 7
 00:00:16,300 --> 00:00:20,533
-no I just use my cell phone to talk to other people
+No, I just use my cell phone to talk to other people
+/noʊ aɪ ˈdʒəst juz maɪ sɛl foʊn tu tɔk tu ˈəðər ˈpipəl/
 
 8
 00:00:20,666 --> 00:00:23,533
-now you can also use a cell phone
+Now you can also use a cell phone
+/naʊ jʊ kæn ɔlsoʊ juz ə sɛl foʊn/
 
 9
 00:00:23,533 --> 00:00:26,733
-to send and receive short text messages
+To send and receive short text messages
+/tu sɛnd ænd rɪˈsiv ʃɔrt tɛkst ˈmɛsɪdʒɪz/
 
 10
 00:00:26,800 --> 00:00:28,533
-it's very useful
+It's very useful
+/ɪts ˈvɛri ˈjusfəl/
 
 11
 00:00:28,700 --> 00:00:31,266
-how do you send a message that way
+How do you send a message that way?
+/haʊ du jʊ sɛnd ə ˈmɛsɪdʒ ðæt weɪ/
 
 12
 00:00:31,300 --> 00:00:34,066
 I just use the keys on the phone to
+/aɪ ˈdʒəst juz ðə kiz ɑn ðə foʊn tu/
 
 13
 00:00:34,066 --> 00:00:35,599
-type a short message
+Type a short message
+/taɪp ə ʃɔrt ˈmɛsɪdʒ/
 
 14
 00:00:36,066 --> 00:00:38,099
-then I press the send button
+Then I press the send button
+/ðɛn aɪ prɛs ðə sɛnd ˈbʌtn̩/
 
 15
 00:00:38,266 --> 00:00:40,966
-it's cheaper than making a phone call
+It's cheaper than making a phone call.
+/ɪts ˈʧipər ðæn ˈmeɪkɪŋ ə foʊn kɔl/
 
 16
 00:00:41,066 --> 00:00:42,999
-that's a great idea
+That's a great idea
+/ðæts ə greɪt aɪˈdiə/
 
 17
 00:00:43,066 --> 00:00:46,333
-you can save both time and money that way
+You can save both time and money that way
+/ju kæn seɪv boʊθ taɪm ænd ˈmʌni ðæt weɪ/
 
 18
 00:00:46,333 --> 00:00:51,366
-right all my friends usually send me text messages now
+Right. All my friends usually send me text messages now
+/raɪt ɔl maɪ frɛnds ˈjuʒəli sɛnd mi tɛkst ˈmɛsɪdʒɪz naʊ/
 
 19
 00:00:51,566 --> 00:00:53,666
-thanks for telling me about this
+Thanks for telling me about this
+/θæŋks fɔr ˈtɛlɪŋ mi əˈbaʊt ðɪs/
 
 20
 00:00:53,733 --> 00:00:55,266
 I'll have to try it
+/aɪl hæv tu traɪ ɪt/
 
 21
 00:00:55,266 --> 00:00:56,533
-you're welcome
+You're welcome
+/jʊr ˈwɛlkəm/
 
 22
 00:00:56,600 --> 00:00:59,100
 I think you'll find it useful
+/aɪ θɪŋk jʊl faɪnd ɪt ˈjusfəl/
 `,
     lyric2: `Cell Phone Messages
 W:   I need to check messages.
@@ -731,83 +881,103 @@ W:   You’re welcome. I think you’ll find it useful.`
     src: './assets/audios/LPTD1.1/Unit 8 Bubbles in Boiling Water.mp3',
     lyric1: `1
 00:00:00,166 --> 00:00:03,533
-unit 8 bubbles in boiling water
+Unit 8 Bubbles in Boiling Water
+/ˈjuːnɪt eɪt ˈbʌbəlz ɪn ˈbɔɪlɪŋ ˈwɔtər/
 
 2
 00:00:04,900 --> 00:00:08,666
-where do the bubbles come from when you boil water
+Where do the bubbles come from when you boil water?
+/wɛr du ðə ˈbʌbəlz kʌm frʌm wɛn jʊ bɔɪl ˈwɔtər/
 
 3
 00:00:09,166 --> 00:00:10,733
-water is a liquid
+Water is a liquid
+/ˈwɔtər ɪz ə ˈlɪkwɪd/
 
 4
 00:00:10,900 --> 00:00:15,200
-when it is heated it moves around faster and faster
+When it is heated, it moves around faster and faster
+/wɛn ɪt ɪz ˈhitɪd, ɪt ˈmuvz əˈraʊnd ˈfæstər ænd ˈfæstər/
 
 5
 00:00:15,700 --> 00:00:20,100
-when it starts to boil the liquid turns into a gas
+When it starts to boil, the liquid turns into a gas
+/wɛn ɪt stɑrts tu bɔɪl, ðə ˈlɪkwɪd tɜrnz ˈɪntu ə ɡæs/
 
 6
 00:00:20,533 --> 00:00:23,166
-this gas is called water vapor
+This gas is called water vapor
+/ðɪs ɡæs ɪz kɔld ˈwɔtər ˈveɪpər/
 
 7
 00:00:23,600 --> 00:00:27,100
-this gas is lighter than the water around it
+This gas is lighter than the water around it
+/ðɪs ɡæs ɪz ˈlaɪtər ðæn ðə ˈwɔtər əˈraʊnd ɪt/
 
 8
 00:00:27,166 --> 00:00:29,199
-it rises to the top
+It rises to the top
+/ɪt ˈraɪzɪz tu ðə tɑp/
 
 9
 00:00:29,500 --> 00:00:32,000
-then it disappears into the air
+Then it disappears into the air
+/ðɛn ɪt ˌdɪsəˈpɪrz ˈɪntu ðə ɛr/
 
 10
 00:00:32,700 --> 00:00:35,200
-as the water gets hotter and hotter
+As the water gets hotter and hotter
+/æz ðə ˈwɔtər ˈɡɛts ˈhɑtər ænd ˈhɑtər/
 
 11
 00:00:35,366 --> 00:00:38,666
-it starts turning into gas very quickly
+It starts turning into gas very quickly
+/ɪt stɑrts ˈtɜrnɪŋ ˈɪntu ɡæs ˈvɛri ˈkwɪkli/
 
 12
 00:00:38,933 --> 00:00:41,999
-a lot of bubbles form at the same time
+A lot of bubbles form at the same time
+/ə lɑt əv ˈbʌbəlz fɔrm ˈæt ðə ˈseɪm taɪm/
 
 13
 00:00:42,400 --> 00:00:45,533
-all these bubbles try to escape at once
+All these bubbles try to escape at once
+/ɔl ðiz ˈbʌbəlz traɪ tu ɪsˈkeɪp ət wʌns/
 
 14
 00:00:46,133 --> 00:00:50,466
-the bubbles push the water out of the way and jump out
+The bubbles push the water out of the way and jump out
+/ðə ˈbʌbəlz pʊʃ ðə ˈwɔtər aʊt əv ðə weɪ ænd ʤʌmp aʊt/
 
 15
 00:00:50,733 --> 00:00:53,399
-this is what we call boiling water
+This is what we call boiling water
+/ðɪs ɪz wət wi kɔl ˈbɔɪlɪŋ ˈwɔtər/
 
 16
 00:00:53,933 --> 00:00:56,933
-more and more water turns into gas
+More and more water turns into gas
+/mɔr ænd mɔr ˈwɔtər tɜrnz ˈɪntu ɡæs/
 
 17
 00:00:57,333 --> 00:01:00,066
-more of it disappears into the air
+More of it disappears into the air
+/mɔr əv ɪt ˌdɪsəˈpɪrz ˈɪntu ðə ɛr/
 
 18
 00:01:00,533 --> 00:01:01,399
-after a while
+After a while
+/ˈæftər ə waɪl/
 
 19
 00:01:01,700 --> 00:01:04,133
-every drop of the water will be gone
+Every drop of the water will be gone
+/ˈɛvri drɑp əv ðə ˈwɔtər wɪl bi ɡɔn/
 
 20
 00:01:04,366 --> 00:01:05,866
-try it and see
+Try it and see
+/traɪ ɪt ænd si/
 `,
     lyric2: `Bubbles in Boiling Water
 Where do the bubbles come from when you boil water?
@@ -835,83 +1005,103 @@ Try it and see!`
     src: './assets/audios/LPTD1.1/Unit 9 The Blue Sky.mp3',
     lyric1: `1
 00:00:00,266 --> 00:00:02,799
-unit 9 the blue sky
+Unit 9 The Blue Sky
+/ˈjuːnɪt naɪn ðə bluː skaɪ/
 
 2
 00:00:04,133 --> 00:00:07,499
 Joe asked me something about science just now
+/dʒoʊ æskt miː ˈsəmθɪŋ əˈbaʊt ˈsaɪəns ˈdʒəst naʊ/
 
 3
 00:00:07,700 --> 00:00:09,766
-but I didn't know the answer
+But I didn't know the answer
+/bət aɪ ˈdɪdənt noʊ ðə ˈænsər/
 
 4
 00:00:10,066 --> 00:00:12,799
-I'm good at science ask me
+I'm good at science. Ask me
+/aɪm ɡʊd æt ˈsaɪəns ˈæsk miː/
 
 5
 00:00:13,300 --> 00:00:16,300
-okay why is the sky blue
+Okay, why is the sky blue?
+/oʊˈkeɪ, waɪ ɪz ðə skaɪ bluː/
 
 6
 00:00:16,933 --> 00:00:19,466
 I'll explain it in a simple way
+/aɪl ɪkˈspleɪn ɪt ɪn ə ˈsɪmpəl weɪ/
 
 7
 00:00:19,800 --> 00:00:23,366
-light comes through the air from the sun in waves
+Light comes through the air from the sun in waves
+/laɪt kʌmz θruː ðə ɛr frəm ðə sʌn ɪn weɪvz/
 
 8
 00:00:23,733 --> 00:00:27,466
-the light is in many colors right right
+The light is in many colors, right? Right.
+/ðə laɪt ɪz ɪn ˈmɛni ˈkʌlərz, raɪt? Raɪt./
 
 9
 00:00:27,800 --> 00:00:31,333
-blue light waves are smaller than air molecules
+Blue light waves are smaller than air molecules
+/bluː laɪt weɪvz ər ˈsmɔlər ðæn ɛr ˈmɒlɪˌkjuːlz/
 
 10
 00:00:31,500 --> 00:00:34,700
-they sometimes get absorbed by these molecules
+They sometimes get absorbed by these molecules
+/ðeɪ ˈsəmˌtaɪmz ɡɛt əbˈsɔrbd baɪ ðiz ˈmɒlɪˌkjuːlz/
 
 11
 00:00:35,266 --> 00:00:37,666
-okay what happens then
+Okay, what happens then?
+/oʊˈkeɪ, wət ˈhæpənz ˈðɛn/
 
 12
 00:00:38,333 --> 00:00:42,166
-then the blue light waves scatter in many directions
+Then the blue light waves scatter in many directions
+/ðɛn ðə bluː laɪt weɪvz ˈskætər ɪn ˈmɛni dɪˈrɛkʃənz/
 
 13
 00:00:42,300 --> 00:00:45,266
-your eyes see this blue light from above you
+Your eyes see this blue light from above you
+/jʊər aɪz siː ðɪs bluː laɪt frəm əˈbəv jʊ/
 
 14
 00:00:45,566 --> 00:00:47,666
-after it leaves the air molecules
+After it leaves the air molecules
+/ˈæftər ɪt liːvz ðə ɛr ˈmɒlɪˌkjuːlz/
 
 15
 00:00:48,300 --> 00:00:51,066
-so that is what makes the sky blue
+So, that is what makes the sky blue
+/soʊ, ðæt ɪz wət meɪks ðə skaɪ bluː/
 
 16
 00:00:51,533 --> 00:00:53,966
-what happens to the other colors
+What happens to the other colors?
+/wət ˈhæpənz tu ðə ˈʌðər ˈkʌlərz/
 
 17
 00:00:54,333 --> 00:00:57,133
-they reflect off the things that they hit
+They reflect off the things that they hit
+/ðeɪ rɪˈflɛkt ɔf ðə θɪŋz ðæt ðeɪ hɪt/
 
 18
 00:00:57,466 --> 00:00:58,966
-your shirt is red
+Your shirt is red
+/jʊər ʃɜrt ɪz rɛd/
 
 19
 00:00:59,133 --> 00:01:02,866
-because our eyes see the red light reflected from it
+Because our eyes see the red light reflected from it
+/bɪˈkɔz aʊr aɪz siː ðə rɛd laɪt rɪˈflɛktɪd frəm ɪt/
 
 20
 00:01:03,600 --> 00:01:06,800
-now I understand why the sky is blue
+Now I understand why the sky is blue
+/naʊ aɪ ˌʌndərˈstænd waɪ ðə skaɪ ɪz bluː/
 `,
     lyric2: `The Blue Sky
 B :   Joe asked me something about science just now. But I didn’t know the answer.
@@ -933,83 +1123,103 @@ B :   Now I understand why the sky is blue!`
     src: './assets/audios/LPTD1.1/Unit 10 A New Camera.mp3',
     lyric1: `1
 00:00:00,200 --> 00:00:02,666
-unit 10 a new camera
+Unit 10 A New Camera
+/ˈjuːnɪt tɛn ə nu ˈkæmərə/
 
 2
 00:00:03,800 --> 00:00:06,666
 I just bought a digital camera
+/aɪ dʒʌst bɔt ə ˈdɪdʒɪtl ˈkæmərə/
 
 3
 00:00:06,733 --> 00:00:09,199
-what is wrong with your old camera
+What is wrong with your old camera?
+/wʌt ɪz rɒŋ wɪð jʊər oʊld ˈkæmərə/
 
 4
 00:00:09,400 --> 00:00:11,600
-nothing I bought this one
+Nothing. I bought this one
+/ˈnʌθɪŋ. aɪ bɔt ðɪs wʌn/
 
 5
 00:00:11,600 --> 00:00:15,100
-because I want to store my pictures on my computer
+Because I want to store my pictures on my computer
+/bɪˈkɔz aɪ wɑnt tu stɔr maɪ ˈpɪkʧərz ɒn maɪ kəmˈpjuːtər/
 
 6
 00:00:15,100 --> 00:00:20,133
-I see I can also delete pictures that are not very good
+I see. I can also delete pictures that are not very good
+/aɪ siː. aɪ kæn ɔlsoʊ dɪˈliːt ˈpɪkʧərz ðæt ər nɑt ˈvɛri ɡʊd/
 
 7
 00:00:20,400 --> 00:00:22,000
 I don't have to print them
+/aɪ doʊnt hæv tu prɪnt ðɛm/
 
 8
 00:00:22,000 --> 00:00:24,700
 I like to print all my photos
+/aɪ laɪk tu prɪnt ɔl maɪ ˈfoʊtoʊz/
 
 9
 00:00:24,766 --> 00:00:27,366
-that's why I like the old cameras
+That's why I like the old cameras
+/ðæts waɪ aɪ laɪk ðə oʊld ˈkæmərəz/
 
 10
 00:00:27,500 --> 00:00:30,400
-oh you can print digital photos too
+Oh, you can print digital photos too
+/oʊ, jʊ kæn prɪnt ˈdɪdʒɪtl ˈfoʊtoʊz tuː/
 
 11
 00:00:30,400 --> 00:00:32,733
-many shops will print them for you
+Many shops will print them for you
+/ˈmɛni ʃɒps wɪl prɪnt ðɛm fɔr jʊ/
 
 12
 00:00:32,800 --> 00:00:33,600
-really
+Really?
+/ˈrɪli/
 
 13
 00:00:33,866 --> 00:00:38,333
-yes you can even buy a good printer and do it from home
+Yes, you can even buy a good printer and do it from home
+/jɛs, jʊ kæn ˈivən baɪ ə ɡʊd ˈprɪntər ænd du ɪt frəm hoʊm/
 
 14
 00:00:38,500 --> 00:00:40,000
-that seems easy
+That seems easy
+/ðæt simz ˈizi/
 
 15
 00:00:40,166 --> 00:00:43,133
-how do you store these digital pictures
+How do you store these digital pictures?
+/haʊ du jʊ stɔr ˈðiz ˈdɪdʒɪtl ˈpɪkʧərz/
 
 16
 00:00:43,300 --> 00:00:46,000
-you can store the pictures on your computer
+You can store the pictures on your computer
+/jʊ kæn stɔr ðə ˈpɪkʧərz ɒn jʊər kəmˈpjuːtər/
 
 17
 00:00:46,066 --> 00:00:48,399
-but you might run out of space
+But you might run out of space
+/bət jʊ ˈmaɪt rʌn aʊt ʌv speɪs/
 
 18
 00:00:48,700 --> 00:00:52,533
 I save all the pictures I like on compact discs
+/aɪ seɪv ɔl ðə ˈpɪkʧərz aɪ laɪk ɒn kəmˈpækt dɪskz/
 
 19
 00:00:52,766 --> 00:00:56,733
-you can store more than 700 photos on one CD
+You can store more than 700 photos on one CD
+/jʊ kæn stɔr mɔr ðæn ˈsɛvən hʌndrəd ˈfoʊtoʊz ɒn wʌn siːˈdi/
 
 20
 00:00:57,000 --> 00:01:00,933
-great maybe I should get a digital camera too
+Great! Maybe I should get a digital camera too
+/ɡreɪt! ˈmeɪbi aɪ ʃʊd ɡɛt ə ˈdɪdʒɪtl ˈkæmərə tuː/
 `,
     lyric2: `A New Camera
 M:   I just bought a digital camera!

@@ -12,7 +12,9 @@ import {
   Select,
   Tabs,
   Modal,
-  InputNumber
+  InputNumber,
+  Dropdown,
+  Menu
 } from 'ant-design-vue'
 import App from './App.vue'
 
@@ -29,5 +31,7 @@ app.use(Select)
 app.use(Tabs)
 app.use(Modal)
 app.use(InputNumber)
+app.use(Dropdown)
+app.use(Menu)
 
 app.mount('#app')

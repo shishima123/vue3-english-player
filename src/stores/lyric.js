@@ -11,6 +11,7 @@ export const useLyricStore = defineStore('lyric', () => {
   // ref
   let currentLyricState = ref({})
   let selectedLyricTypeState = ref('lyric1')
+  let isShowIPAState = ref(false)
   let lyricRef = ref()
 
   let convertLyricComputed = computed(() => {
@@ -18,30 +19,34 @@ export const useLyricStore = defineStore('lyric', () => {
       return []
     }
 
+    let rawLyric = playerStore.currentSongState[selectedLyricTypeState.value]
+    if (selectedLyricTypeState.value !== 'lyric1') {
+      return rawLyric.split('\n').map((lyric, id) => ({
+        id,
+        lyric
+      }))
+    }
+
     let lyricConverted = []
-    let split = playerStore.currentSongState[selectedLyricTypeState.value].split(/\n\s*\n/)
-    for (let i = 0; i < split.length; i++) {
-      let subtitle = split[i]
-
-      let [idLine, timeLine, ...textLines] = subtitle.split('\n')
+    rawLyric.split(/\n\s*\n/).forEach((subtitle) => {
+      let [idLine, timeString, lyric, ipa] = subtitle.split('\n')
       let id = parseInt(idLine.trim())
-      // type sub has no time
-      if (isNaN(id)) {
-        return [idLine, timeLine, ...textLines].map((subtitle, id) => ({
-          id,
-          text: subtitle
-        }))
-      }
-
-      // type sub has time
-      let timeString = timeLine.trim()
-      let text = textLines.join('\n').trim()
-      let timeSplit = timeLine.trim().split('-->')
+      let timeSplit = timeString.trim().split('-->')
       let [startString, endString] = timeSplit
       let start = timeStringToSecond(timeSplit[0])
       let end = timeStringToSecond(timeSplit[1])
-      lyricConverted.push({ id, timeString, text, start, end, startString, endString, over: false })
-    }
+      lyricConverted.push({
+        id,
+        timeString: timeString.trim(),
+        lyric: lyric.trim(),
+        ipa: ipa ? ipa : '',
+        start,
+        end,
+        startString,
+        endString,
+        over: false
+      })
+    })
     return lyricConverted
   })
 
@@ -75,6 +80,7 @@ export const useLyricStore = defineStore('lyric', () => {
     currentLyricState,
     selectedLyricTypeState,
     lyricRef,
+    isShowIPAState,
     convertLyricComputed,
     changeCurrentLyricState,
     scrollToActiveInLyrics,

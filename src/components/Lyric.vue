@@ -6,6 +6,9 @@ import { useLyricStore } from '@/stores/lyric'
 import { usePlayerStore } from '@/stores/player'
 import { storeToRefs } from 'pinia'
 
+// icons
+import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
+
 // store
 const navMobileStore = useNavMobileStore()
 const repeatStore = useRepeatStore()
@@ -18,6 +21,7 @@ let lyricTypesOptionsState = ref([
   { value: 'lyric1', label: 'Lyric 1' },
   { value: 'lyric2', label: 'Lyric 2' }
 ])
+let settingDropdownState = ref(false)
 
 // computed
 let showTimeStringLyricComputed = computed(() => {
@@ -36,11 +40,27 @@ let showTimeStringLyricComputed = computed(() => {
     :class="{ 'playlist-lyrics-section-active': navMobileStore.showLyricsState }"
   >
     <div class="sticky top-0 bg-white z-10 transition">
-      <a-select
-        v-model:value="lyricStore.selectedLyricTypeState"
-        class="!w-[110px] !absolute top-[5px] left-[10px]"
-        :options="lyricTypesOptionsState"
-      />
+      <div class="flex items-center absolute top-[5px] left-[10px]">
+        <a-select
+          v-model:value="lyricStore.selectedLyricTypeState"
+          class="!w-[110px] mr-3"
+          :options="lyricTypesOptionsState"
+        />
+        <a-dropdown v-model:open="settingDropdownState" trigger="hover" placement="bottom" arrow>
+          <a class="ant-dropdown-link" @click.prevent>
+            <Cog6ToothIcon class="h-6 w-6 hover:text-blue-500 transition cursor-pointer" />
+          </a>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item key="1">
+                <a-switch v-model:checked="lyricStore.isShowIPAState" />
+                <span class="ml-3">Show IPA</span>
+              </a-menu-item>
+            </a-menu>
+          </template>
+        </a-dropdown>
+      </div>
+
       <h3 class="text-lg text-center py-3 font-bold">Lyrics</h3>
     </div>
     <div class="py-5 px-7 text-center scrollbar overflow-y-auto overflow-x-hidden" ref="lyricRef">
@@ -55,13 +75,14 @@ let showTimeStringLyricComputed = computed(() => {
         }"
         @click="playerStore.setCurrentlyTimer(lyric.start || 0, lyric.end)"
       >
-        <span class="text-2xs text-gray-400" v-if="showTimeStringLyricComputed"
-          >({{ lyric.startString }})</span
-        >
-        <span class="first-letter:capitalize inline-block mx-1">{{ lyric.text }}</span>
-        <span class="text-2xs text-gray-400" v-if="showTimeStringLyricComputed"
-          >({{ lyric.endString }})</span
-        >
+        <span class="text-2xs text-gray-400" v-if="showTimeStringLyricComputed">
+          ({{ lyric.startString }})
+        </span>
+        <span class="first-letter:capitalize block mx-1">{{ lyric.lyric }}</span>
+        <span class="block mx-1" v-if="lyricStore.isShowIPAState">{{ lyric.ipa }}</span>
+        <span class="text-2xs text-gray-400" v-if="showTimeStringLyricComputed">
+          ({{ lyric.endString }})
+        </span>
       </p>
     </div>
   </section>
