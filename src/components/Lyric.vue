@@ -41,11 +41,6 @@ let showTimeStringLyricComputed = computed(() => {
   >
     <div class="sticky top-0 bg-white z-10 transition">
       <div class="flex items-center absolute top-[5px] right-[10px]">
-        <a-select
-          v-model:value="lyricStore.selectedLyricTypeState"
-          class="!w-[110px] mr-3"
-          :options="lyricTypesOptionsState"
-        />
         <a-dropdown v-model:open="settingDropdownState" trigger="hover" placement="bottom" arrow>
           <a class="ant-dropdown-link" @click.prevent>
             <Cog6ToothIcon class="h-6 w-6 hover:text-blue-500 transition cursor-pointer" />
@@ -59,6 +54,11 @@ let showTimeStringLyricComputed = computed(() => {
             </a-menu>
           </template>
         </a-dropdown>
+        <a-select
+          v-model:value="lyricStore.selectedLyricTypeState"
+          class="!w-[110px] ml-3"
+          :options="lyricTypesOptionsState"
+        />
       </div>
 
       <h3 class="text-lg md:text-center py-3 font-bold pl-7 md:pl-0">Lyrics</h3>
