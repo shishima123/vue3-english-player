@@ -40,7 +40,7 @@ let showTimeStringLyricComputed = computed(() => {
     :class="{ 'playlist-lyrics-section-active': navMobileStore.showLyricsState }"
   >
     <div class="sticky top-0 bg-white z-10 transition">
-      <div class="flex items-center absolute top-[5px] left-[10px]">
+      <div class="flex items-center absolute top-[5px] right-[10px]">
         <a-select
           v-model:value="lyricStore.selectedLyricTypeState"
           class="!w-[110px] mr-3"
@@ -61,7 +61,7 @@ let showTimeStringLyricComputed = computed(() => {
         </a-dropdown>
       </div>
 
-      <h3 class="text-lg text-center py-3 font-bold">Lyrics</h3>
+      <h3 class="text-lg md:text-center py-3 font-bold pl-7 md:pl-0">Lyrics</h3>
     </div>
     <div class="py-5 px-7 text-center scrollbar overflow-y-auto overflow-x-hidden" ref="lyricRef">
       <p
@@ -79,7 +79,9 @@ let showTimeStringLyricComputed = computed(() => {
           ({{ lyric.startString }})
         </span>
         <span class="first-letter:capitalize block mx-1">{{ lyric.lyric }}</span>
-        <span class="block mx-1" v-if="lyricStore.isShowIPAState">{{ lyric.ipa }}</span>
+        <span class="block mx-1 text-sm text-gray-400" v-if="lyricStore.isShowIPAState">
+          {{ lyric.ipa }}
+        </span>
         <span class="text-2xs text-gray-400" v-if="showTimeStringLyricComputed">
           ({{ lyric.endString }})
         </span>

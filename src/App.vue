@@ -23,6 +23,7 @@ import {
   ClockIcon,
   CloudArrowDownIcon
 } from '@heroicons/vue/24/outline'
+import { useLyricStore } from '@/stores/lyric'
 
 // store
 const navMobileStore = useNavMobileStore()
@@ -31,6 +32,7 @@ const sleepTimerStore = useSleepTimerStore()
 const replayStore = useReplayStore()
 const playerStore = usePlayerStore()
 const repeatStore = useRepeatStore()
+const lyricStore = useLyricStore()
 
 // ref
 let activeTab = ref('1')
@@ -41,6 +43,7 @@ function setDefaultSettingFromLocalStorage() {
   sleepTimerStore.setDefaultSettingFromLocalStorage()
   syncStore.setDefaultSettingFromLocalStorage()
   replayStore.setDefaultSettingFromLocalStorage()
+  lyricStore.setDefaultSettingFromLocalStorage()
 
   if (localStorage.activeTab) {
     activeTab.value = localStorage.activeTab
@@ -105,7 +108,7 @@ watch(activeTab, async (value) => {
             <span class="flex justify-center"><ClockIcon class="h-6 w-6" /></span>
             <span
               v-if="sleepTimerStore.isSleepTimerActive"
-              class="absolute flex h-3 w-3 top-[5px] right-[0px] text-2xs text-emerald-500"
+              class="absolute bg-green-600 text-green-100 px-[5px] text-xs font-bold rounded-full top-[0px] right-[-4px]"
             >
               {{ sleepTimerStore.sleepRemainingTimeState }}
             </span>

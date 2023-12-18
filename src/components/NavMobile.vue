@@ -16,7 +16,7 @@ const navMobileStore = useNavMobileStore()
       @click="navMobileStore.activeNavMobile('playlist')"
     >
       <span class="flex justify-center">
-        <QueueListIcon class="h-5 w-5" />
+        <QueueListIcon class="h-7 w-7" />
       </span>
     </div>
     <div
@@ -25,7 +25,7 @@ const navMobileStore = useNavMobileStore()
       @click="navMobileStore.activeNavMobile('lyrics')"
     >
       <span class="flex justify-center">
-        <MusicalNoteIcon class="h-5 w-5" />
+        <MusicalNoteIcon class="h-7 w-7" />
       </span>
     </div>
   </section>

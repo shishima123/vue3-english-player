@@ -4,11 +4,13 @@ import { getCurrentUser, getDatabaseList, setDatabaseList } from '@/configs/fire
 import { usePlayerStore } from '@/stores/player'
 import { useReplayStore } from '@/stores/replay'
 import { useRepeatStore } from '@/stores/repeat'
+import { useLyricStore } from '@/stores/lyric'
 export const useSyncStore = defineStore('sync', () => {
   // store
   const playerStore = usePlayerStore()
   const replayStore = useReplayStore()
   const repeatStore = useRepeatStore()
+  const lyricStore = useLyricStore()
 
   // ref
   let syncFlagState = ref(true)
@@ -50,7 +52,7 @@ export const useSyncStore = defineStore('sync', () => {
     data.replayToState = Number(replayStore.replayToState)
     data.replayPickedState = replayStore.replayPickedState
     data.sleepTimeState = Number(repeatStore.sleepTimeState)
-
+    data.isShowIPAState = lyricStore.isShowIPAState
     await setDatabaseList('sync', data)
   }
 
