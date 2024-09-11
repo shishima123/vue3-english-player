@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { FirebaseEnums, getCurrentUser, signInFirebase } from '@/configs/firebase'
 import { useSyncStore } from '@/stores/sync'
+import { setTimeout } from 'worker-timers'
 // icons
 import { ArrowPathIcon } from '@heroicons/vue/24/outline'
 import { usePlayerStore } from '@/stores/player'

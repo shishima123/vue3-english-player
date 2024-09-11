@@ -8,6 +8,7 @@ import { usePlaylistStore } from '@/stores/playlist'
 import { useRepeatStore } from '@/stores/repeat'
 import { formatTimer } from '@/helpers/timer'
 import { useSyncStore } from '@/stores/sync'
+import {  setTimeout } from 'worker-timers';
 
 export const usePlayerStore = defineStore('player', () => {
   // store

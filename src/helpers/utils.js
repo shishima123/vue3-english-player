@@ -1,4 +1,5 @@
 import { formatTimer } from './timer'
+import {  setTimeout } from 'worker-timers';
 
 /**
  * Insert initial songs params

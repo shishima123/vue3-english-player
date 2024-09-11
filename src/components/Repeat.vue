@@ -6,6 +6,7 @@ import { useRepeatStore } from '@/stores/repeat'
 import { storeToRefs } from 'pinia'
 import { range } from '@/helpers/utils'
 import { usePlayerStore } from '@/stores/player'
+import {  setTimeout } from 'worker-timers';
 
 // icons
 import { AdjustmentsVerticalIcon, XCircleIcon } from '@heroicons/vue/24/outline'

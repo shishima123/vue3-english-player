@@ -3,6 +3,7 @@ import { computed, watch } from 'vue'
 import { useSleepTimerStore } from '@/stores/sleepTimer'
 import { storeToRefs } from 'pinia'
 import { usePlayerStore } from '@/stores/player'
+import { clearInterval, setInterval } from 'worker-timers'
 
 // store
 const sleepTimerStore = useSleepTimerStore()
