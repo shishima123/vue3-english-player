@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { threatSongs } from '@/helpers/utils'
 import songMocks from '@/mocks/songs'
 import { useReplayStore } from '@/stores/replay'
@@ -8,7 +8,8 @@ import { usePlaylistStore } from '@/stores/playlist'
 import { useRepeatStore } from '@/stores/repeat'
 import { formatTimer } from '@/helpers/timer'
 import { useSyncStore } from '@/stores/sync'
-import {  setTimeout } from 'worker-timers';
+import { setTimeout } from 'worker-timers'
+import { useStorage } from '@vueuse/core'
 
 export const usePlayerStore = defineStore('player', () => {
   // store
@@ -21,12 +22,12 @@ export const usePlayerStore = defineStore('player', () => {
   // ref
   let currentSongState = ref({})
   let songsState = ref(threatSongs(songMocks))
-  let songIndexState = ref(0)
+  let songIndexState = useStorage('songIndexState', 0)
   let playerState = ref(new Audio())
   let isPlayingState = ref(false)
   let currentlyTimerState = ref('00:00')
   let seekSliderState = ref(0)
-  let volumeSliderState = ref(100)
+  let volumeSliderState = useStorage('volumeSliderState', 100)
 
   function play() {
     playerState.value.play()
@@ -38,7 +39,8 @@ export const usePlayerStore = defineStore('player', () => {
       return true
     }
 
-    await repeatStore.resetSeekSlider()
+    repeatStore.resetSeekSlider()
+
     replayStore.setLoopsCount(0)
     songIndexState.value = calcCurrentSongIndex(songIndexInput)
     await setCurrentSong()
@@ -157,30 +159,9 @@ export const usePlayerStore = defineStore('player', () => {
     })
   }
 
-  function setDefaultSettingFromLocalStorage() {
-    if (localStorage.volumeSliderState) {
-      volumeSliderState.value = Number(localStorage.volumeSliderState)
-    }
-
-    if (localStorage.songIndexState) {
-      songIndexState.value =
-        Number(localStorage.songIndexState) > songsState.value.length - 1
-          ? 0
-          : Number(localStorage.songIndexState)
-    }
-  }
-
   function resetSeekSlider() {
     seekSliderState.value = 0
   }
-
-  watch(songIndexState, async (value) => {
-    localStorage.songIndexState = value
-    await syncStore.syncUpload()
-  })
-  watch(volumeSliderState, async (value) => {
-    localStorage.volumeSliderState = value
-  })
 
   return {
     currentSongState,
@@ -198,7 +179,6 @@ export const usePlayerStore = defineStore('player', () => {
     changeSong,
     setCurrentlyTimer,
     setCurrentSong,
-    setDefaultSettingFromLocalStorage,
     setPlayerSource,
     registerListener
   }

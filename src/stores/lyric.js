@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { timeStringToSecond } from '@/helpers/timer'
 import { scrollToActiveElement } from '@/helpers/utils'
 import { usePlayerStore } from '@/stores/player'
+import { useStorage } from '@vueuse/core'
 
 export const useLyricStore = defineStore('lyric', () => {
   // store
@@ -11,7 +12,7 @@ export const useLyricStore = defineStore('lyric', () => {
   // ref
   let currentLyricState = ref({})
   let selectedLyricTypeState = ref('lyric1')
-  let isShowIPAState = ref(false)
+  let isShowIPAState = useStorage('isShowIPAState', false)
   let lyricRef = ref()
 
   let convertLyricComputed = computed(() => {
@@ -64,12 +65,6 @@ export const useLyricStore = defineStore('lyric', () => {
     lyricRef.value.scrollTo({ top: 0 })
   }
 
-  function setDefaultSettingFromLocalStorage() {
-    if (localStorage.isShowIPAState) {
-      isShowIPAState.value = localStorage.isShowIPAState === 'true'
-    }
-  }
-
   watch(currentLyricState, async (value) => {
     if (value) {
       convertLyricComputed.value.map((el) => {
@@ -82,10 +77,6 @@ export const useLyricStore = defineStore('lyric', () => {
     scrollToActiveInLyrics()
   })
 
-  watch(isShowIPAState, async (value) => {
-    localStorage.isShowIPAState = value
-  })
-
   return {
     currentLyricState,
     selectedLyricTypeState,
@@ -94,7 +85,6 @@ export const useLyricStore = defineStore('lyric', () => {
     convertLyricComputed,
     changeCurrentLyricState,
     scrollToActiveInLyrics,
-    scrollToTopInLyrics,
-    setDefaultSettingFromLocalStorage
+    scrollToTopInLyrics
   }
 })

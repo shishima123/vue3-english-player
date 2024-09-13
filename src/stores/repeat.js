@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia'
-import { ref, watch, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { usePlayerStore } from '@/stores/player'
-import { useSyncStore } from '@/stores/sync'
+import { useStorage } from '@vueuse/core'
 
 export const useRepeatStore = defineStore('repeat', () => {
   // store
   const playerStore = usePlayerStore()
-  const syncStore = useSyncStore()
 
   // ref
   let isRepeatActiveState = ref(false)
@@ -17,7 +16,7 @@ export const useRepeatStore = defineStore('repeat', () => {
   let seekSliderState = ref([0, 0])
   let isSleepActiveState = ref(true)
   let playAfterSleepState = ref()
-  let sleepTimeState = ref(5)
+  let sleepTimeState = useStorage('repeatSleepTimeState', 5)
 
   let syncStartActiveState = ref(true)
   let syncEndActiveState = ref(true)
@@ -38,11 +37,6 @@ export const useRepeatStore = defineStore('repeat', () => {
       return endTimeState.value + syncEndValueState.value
     }
     return endTimeState.value
-  })
-
-  watch(sleepTimeState, async (value) => {
-    localStorage.sleepTimeState = value
-    await syncStore.syncUpload()
   })
 
   return {

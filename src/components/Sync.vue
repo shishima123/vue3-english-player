@@ -6,12 +6,12 @@ import { setTimeout } from 'worker-timers'
 // icons
 import { ArrowPathIcon } from '@heroicons/vue/24/outline'
 import { usePlayerStore } from '@/stores/player'
-
-const emit = defineEmits(['setDefaultSettingFromLocalStorage'])
+import { useRepeatStore } from '@/stores/repeat'
 
 // store
 const syncStore = useSyncStore()
 const playerStore = usePlayerStore()
+const repeatStore = useRepeatStore()
 
 // ref
 let isSyncing = ref(false)
@@ -20,7 +20,7 @@ async function onSync() {
   isSyncing.value = true
   try {
     await syncStore.syncDownload(true)
-    await emit('setDefaultSettingFromLocalStorage')
+    repeatStore.resetSeekSlider()
     await playerStore.setCurrentSong()
     await playerStore.setPlayerSource()
   } catch (error) {

@@ -5,6 +5,8 @@ import { usePlayerStore } from '@/stores/player'
 import { useReplayStore } from '@/stores/replay'
 import { useRepeatStore } from '@/stores/repeat'
 import { useLyricStore } from '@/stores/lyric'
+import { useStorage } from '@vueuse/core'
+
 export const useSyncStore = defineStore('sync', () => {
   // store
   const playerStore = usePlayerStore()
@@ -13,7 +15,7 @@ export const useSyncStore = defineStore('sync', () => {
   const lyricStore = useLyricStore()
 
   // ref
-  let syncFlagState = ref(true)
+  const syncFlagState = useStorage('syncFlagState', true)
   let modalLoginState = ref(false)
 
   function onShowModalLogin() {
@@ -27,16 +29,12 @@ export const useSyncStore = defineStore('sync', () => {
     syncFlagState.value = false
   }
 
-  function setDefaultSettingFromLocalStorage() {
-    syncFlagState.value = localStorage.getItem('syncFlagState') === 'true'
-  }
-
   async function syncDownload(forceSync = false) {
     if (!syncFlagState.value && !forceSync) {
       return
     }
     let dataSync = await getDatabaseList('sync')
-    await setLocalStorage(dataSync)
+    setSyncDataToState(dataSync)
   }
 
   async function syncUpload() {
@@ -49,17 +47,21 @@ export const useSyncStore = defineStore('sync', () => {
     data.songIndexState = Number(playerStore.songIndexState)
     data.replayFromState = Number(replayStore.replayFromState)
     data.replayToState = Number(replayStore.replayToState)
-    data.replayToState = Number(replayStore.replayToState)
     data.replayPickedState = replayStore.replayPickedState
     data.sleepTimeState = Number(repeatStore.sleepTimeState)
     data.isShowIPAState = lyricStore.isShowIPAState
     await setDatabaseList('sync', data)
   }
 
-  function setLocalStorage(dataSync) {
-    Object.keys(dataSync).forEach(function (state) {
-      localStorage[state] = dataSync[state]
-    })
+  function setSyncDataToState(dataSync) {
+    replayStore.loopsState = dataSync.loopsState
+    replayStore.loopsCountState = dataSync.loopsCountState
+    playerStore.songIndexState = dataSync.songIndexState
+    replayStore.replayFromState = dataSync.replayFromState
+    replayStore.replayToState = dataSync.replayToState
+    replayStore.replayPickedState = dataSync.replayPickedState
+    repeatStore.sleepTimeState = dataSync.sleepTimeState
+    lyricStore.isShowIPAState = dataSync.isShowIPAState
   }
 
   // using for prevent sync in first load page
@@ -69,7 +71,6 @@ export const useSyncStore = defineStore('sync', () => {
   })
 
   watch(syncFlagState, async (value) => {
-    localStorage.syncFlagState = value
     if (value) {
       let user = getCurrentUser()
       if (!user) {
@@ -78,14 +79,28 @@ export const useSyncStore = defineStore('sync', () => {
     }
   })
 
+  watch(
+    [
+      () => replayStore.loopsState,
+      () => replayStore.loopsCountState,
+      () => playerStore.songIndexState,
+      () => replayStore.replayFromState,
+      () => replayStore.replayToState,
+      () => replayStore.replayPickedState,
+      () => repeatStore.sleepTimeState,
+      () => lyricStore.isShowIPAState
+    ],
+    async () => {
+      await syncUpload()
+    }
+  )
+
   return {
     syncFlagState,
     modalLoginState,
     onShowModalLogin,
     onHideModalLogin,
-    setDefaultSettingFromLocalStorage,
     syncDownload,
-    syncUpload,
     onTurnOffSync
   }
 })

@@ -1,5 +1,6 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { onMounted } from 'vue'
+import { useStorage } from '@vueuse/core'
 import NavMobile from '@/components/NavMobile.vue'
 import Playlist from '@/components/Playlist.vue'
 import Lyric from '@/components/Lyric.vue'
@@ -23,7 +24,6 @@ import {
   ClockIcon,
   CloudArrowDownIcon
 } from '@heroicons/vue/24/outline'
-import { useLyricStore } from '@/stores/lyric'
 
 // store
 const navMobileStore = useNavMobileStore()
@@ -32,26 +32,12 @@ const sleepTimerStore = useSleepTimerStore()
 const replayStore = useReplayStore()
 const playerStore = usePlayerStore()
 const repeatStore = useRepeatStore()
-const lyricStore = useLyricStore()
 
 // ref
-let activeTab = ref('1')
-
-function setDefaultSettingFromLocalStorage() {
-  playerStore.pause()
-  playerStore.setDefaultSettingFromLocalStorage()
-  sleepTimerStore.setDefaultSettingFromLocalStorage()
-  syncStore.setDefaultSettingFromLocalStorage()
-  replayStore.setDefaultSettingFromLocalStorage()
-  lyricStore.setDefaultSettingFromLocalStorage()
-
-  if (localStorage.activeTab) {
-    activeTab.value = localStorage.activeTab
-  }
-}
+let activeTab = useStorage('activeTab', '1')
 
 onMounted(async () => {
-  await setDefaultSettingFromLocalStorage()
+  playerStore.pause()
   try {
     await syncStore.syncDownload()
   } catch (error) {
@@ -64,10 +50,6 @@ onMounted(async () => {
   await playerStore.setPlayerSource()
   await playerStore.registerListener()
   await repeatStore.updateSeekSlider()
-})
-
-watch(activeTab, async (value) => {
-  localStorage.activeTab = value
 })
 </script>
 
@@ -119,7 +101,7 @@ watch(activeTab, async (value) => {
           <template #tab>
             <CloudArrowDownIcon class="h-6 w-6" />
           </template>
-          <sync @set-default-setting-from-local-storage="setDefaultSettingFromLocalStorage"></sync>
+          <sync></sync>
         </a-tab-pane>
       </a-tabs>
     </section>
