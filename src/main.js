@@ -35,3 +35,5 @@ app.use(Dropdown)
 app.use(Menu)
 
 app.mount('#app')
+
+console.log('v', import.meta.env.PACKAGE_VERSION)
