@@ -37,4 +37,4 @@ app
 
 app.mount('#app')
 
-console.log('v', import.meta.env.PACKAGE_VERSION)
+console.log('Build Date:', import.meta.env.PACKAGE_VERSION)
