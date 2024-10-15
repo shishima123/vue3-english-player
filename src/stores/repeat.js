@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { usePlayerStore } from '@/stores/player'
 import { useStorage } from '@vueuse/core'
+import { clearTimeout } from 'worker-timers'
 
 export const useRepeatStore = defineStore('repeat', () => {
   // store
@@ -26,17 +27,11 @@ export const useRepeatStore = defineStore('repeat', () => {
 
   // a computed ref
   const startTimeComputed = computed(() => {
-    if (syncStartActiveState.value) {
-      return startTimeState.value + syncStartValueState.value
-    }
-    return startTimeState.value
+    return Math.round((startTimeState.value + syncStartValueState.value) * 100) / 100
   })
 
   const endTimeComputed = computed(() => {
-    if (syncEndActiveState.value) {
-      return endTimeState.value + syncEndValueState.value
-    }
-    return endTimeState.value
+    return Math.round((endTimeState.value + syncEndValueState.value) * 100) / 100
   })
 
   return {
@@ -60,7 +55,8 @@ export const useRepeatStore = defineStore('repeat', () => {
     resetSeekSlider,
     disableRepeat,
     changeSyncValue,
-    resetSyncValueState
+    resetSyncValueState,
+    clearTimeOutRepeat
   }
 
   function setTimeWhenClickLyric(startTime, endTime) {
@@ -83,7 +79,7 @@ export const useRepeatStore = defineStore('repeat', () => {
 
   function disableRepeat() {
     isRepeatActiveState.value = false
-    clearTimeout(playAfterSleepState.value)
+    clearTimeOutRepeat()
   }
 
   function changeSyncValue(syncState, type) {
@@ -98,5 +94,9 @@ export const useRepeatStore = defineStore('repeat', () => {
 
   function resetSyncValueState(syncState) {
     eval(syncState).value = 0
+  }
+
+  function clearTimeOutRepeat() {
+    clearTimeout(playAfterSleepState.value)
   }
 })

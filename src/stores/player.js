@@ -7,7 +7,6 @@ import { useLyricStore } from '@/stores/lyric'
 import { usePlaylistStore } from '@/stores/playlist'
 import { useRepeatStore } from '@/stores/repeat'
 import { formatTimer } from '@/helpers/timer'
-import { useSyncStore } from '@/stores/sync'
 import { setTimeout } from 'worker-timers'
 import { useStorage } from '@vueuse/core'
 
@@ -17,7 +16,6 @@ export const usePlayerStore = defineStore('player', () => {
   const lyricStore = useLyricStore()
   const playlistStore = usePlaylistStore()
   const repeatStore = useRepeatStore()
-  const syncStore = useSyncStore()
 
   // ref
   let currentSongState = ref({})
@@ -58,6 +56,7 @@ export const usePlayerStore = defineStore('player', () => {
   function pause() {
     playerState.value.pause()
     isPlayingState.value = false
+    repeatStore.clearTimeOutRepeat()
   }
 
   async function next() {
@@ -132,9 +131,12 @@ export const usePlayerStore = defineStore('player', () => {
           // sleep
           if (repeatStore.isSleepActiveState) {
             playerState.value.pause()
-            repeatStore.playAfterSleepState = setTimeout(() => {
-              playerState.value.play()
-            }, repeatStore.sleepTimeState * 1000)
+
+            if (isPlayingState.value) {
+              repeatStore.playAfterSleepState = setTimeout(() => {
+                playerState.value.play()
+              }, repeatStore.sleepTimeState * 1000)
+            }
           }
         }
       }
@@ -163,6 +165,13 @@ export const usePlayerStore = defineStore('player', () => {
     seekSliderState.value = 0
   }
 
+  function repeat() {
+    playerState.value.pause()
+    repeatStore.clearTimeOutRepeat()
+    playerState.value.currentTime = repeatStore.startTimeComputed
+    playerState.value.play()
+  }
+
   return {
     currentSongState,
     songsState,
@@ -180,6 +189,7 @@ export const usePlayerStore = defineStore('player', () => {
     setCurrentlyTimer,
     setCurrentSong,
     setPlayerSource,
-    registerListener
+    registerListener,
+    repeat
   }
 })

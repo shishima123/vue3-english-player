@@ -9,7 +9,7 @@ import { usePlayerStore } from '@/stores/player'
 import { setTimeout } from 'worker-timers'
 
 // icons
-import { AdjustmentsVerticalIcon, XCircleIcon } from '@heroicons/vue/24/outline'
+import { XCircleIcon } from '@heroicons/vue/24/outline'
 
 // store
 const repeatStore = useRepeatStore()
@@ -50,7 +50,7 @@ function onChangeEndTimePicker(time) {
 
 function onChangeRepeatActive() {
   repeatStore.isRepeatActiveState = !repeatStore.isRepeatActiveState
-  clearTimeout(repeatStore.playAfterSleepState)
+  repeatStore.clearTimeOutRepeat()
 }
 
 onMounted(() => {
@@ -80,7 +80,15 @@ watch(seekSliderState, (value) => {
           <a-radio value="lyric" class="flex py-1">Lyric</a-radio>
         </a-radio-group>
       </div>
-      <div class="flex flex-col">
+      <div class="flex">
+        <button
+          class="btn btn-danger mr-4"
+          v-if="repeatStore.isRepeatActiveState"
+          @click="playerStore.repeat()"
+        >
+          Replay
+        </button>
+
         <button
           class="btn"
           :class="{ active: repeatStore.isRepeatActiveState }"
