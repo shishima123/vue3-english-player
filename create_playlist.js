@@ -5,6 +5,8 @@ const mp3Duration = require('mp3-duration')
 const folderPath =
   'E:\\English\\Listening_Practice_Through_Dictation\\ListeningPracticeThroughDictation_1'
 
+const audioDir = 'LPTD1.1'
+
 // Read the list of files in the folder
 fs.readdir(folderPath, (err, files) => {
   if (err) {
@@ -44,7 +46,7 @@ fs.readdir(folderPath, (err, files) => {
         artist: `LPTD`, // The file's author (here we use the file name)
         seconds: Math.round(duration), // The file's duration (rounded to the nearest integer)
         cover: `require("../assets/images/cover.jpg")`, // Path to the cover image
-        src: `require("../assets/audios/LPTD1.1/${file}")`, // Path to the audio file
+        src: `require("../assets/audios/${audioDir}/${file}")`, // Path to the audio file
         lyric: ``
       }
       // Add the file information to the array

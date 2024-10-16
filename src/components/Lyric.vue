@@ -4,6 +4,7 @@ import { useNavMobileStore } from '@/stores/navMobile'
 import { useRepeatStore } from '@/stores/repeat'
 import { useLyricStore } from '@/stores/lyric'
 import { usePlayerStore } from '@/stores/player'
+import { usePlaylistStore } from '@/stores/playlist'
 import { storeToRefs } from 'pinia'
 
 // icons
@@ -14,6 +15,7 @@ const navMobileStore = useNavMobileStore()
 const repeatStore = useRepeatStore()
 const lyricStore = useLyricStore()
 const playerStore = usePlayerStore()
+const playlistStore = usePlaylistStore()
 
 // ref
 let { lyricRef } = storeToRefs(lyricStore)
@@ -41,24 +43,35 @@ let showTimeStringLyricComputed = computed(() => {
   >
     <div class="sticky top-0 bg-white z-10 transition">
       <div class="flex items-center absolute top-[5px] right-[10px]">
-        <a-dropdown v-model:open="settingDropdownState" trigger="hover" placement="bottom" arrow>
+        <a-dropdown v-model:open="settingDropdownState" trigger="click" placement="bottomRight">
           <a class="ant-dropdown-link" @click.prevent>
             <Cog6ToothIcon class="h-6 w-6 hover:text-blue-500 transition cursor-pointer" />
           </a>
           <template #overlay>
             <a-menu>
               <a-menu-item key="1">
+                <a-select
+                  v-model:value="lyricStore.selectedLyricTypeState"
+                  class="!w-full"
+                  :options="lyricTypesOptionsState"
+                />
+              </a-menu-item>
+
+              <a-menu-item key="2">
+                <a-select
+                  v-model:value="playlistStore.selectPlaylistState"
+                  class="!w-full"
+                  :options="playlistStore.playlistOptions"
+                />
+              </a-menu-item>
+
+              <a-menu-item key="3">
                 <a-switch v-model:checked="lyricStore.isShowIPAState" />
                 <span class="ml-3">Show IPA</span>
               </a-menu-item>
             </a-menu>
           </template>
         </a-dropdown>
-        <a-select
-          v-model:value="lyricStore.selectedLyricTypeState"
-          class="!w-[110px] ml-3"
-          :options="lyricTypesOptionsState"
-        />
       </div>
 
       <h3 class="text-lg md:text-center py-3 font-bold pl-7 md:pl-0">Lyrics</h3>

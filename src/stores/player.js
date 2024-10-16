@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { threatSongs } from '@/helpers/utils'
-import songMocks from '@/mocks/songs'
+import songMocks from '@/mocks/playlist'
 import { useReplayStore } from '@/stores/replay'
 import { useLyricStore } from '@/stores/lyric'
 import { usePlaylistStore } from '@/stores/playlist'
@@ -19,7 +19,7 @@ export const usePlayerStore = defineStore('player', () => {
 
   // ref
   let currentSongState = ref({})
-  let songsState = ref(threatSongs(songMocks))
+  let songsState = ref(threatSongs(songMocks[playlistStore.selectPlaylistState]))
   let songIndexState = useStorage('songIndexState', 0)
   let playerState = ref(new Audio())
   let isPlayingState = ref(false)
@@ -171,6 +171,14 @@ export const usePlayerStore = defineStore('player', () => {
     playerState.value.currentTime = repeatStore.startTimeComputed
     playerState.value.play()
   }
+
+  watch(
+    () => playlistStore.selectPlaylistState,
+    async () => {
+      songsState.value = threatSongs(songMocks[playlistStore.selectPlaylistState])
+      await changeSong(0)
+    }
+  )
 
   return {
     currentSongState,
