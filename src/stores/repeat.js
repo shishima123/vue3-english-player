@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
 import { usePlayerStore } from '@/stores/player'
 import { useStorage } from '@vueuse/core'
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 import { clearTimeout } from 'worker-timers'
 
 export const useRepeatStore = defineStore('repeat', () => {

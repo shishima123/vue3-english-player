@@ -1,21 +1,21 @@
 import 'vue-slider-component/theme/antd.css'
 import './assets/styles/style.css'
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import VueSlider from 'vue-slider-component'
 import {
   ConfigProvider,
-  TimePicker,
-  Switch,
+  Dropdown,
+  InputNumber,
+  Menu,
+  Modal,
   Radio,
   Select,
+  Switch,
   Tabs,
-  Modal,
-  InputNumber,
-  Dropdown,
-  Menu
+  TimePicker
 } from 'ant-design-vue'
+import { createPinia } from 'pinia'
+import { createApp } from 'vue'
+import VueSlider from 'vue-slider-component'
 import App from './App.vue'
 
 const app = createApp(App)

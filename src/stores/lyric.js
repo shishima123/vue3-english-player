@@ -1,9 +1,9 @@
-import { defineStore } from 'pinia'
-import { computed, ref, watch } from 'vue'
 import { timeStringToSecond } from '@/helpers/timer'
 import { scrollToActiveElement } from '@/helpers/utils'
 import { usePlayerStore } from '@/stores/player'
 import { useStorage } from '@vueuse/core'
+import { defineStore } from 'pinia'
+import { computed, ref, watch } from 'vue'
 
 export const useLyricStore = defineStore('lyric', () => {
   // store

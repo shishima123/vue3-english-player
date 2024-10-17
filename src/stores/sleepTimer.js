@@ -1,6 +1,6 @@
+import { useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { useStorage } from '@vueuse/core'
 
 export const useSleepTimerStore = defineStore('sleepTimer', () => {
   // ref

@@ -1,14 +1,14 @@
-import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { formatTimer } from '@/helpers/timer'
 import { threatSongs } from '@/helpers/utils'
 import songMocks from '@/mocks/playlist'
-import { useReplayStore } from '@/stores/replay'
 import { useLyricStore } from '@/stores/lyric'
 import { usePlaylistStore } from '@/stores/playlist'
 import { useRepeatStore } from '@/stores/repeat'
-import { formatTimer } from '@/helpers/timer'
-import { setTimeout } from 'worker-timers'
+import { useReplayStore } from '@/stores/replay'
 import { useStorage } from '@vueuse/core'
+import { defineStore } from 'pinia'
+import { ref, watch } from 'vue'
+import { setTimeout } from 'worker-timers'
 
 export const usePlayerStore = defineStore('player', () => {
   // store

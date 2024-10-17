@@ -1,13 +1,8 @@
+import { useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-import { usePlayerStore } from '@/stores/player'
-import { useSyncStore } from '@/stores/sync'
-import { useStorage } from '@vueuse/core'
 
 export const useReplayStore = defineStore('replay', () => {
-  // store
-  const syncStore = useSyncStore()
-
   // ref
   let replayFlagState = ref(true)
   let replayFromState = useStorage('replayFromState', 1)

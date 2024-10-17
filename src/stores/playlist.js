@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
 import { scrollToActiveElement } from '@/helpers/utils'
 import { useStorage } from '@vueuse/core'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 export const usePlaylistStore = defineStore('playlist', () => {
   // ref

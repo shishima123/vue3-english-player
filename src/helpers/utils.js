@@ -1,5 +1,5 @@
+import { setTimeout } from 'worker-timers'
 import { formatTimer } from './timer'
-import {  setTimeout } from 'worker-timers';
 
 /**
  * Insert initial songs params
@@ -45,4 +45,4 @@ function createSelectObjectFromNumber(number) {
   return obj
 }
 
-export { threatSongs, scrollToActiveElement, range, createSelectObjectFromNumber }
+export { createSelectObjectFromNumber, range, scrollToActiveElement, threatSongs }

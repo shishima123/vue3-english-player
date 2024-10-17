@@ -36,6 +36,7 @@ yarn build
 ```sh
 yarn lint
 ```
+
 ## 💁🏻 Build
 
 Open the terminal/command line and run the following commands in turn:
@@ -43,6 +44,7 @@ Open the terminal/command line and run the following commands in turn:
 ```sh
 make build
 ```
+
 ## 💁🏻 Deploy to github pages
 
 Open the terminal/command line and run the following commands in turn:
@@ -50,6 +52,7 @@ Open the terminal/command line and run the following commands in turn:
 ```sh
 make deploy
 ```
+
 ## 💁🏻 CI/CD
 
 Using GitHub action

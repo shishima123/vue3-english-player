@@ -1,11 +1,11 @@
+import { getCurrentUser, getDatabaseList, setDatabaseList } from '@/configs/firebase'
+import { useLyricStore } from '@/stores/lyric'
+import { usePlayerStore } from '@/stores/player'
+import { useRepeatStore } from '@/stores/repeat'
+import { useReplayStore } from '@/stores/replay'
+import { useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { onMounted, ref, watch } from 'vue'
-import { getCurrentUser, getDatabaseList, setDatabaseList } from '@/configs/firebase'
-import { usePlayerStore } from '@/stores/player'
-import { useReplayStore } from '@/stores/replay'
-import { useRepeatStore } from '@/stores/repeat'
-import { useLyricStore } from '@/stores/lyric'
-import { useStorage } from '@vueuse/core'
 
 export const useSyncStore = defineStore('sync', () => {
   // store
