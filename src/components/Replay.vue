@@ -16,7 +16,7 @@ let songIndexOptionsComputed = computed(() => {
 
 <template>
   <!-- begin:: Loop -->
-  <fieldset class="flex justify-between items-center my-1 fieldset-border">
+  <fieldset class="fieldset-border my-1 flex items-center justify-between">
     <legend>Loops</legend>
     <div>
       <p class="text-base">
@@ -28,7 +28,7 @@ let songIndexOptionsComputed = computed(() => {
         <label for="loops_input">Loop for</label>
         <input
           id="loops_input"
-          class="p-0.5 mx-0.5 w-[30px] text-center text-base border-b border-solid border-gray-600 outline-0"
+          class="mx-0.5 w-[30px] border-b border-solid border-gray-600 p-0.5 text-center text-base outline-0"
           v-model="replayStore.loopsState"
           type="text"
           name="loops-input"
@@ -42,7 +42,7 @@ let songIndexOptionsComputed = computed(() => {
   </fieldset>
   <!-- end:: Loop -->
   <!-- begin:: Replay -->
-  <fieldset class="flex justify-between items-center my-1 fieldset-border">
+  <fieldset class="fieldset-border my-1 flex items-center justify-between">
     <legend>Replay</legend>
     <div class="w-full">
       <a-radio-group

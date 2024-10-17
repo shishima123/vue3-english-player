@@ -64,7 +64,7 @@ function onClosed() {
 </script>
 
 <template>
-  <fieldset class="flex justify-between items-center my-1 fieldset-border">
+  <fieldset class="fieldset-border my-1 flex items-center justify-between">
     <legend>Sync</legend>
     <div>
       <div class="flex items-center text-base">
@@ -75,7 +75,7 @@ function onClosed() {
     <div class="flex flex-col">
       <button class="btn" :class="{ disabled: isSyncing }" @click="onSync">
         Sync Now
-        <span class="flex justify-center ml-2" :class="{ 'animate-spin': isSyncing }">
+        <span class="ml-2 flex justify-center" :class="{ 'animate-spin': isSyncing }">
           <ArrowPathIcon class="h-5 w-5" />
         </span>
       </button>
@@ -91,11 +91,11 @@ function onClosed() {
       centered
     >
       <form @submit.prevent="onSubmit">
-        <span class="block text-xl uppercase font-bold mb-4 text-center">Login</span>
+        <span class="mb-4 block text-center text-xl font-bold uppercase">Login</span>
         <div class="mb-4">
-          <label for="email" class="block text-xs mb-1">Email</label>
+          <label for="email" class="mb-1 block text-xs">Email</label>
           <input
-            class="w-full border rounded p-2 outline-none focus:outline-none focus:border-green-600"
+            class="w-full rounded border p-2 outline-none focus:border-green-600 focus:outline-none"
             type="email"
             name="email"
             id="email"
@@ -104,9 +104,9 @@ function onClosed() {
           />
         </div>
         <div class="mb-6 md:w-full">
-          <label for="password" class="block text-xs mb-1">Password</label>
+          <label for="password" class="mb-1 block text-xs">Password</label>
           <input
-            class="w-full border rounded p-2 outline-none focus:outline-none focus:border-green-600"
+            class="w-full rounded border p-2 outline-none focus:border-green-600 focus:outline-none"
             type="password"
             name="password"
             id="password"
@@ -114,8 +114,8 @@ function onClosed() {
             v-model="password"
           />
         </div>
-        <span v-if="error" class="block text-red-500 text-sm mb-4">{{ error }}</span>
-        <div class="w-full text-center mb-1">
+        <span v-if="error" class="mb-4 block text-sm text-red-500">{{ error }}</span>
+        <div class="mb-1 w-full text-center">
           <button type="submit" :class="{ disabled: isLoggingIn }" class="btn">Login</button>
         </div>
       </form>

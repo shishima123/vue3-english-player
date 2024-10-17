@@ -40,7 +40,7 @@ watch(isSleepTimerActive, async (value, oldValue) => {
 </script>
 
 <template>
-  <fieldset class="flex justify-between items-center my-1 fieldset-border">
+  <fieldset class="fieldset-border my-1 flex items-center justify-between">
     <legend>Sleep timer</legend>
     <div>
       <p class="text-base">
@@ -53,7 +53,7 @@ watch(isSleepTimerActive, async (value, oldValue) => {
         <p class="flex">
           After
           <input
-            class="p-0.5 mx-0.5 w-[30px] text-center text-base border-b border-solid border-gray-600 outline-0"
+            class="mx-0.5 w-[30px] border-b border-solid border-gray-600 p-0.5 text-center text-base outline-0"
             v-model="sleepTimerStore.sleepTimeState"
             type="text"
             name="loops-input"

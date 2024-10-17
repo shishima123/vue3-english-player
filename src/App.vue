@@ -65,7 +65,7 @@ onMounted(async () => {
   >
     <!-- begin:: Player Section -->
     <section
-      class="flex flex-col flex-nowrap order-3 w-full h-full mx-auto overflow-hidden px-[15px] md:p-[10px] bg-white text-base rounded-none md:rounded shadow-none md:shadow-md row-start-1 row-end-3 col-start-1 col-end-2 md:order-1 transition-[height] duration-[350ms] ease-linear"
+      class="order-3 col-start-1 col-end-2 row-start-1 row-end-3 mx-auto flex h-full w-full flex-col flex-nowrap overflow-hidden rounded-none bg-white px-[15px] text-base shadow-none transition-[height] duration-[350ms] ease-linear md:order-1 md:rounded md:p-[10px] md:shadow-md"
       :class="{
         '!h-[var(--player-mobile-height)]':
           navMobileStore.showLyricsState || navMobileStore.showPlaylistState
@@ -90,7 +90,7 @@ onMounted(async () => {
             <span class="flex justify-center"><ClockIcon class="h-6 w-6" /></span>
             <span
               v-if="sleepTimerStore.isSleepTimerActive"
-              class="absolute bg-green-600 text-green-100 px-[5px] text-xs font-bold rounded-full top-[0px] right-[-4px]"
+              class="absolute right-[-4px] top-[0px] rounded-full bg-green-600 px-[5px] text-xs font-bold text-green-100"
             >
               {{ sleepTimerStore.sleepRemainingTimeState }}
             </span>

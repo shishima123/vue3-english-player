@@ -29,11 +29,11 @@ function setVolume() {
 <template>
   <!-- begin:: Player -->
   <div>
-    <h2 class="w-full text-xl font-bold text-center py-4 px-1 text-ellipsis whitespace-nowrap">
+    <h2 class="w-full text-ellipsis whitespace-nowrap px-1 py-4 text-center text-xl font-bold">
       {{ playerStore.currentSongState.title }}
     </h2>
     <div class="mb-5">
-      <div class="flex justify-between px-1 w-full text-xs">
+      <div class="flex w-full justify-between px-1 text-xs">
         <p>{{ playerStore.currentlyTimerState }}</p>
         <p>{{ playerStore.currentSongState.totalTimer }}</p>
       </div>
@@ -50,7 +50,7 @@ function setVolume() {
       ></vue-slider>
     </div>
 
-    <div class="flex items-center justify-center w-3/5 mx-auto">
+    <div class="mx-auto flex w-3/5 items-center justify-center">
       <span class="mr-2 inline-block">
         <SpeakerXMarkIcon class="h-5 w-5" />
       </span>
@@ -65,16 +65,16 @@ function setVolume() {
         <SpeakerWaveIcon class="h-5 w-5" />
       </span>
     </div>
-    <div class="flex justify-center items-center py-5 px-4">
-      <div class="flex justify-between border border-solid border-gray-300 w-3/5 rounded-[30px]">
+    <div class="flex items-center justify-center px-4 py-5">
+      <div class="flex w-3/5 justify-between rounded-[30px] border border-solid border-gray-300">
         <button
-          class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-400 relative py-5 px-7 hover:scale-125 transition bg-transparent"
+          class="relative flex h-[25px] w-[25px] cursor-pointer items-center justify-center rounded-full border-0 bg-transparent px-7 py-5 text-xl text-gray-400 transition hover:scale-125"
           @click="playerStore.prev"
         >
           <span><BackwardIcon class="h-6 w-6" /></span>
         </button>
         <button
-          class="flex justify-center items-center border-0 rounded-full text-xl w-[25px] h-[25px] cursor-pointer text-gray-400 relative py-5 px-7 hover:scale-125 transition bg-transparent"
+          class="relative flex h-[25px] w-[25px] cursor-pointer items-center justify-center rounded-full border-0 bg-transparent px-7 py-5 text-xl text-gray-400 transition hover:scale-125"
           @click="playerStore.next"
         >
           <span><ForwardIcon class="h-6 w-6" /></span>
@@ -83,14 +83,14 @@ function setVolume() {
 
       <div class="absolute">
         <button
-          class="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
+          class="h-[60px] w-[60px] cursor-pointer rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-2xl text-white shadow-2xl transition hover:scale-110 hover:from-cyan-400 hover:to-blue-400"
           v-if="!playerStore.isPlayingState"
           @click="playerStore.play()"
         >
           <span class="flex justify-center"><PlayIcon class="h-7 w-7" /></span>
         </button>
         <button
-          class="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full w-[60px] h-[60px] shadow-2xl cursor-pointer text-2xl text-white hover:scale-110 transition"
+          class="h-[60px] w-[60px] cursor-pointer rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-2xl text-white shadow-2xl transition hover:scale-110"
           v-else
           @click="playerStore.pause"
         >

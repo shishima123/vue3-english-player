@@ -71,9 +71,9 @@ watch(seekSliderState, (value) => {
 </script>
 
 <template>
-  <fieldset class="my-1 fieldset-border">
+  <fieldset class="fieldset-border my-1">
     <legend>Repeat</legend>
-    <div class="flex justify-between items-center">
+    <div class="flex items-center justify-between">
       <div class="mb-3">
         <a-radio-group v-model:value="repeatStore.repeatTypeState" name="repeatType">
           <a-radio value="time" class="flex py-1">Time</a-radio>
@@ -113,7 +113,7 @@ watch(seekSliderState, (value) => {
       ></vue-slider>
     </div>
 
-    <div class="flex justify-between mb-3">
+    <div class="mb-3 flex justify-between">
       <div>
         <span class="mr-2">Start</span>
         <a-time-picker
@@ -144,34 +144,34 @@ watch(seekSliderState, (value) => {
       </div>
     </div>
     <div>
-      <div class="flex items-center text-base h-[32px] mb-2">
+      <div class="mb-2 flex h-[32px] items-center text-base">
         <a-switch v-model:checked="repeatStore.isSleepActiveState" />
         <label class="ml-2" for="sleep_input">Sleep</label>
         <input
           id="sleep_input"
-          class="p-0.5 mx-0.5 w-[30px] text-center text-base border-b border-solid border-gray-600 outline-0"
+          class="mx-0.5 w-[30px] border-b border-solid border-gray-600 p-0.5 text-center text-base outline-0"
           v-model="repeatStore.sleepTimeState"
           type="text"
           name="sleep-input"
         />
         <label for="sleep_input">seconds</label>
       </div>
-      <div class="flex items-center text-base h-[32px] mb-2">
+      <div class="mb-2 flex h-[32px] items-center text-base">
         <a-switch v-model:checked="repeatStore.showTimeStringLyricState" />
         <span class="ml-2">Show Time in Lyric</span>
       </div>
-      <div class="flex items-center h-[32px] mb-2">
+      <div class="mb-2 flex h-[32px] items-center">
         <a-switch v-model:checked="repeatStore.syncStartActiveState" />
         <label class="mx-2 w-[80px]" for="sleep_input">Sync Start</label>
         <a-input-number
-          class="w-[100px] flex-grow input-sync"
+          class="input-sync w-[100px] flex-grow"
           v-model:value="repeatStore.syncStartValueState"
           :keyboard="false"
           :controls="false"
         >
           <template #addonBefore>
             <button
-              class="w-[32px] m-[-4px_-11px] h-[32px] bg-transparent"
+              class="m-[-4px_-11px] h-[32px] w-[32px] bg-transparent"
               @click="repeatStore.changeSyncValue('syncStartValueState', '-')"
             >
               -
@@ -179,7 +179,7 @@ watch(seekSliderState, (value) => {
           </template>
           <template #addonAfter>
             <button
-              class="w-[32px] m-[-4px_-11px] h-[32px] bg-transparent"
+              class="m-[-4px_-11px] h-[32px] w-[32px] bg-transparent"
               @click="repeatStore.changeSyncValue('syncStartValueState', '+')"
             >
               +
@@ -187,22 +187,22 @@ watch(seekSliderState, (value) => {
           </template>
         </a-input-number>
         <XCircleIcon
-          class="h-5 w-5 ml-2 hover:text-blue-500 cursor-pointer transition"
+          class="ml-2 h-5 w-5 cursor-pointer transition hover:text-blue-500"
           @click="repeatStore.resetSyncValueState('syncStartValueState')"
         />
       </div>
-      <div class="flex items-center h-[32px]">
+      <div class="flex h-[32px] items-center">
         <a-switch v-model:checked="repeatStore.syncEndActiveState" />
         <span class="mx-2 w-[80px]">Sync End</span>
         <a-input-number
-          class="w-[100px] flex-grow input-sync"
+          class="input-sync w-[100px] flex-grow"
           v-model:value="repeatStore.syncEndValueState"
           :keyboard="false"
           :controls="false"
         >
           <template #addonBefore>
             <button
-              class="w-[32px] m-[-4px_-11px] h-[32px] bg-transparent"
+              class="m-[-4px_-11px] h-[32px] w-[32px] bg-transparent"
               @click="repeatStore.changeSyncValue('syncEndValueState', '-')"
             >
               -
@@ -210,7 +210,7 @@ watch(seekSliderState, (value) => {
           </template>
           <template #addonAfter>
             <button
-              class="w-[32px] m-[-4px_-11px] h-[32px] bg-transparent"
+              class="m-[-4px_-11px] h-[32px] w-[32px] bg-transparent"
               @click="repeatStore.changeSyncValue('syncEndValueState', '+')"
             >
               +
@@ -218,7 +218,7 @@ watch(seekSliderState, (value) => {
           </template>
         </a-input-number>
         <XCircleIcon
-          class="h-5 w-5 ml-2 hover:text-blue-500 cursor-pointer transition"
+          class="ml-2 h-5 w-5 cursor-pointer transition hover:text-blue-500"
           @click="repeatStore.resetSyncValueState('syncEndValueState')"
         />
       </div>
