@@ -16,10 +16,16 @@ export const usePlayerStore = defineStore('player', () => {
   const lyricStore = useLyricStore()
   const playlistStore = usePlaylistStore()
   const repeatStore = useRepeatStore()
+  let playlistSelected = songMocks[playlistStore.selectPlaylistState]
+
+  if (!playlistSelected) {
+    playlistStore.selectPlaylistState = playlistStore.defaultSelect
+    playlistSelected = songMocks[playlistStore.selectPlaylistState]
+  }
 
   // ref
   let currentSongState = ref({})
-  let songsState = ref(threatSongs(songMocks[playlistStore.selectPlaylistState]))
+  let songsState = ref(threatSongs(playlistSelected))
   let songIndexState = useStorage('songIndexState', 0)
   let playerState = ref(new Audio())
   let isPlayingState = ref(false)
@@ -32,8 +38,8 @@ export const usePlayerStore = defineStore('player', () => {
     isPlayingState.value = true
   }
 
-  async function changeSong(songIndexInput = null) {
-    if (songIndexState.value === songIndexInput) {
+  async function changeSong(songIndexInput = null, forceChange = false) {
+    if (songIndexState.value === songIndexInput && !forceChange) {
       return true
     }
 
@@ -176,7 +182,7 @@ export const usePlayerStore = defineStore('player', () => {
     () => playlistStore.selectPlaylistState,
     async () => {
       songsState.value = threatSongs(songMocks[playlistStore.selectPlaylistState])
-      await changeSong(0)
+      await changeSong(0, true)
     }
   )
 

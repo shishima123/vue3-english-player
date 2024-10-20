@@ -3,9 +3,9 @@ const path = require('path')
 const mp3Duration = require('mp3-duration')
 
 const folderPath =
-  'E:\\English\\Listening_Practice_Through_Dictation\\ListeningPracticeThroughDictation_1'
+  '/home/phuoc/Desktop/Development/Pet_Project/vue3-english-player/public/assets/audios/LPTD1.4'
 
-const audioDir = 'LPTD1.1'
+const audioDir = 'LPTD1.4'
 
 // Read the list of files in the folder
 fs.readdir(folderPath, (err, files) => {
@@ -43,22 +43,21 @@ fs.readdir(folderPath, (err, files) => {
       const fileInfo = {
         id: i + 1, // The file's index in the list
         title: path.parse(file).name, // The file's name without extension
-        artist: `LPTD`, // The file's author (here we use the file name)
         seconds: Math.round(duration), // The file's duration (rounded to the nearest integer)
-        cover: `require("../assets/images/cover.jpg")`, // Path to the cover image
-        src: `require("../assets/audios/${audioDir}/${file}")`, // Path to the audio file
-        lyric: ``
+        src: `./assets/audios/${audioDir}/${file}`, // Path to the audio file
+        lyric1: ``,
+        lyric2: ``
       }
       // Add the file information to the array
       fileInfos.push(fileInfo)
       // If we have retrieved information about all the MP3 files, write the list of files to a JSON file, sorted by id
       if (fileInfos.length === files.filter((f) => path.extname(f) === '.mp3').length) {
         fileInfos.sort((a, b) => a.id - b.id) // Sort the fileInfos array by id
-        const songs = `const songs = ${JSON.stringify(
+        const songs = `export default ${JSON.stringify(
           fileInfos,
           null,
           2
-        )};\n\nexport default songs;\n`
+        )};`
         fs.writeFile('songs.js', songs, (err) => {
           if (err) {
             console.log(err)

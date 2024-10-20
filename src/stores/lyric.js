@@ -31,6 +31,9 @@ export const useLyricStore = defineStore('lyric', () => {
     let lyricConverted = []
     rawLyric.split(/\n\s*\n/).forEach((subtitle) => {
       let [idLine, timeString, lyric, ipa] = subtitle.split('\n')
+      if (!timeString) {
+        return
+      }
       let id = parseInt(idLine.trim())
       let timeSplit = timeString.trim().split('-->')
       let [startString, endString] = timeSplit

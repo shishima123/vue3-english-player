@@ -20,7 +20,7 @@ onMounted(() => {
 
 <template>
   <section
-    class="scrollbar relative col-start-2 col-end-3 row-start-2 row-end-3 mx-auto flex h-0 w-full flex-col flex-nowrap overflow-auto bg-white transition-[height] duration-[350ms] ease-linear md:h-[var(--playlist-height)] md:rounded md:shadow-md md:hover:overflow-auto lg:overflow-hidden"
+    class="scrollbar relative col-start-2 col-end-3 row-start-2 row-end-3 mx-auto flex h-0 w-full flex-col flex-nowrap overflow-auto bg-white transition-[height] duration-[350ms] ease-linear md:h-[var(--playlist-height)] md:rounded md:shadow-md"
     :class="{ 'playlist-lyrics-section-active': navMobileStore.showPlaylistState }"
     ref="wrapper"
   >
