@@ -372,8 +372,7 @@ W:   I see. That does seem like a problem. Do the leaves on the plant look healt
 M:   Not really. The leaves used to be very green. Now, most of them have turned brown.
 W:   Well, I think your rose bush needs some fertilizer.
 M:   OK. What sort of fertilizer do you think I should use?
-W:   This liquid fertilizer is very good. It will help make your rose leaves green again. Then the
-plant should produce roses quite soon. The fertilizer costs about ten dollars.
+W:   This liquid fertilizer is very good. It will help make your rose leaves green again. Then the plant should produce roses quite soon. The fertilizer costs about ten dollars.
 M:   How long will it take for rose bush to recover?
 W:   About two weeks, I think.
 M:   Great. I’ll take it. Thank you so much for your help.
