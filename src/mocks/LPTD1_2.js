@@ -720,67 +720,79 @@ M: Great, I’ll take it!`
 Unit 8 Acupuncture
 
 2
-00:00:04,120 --> 00:00:10,100
-Acupuncture began in China thousands of years ago. It is a special way to treat sick people.
+00:00:03,760 --> 00:00:07,040
+Acupuncture began in China thousands of years ago.
 
 3
-00:00:11,120 --> 00:00:14,540
-There are many acupuncture spots on the human body.
+00:00:07,600 --> 00:00:10,080
+It is a special way to treat sick people.
 
 4
-00:00:15,600 --> 00:00:19,000
-Small metal needles are put into spots on the body.
+00:00:11,360 --> 00:00:14,640
+There are many acupuncture spots on the human body.
 
 5
-00:00:20,160 --> 00:00:24,300
-Each spot is connected to a special body part or system.
+00:00:15,680 --> 00:00:19,040
+Small metal needles are put into spots on the body.
 
 6
-00:00:25,000 --> 00:00:27,880
-There are many spots for each part.
+00:00:20,400 --> 00:00:24,240
+Each spot is connected to a special body part or system.
 
 7
-00:00:28,880 --> 00:00:32,880
-An expert puts the needles into these spots in a person's body.
+00:00:25,200 --> 00:00:27,680
+There are many spots for each part.
 
 8
-00:00:33,880 --> 00:00:37,880
-These spots connect to the body system that has a problem.
+00:00:28,080 --> 00:00:32,000
+An expert puts the needles into these spots in a person's body.
 
 9
-00:00:38,880 --> 00:00:43,880
-The needles do not go deep. People say that the needles do not hurt.
+00:00:32,960 --> 00:00:36,720
+These spots connect to the body system that has a problem.
 
 10
-00:00:44,880 --> 00:00:50,880
-We are not sure why acupuncture works, but studies have shown that it works very well.
+00:00:37,920 --> 00:00:39,760
+The needles do not go deep.
 
 11
-00:00:51,880 --> 00:00:53,880
-No one can explain why.
+00:00:40,320 --> 00:00:42,800
+People say that the needles do not hurt.
 
 12
-00:00:53,880 --> 00:00:56,880
-Doctors think that it helps the nerves in the body.
+00:00:44,160 --> 00:00:46,800
+We are not sure why acupuncture works.
 
 13
-00:00:57,880 --> 00:01:02,880
-Some doctors use acupuncture to treat people who cannot take medicine.
+00:00:47,520 --> 00:00:50,400
+But studies have shown that it works very well.
 
 14
-00:01:03,880 --> 00:01:08,880
-People in Asia have been using this special method for a long time.
+00:00:51,200 --> 00:00:52,960
+No one can explain why.
 
 15
-00:01:09,880 --> 00:01:13,880
-At first, people outside Asia did not trust this method.
+00:00:53,840 --> 00:00:56,800
+Doctors think that it helps the nerves in the body.
 
 16
-00:01:14,880 --> 00:01:16,880
-They did not think that it would help them.
+00:00:58,480 --> 00:01:03,200
+Some doctors use acupuncture to treat people who cannot take medicine.
 
 17
-00:01:17,880 --> 00:01:21,880
+00:01:04,960 --> 00:01:09,200
+People in Asia have been using this special method for a long time.
+
+18
+00:01:10,080 --> 00:01:14,640
+At first, people outside Asia did not trust this method.
+
+19
+00:01:15,600 --> 00:01:17,760
+They did not think that it would help them.
+
+20
+00:01:18,640 --> 00:01:22,320
 Now, it has become very popular around the world.
 `,
     lyric2: `Acupuncture began in China thousands of

@@ -31,7 +31,7 @@ do
         echo "Processing file $PROCESSED_COUNT of $TOTAL_FILES: $FILE"
 
         # Chạy lệnh auto_subtitle
-        auto_subtitle "$FILE" -o "$OUTPUT_DIR" --srt_only true
+        auto_subtitle "$FILE" -o "$OUTPUT_DIR" --srt_only true --model medium.en --language en
 
         echo "Finished processing: $FILE"
     fi
