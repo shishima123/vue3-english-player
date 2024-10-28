@@ -8,7 +8,11 @@ import { usePlaylistStore } from '@/stores/playlist'
 import { storeToRefs } from 'pinia'
 
 // icons
-import { Cog6ToothIcon, ArrowsPointingOutIcon } from '@heroicons/vue/24/outline'
+import {
+  Cog6ToothIcon,
+  ArrowsPointingOutIcon,
+  ArrowsPointingInIcon
+} from '@heroicons/vue/24/outline'
 
 // store
 const navMobileStore = useNavMobileStore()
@@ -48,8 +52,14 @@ let showTimeStringLyricComputed = computed(() => {
     <div class="sticky top-0 z-10 bg-white transition">
       <div class="absolute left-[10px] top-[5px] flex items-center">
         <ArrowsPointingOutIcon
+          v-if="!fullScreenState"
           class="mr-2 h-6 w-6 cursor-pointer transition hover:text-blue-500"
-          @click="fullScreenState = !fullScreenState"
+          @click="fullScreenState = true"
+        />
+        <ArrowsPointingInIcon
+          v-else
+          class="mr-2 h-6 w-6 cursor-pointer transition hover:text-blue-500"
+          @click="fullScreenState = false"
         />
       </div>
       <div class="absolute right-[10px] top-[5px] flex items-center">
