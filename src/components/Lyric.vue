@@ -6,6 +6,7 @@ import { useLyricStore } from '@/stores/lyric'
 import { usePlayerStore } from '@/stores/player'
 import { usePlaylistStore } from '@/stores/playlist'
 import { storeToRefs } from 'pinia'
+import { useLocalStorage } from '@vueuse/core'
 
 // icons
 import {
@@ -29,6 +30,7 @@ let lyricTypesOptionsState = ref([
 ])
 let settingDropdownState = ref(false)
 let fullScreenState = ref(false)
+let fontSizeState = useLocalStorage('fontsize-lyric', 18)
 
 // computed
 let showTimeStringLyricComputed = computed(() => {
@@ -89,6 +91,34 @@ let showTimeStringLyricComputed = computed(() => {
                 <a-switch v-model:checked="lyricStore.isShowIPAState" />
                 <span class="ml-3">Show IPA</span>
               </a-menu-item>
+              <a-menu-item key="4">
+                <div class="flex h-[32px] items-center">
+                  <span class="mx-2 w-[80px]">Font Size</span>
+                  <a-input-number
+                    class="input-sync w-[120px] flex-grow"
+                    v-model:value="fontSizeState"
+                    :keyboard="false"
+                    :controls="false"
+                  >
+                    <template #addonBefore>
+                      <button
+                        class="m-[-4px_-11px] h-[32px] w-[32px] bg-transparent"
+                        @click="fontSizeState--"
+                      >
+                        -
+                      </button>
+                    </template>
+                    <template #addonAfter>
+                      <button
+                        class="m-[-4px_-11px] h-[32px] w-[32px] bg-transparent"
+                        @click="fontSizeState++"
+                      >
+                        +
+                      </button>
+                    </template>
+                  </a-input-number>
+                </div>
+              </a-menu-item>
             </a-menu>
           </template>
         </a-dropdown>
@@ -106,6 +136,7 @@ let showTimeStringLyricComputed = computed(() => {
           'text-left': lyricStore.selectedLyricTypeState === 'lyric2',
           'text-slate-300': lyric.over
         }"
+        :style="{ fontSize: fontSizeState + 'px' }"
         @click="playerStore.setCurrentlyTimer(lyric.start || 0, lyric.end)"
       >
         <span class="text-2xs text-gray-400" v-if="showTimeStringLyricComputed">
