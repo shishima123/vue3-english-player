@@ -8,7 +8,7 @@ import { usePlaylistStore } from '@/stores/playlist'
 import { storeToRefs } from 'pinia'
 
 // icons
-import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
+import { Cog6ToothIcon, ArrowsPointingOutIcon } from '@heroicons/vue/24/outline'
 
 // store
 const navMobileStore = useNavMobileStore()
@@ -24,6 +24,7 @@ let lyricTypesOptionsState = ref([
   { value: 'lyric2', label: 'Lyric 2' }
 ])
 let settingDropdownState = ref(false)
+let fullScreenState = ref(false)
 
 // computed
 let showTimeStringLyricComputed = computed(() => {
@@ -39,9 +40,18 @@ let showTimeStringLyricComputed = computed(() => {
   <!-- begin:: Lyric Section -->
   <section
     class="relative col-start-2 col-end-3 row-start-1 row-end-2 mx-auto flex h-0 w-full flex-col flex-nowrap overflow-hidden bg-white transition-[height] duration-[350ms] ease-linear md:h-[calc(100vh-var(--playlist-height)-var(--gap-app)-var(--padding-app)*2)] md:rounded md:shadow-md"
-    :class="{ 'playlist-lyrics-section-active': navMobileStore.showLyricsState }"
+    :class="{
+      'playlist-lyrics-section-active': navMobileStore.showLyricsState,
+      fullscreen: fullScreenState
+    }"
   >
     <div class="sticky top-0 z-10 bg-white transition">
+      <div class="absolute left-[10px] top-[5px] flex items-center">
+        <ArrowsPointingOutIcon
+          class="mr-2 h-6 w-6 cursor-pointer transition hover:text-blue-500"
+          @click="fullScreenState = !fullScreenState"
+        />
+      </div>
       <div class="absolute right-[10px] top-[5px] flex items-center">
         <a-dropdown v-model:open="settingDropdownState" trigger="click" placement="bottomRight">
           <a class="ant-dropdown-link" @click.prevent>

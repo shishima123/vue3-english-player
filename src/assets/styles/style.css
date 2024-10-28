@@ -319,7 +319,7 @@
   }
 
   /*
-  Prevent resizing textareas horizontally by default.
+  Prevent resizing text areas horizontally by default.
   */
   textarea {
     resize: vertical;
@@ -497,13 +497,17 @@
   /* End Customize website's scrollbar like Mac OS */
   .scrolled {
     box-shadow:
-      rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-      rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+      rgba(50, 50, 93, 0.25) 0 2px 5px -1px,
+      rgba(0, 0, 0, 0.3) 0 1px 3px -1px;
   }
 
   .playlist-lyrics-section-active {
     height: calc(100vh - var(--player-mobile-height)) !important;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0 1px 2px 0;
+  }
+
+  .fullscreen {
+    @apply !fixed !top-0 !left-0 !right-0 !bottom-0 !overflow-auto !z-[9999] !h-screen !w-screen;
   }
 }
 
