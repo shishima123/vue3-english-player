@@ -782,22 +782,6 @@ They did not think that it would help them.
 17
 00:01:17,880 --> 00:01:21,880
 Now, it has become very popular around the world.
-
-18
-00:01:24,880 --> 00:01:29,880
-The results of acupuncture are very similar to the results of acupuncture.
-
-19
-00:01:30,880 --> 00:01:35,880
-The results of acupuncture are very similar to the results of acupuncture.
-
-20
-00:01:36,880 --> 00:01:41,880
-The results of acupuncture are very similar to the results of acupuncture.
-
-21
-00:01:42,880 --> 00:01:47,880
-The results of acupuncture are very similar to the results of acupuncture.
 `,
     lyric2: `Acupuncture began in China thousands of
 years ago. It is a special way to treat sick people.
